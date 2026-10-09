@@ -18,7 +18,7 @@
     边界、时间/空间/变量/反/空）
   - `docs/why-integrate.md`（集成动机分析，按证据组织）
   - `docs/practice.md`（实践指南，引用 RUNLOG 真实输出）
-  - `docs/support-matrix.md`（80 个条目的状态/版本/证据矩阵）
+  - `docs/support-matrix.md`（79 个条目的状态/版本/证据矩阵）
   - `docs/timeline.md`（2026-09-28 至 2026-10-09 的时间线）
   - `research/2026-10-09.md`（本轮核实方法、查询记录、五条线索核实、实验）
 - **仓库基建**：`CONTRIBUTING.md`（收录标准）、`LICENSE`（CC0-1.0）、
