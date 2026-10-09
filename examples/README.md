@@ -129,8 +129,8 @@ sh examples/tmux-passthrough.sh
 ```text
 allow-passthrough=off  bare        -> absent  (as expected)
 allow-passthrough=off  DCS-wrapped -> absent  (as expected)
-allow-passthrough on   bare        -> absent  (as expected)
-allow-passthrough on   DCS-wrapped -> present  (as expected)
+allow-passthrough=on   bare        -> absent  (as expected)
+allow-passthrough=on   DCS-wrapped -> present  (as expected)
 
 all 4 cases behaved as expected.
 ```

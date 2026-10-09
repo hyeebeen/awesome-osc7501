@@ -42,7 +42,7 @@
 
 1. **启发式读屏不可靠**：作者 Mitchell Hashimoto 发布
    [推文](https://x.com/mitchellh/status/2107577887159386152) 称，他发现 250+ 个
-   agent 编排器各自用启发式（截屏 + 分类器）去猜 Claude Code 是否在干活；
+   agent 编排器各自用启发式去猜 Claude Code 是否在干活；
    Herdr 因此在 3 个月里改了约 10 次兼容性。
 2. **专有带外 API 有 O(N) 集成问题**：每个程序对每个 inbox/工作台单独对接是
    O(N) 的，而且 socket 等带外通道跨 SSH、容器时需要额外桥接（[博文](https://mitchellh.com/writing/program-status-osc7501)）。
@@ -81,7 +81,7 @@ printf '\033]7501;state=working:app=demo\033\\'
 
 | state | 语义 | 专属可选键 | 生命周期（终端侧） |
 | --- | --- | --- | --- |
-| `idle` | 空闲/取消 | — | 可丢弃 |
+| `idle` | 空闲/取消 | — | 直到被替换或清除；进程退出/新提示符时可丢弃（MAY） |
 | `working` | 正在工作中 | `progress`（0–100，缺省=不确定） | 进程退出或新提示符（OSC 133 A）时必须丢弃 |
 | `blocked` | 等待外部输入 | `kind`（permission/question/auth）、`progress` | 同上，必须丢弃 |
 | `done` | 成功完成 | — | 保留 |
@@ -93,7 +93,7 @@ printf '\033]7501;state=working:app=demo\033\\'
 - 每条报告**完整替换**其 id 对应的记录（缺的键就从记录里消失，所以每次都要重发 `app`）。
 - `id` 是层级路径（`a/b/c`，最深 8 层）；子记录的 `app` 从最近祖先继承。
 - RIS 全复位清除所有记录；DECSTR 软复位不清；主/备用屏切换无影响。
-- 每终端至少支持 64 条记录（建议 256），超出淘汰最久未更新的。
+- 每终端记录上限 256（终端可设更低，但至少支持 64），超出时淘汰最久未更新的。
 
 ### 兼容检测与降级
 
@@ -148,11 +148,11 @@ printf '\033]7501;state=working:app=demo\033\\'
 
 #### 终端 / 多路复用器 / agent 工作台（接收端）
 
-- [Rex](https://www.superlogical.com/rex/docs/build/program-status) - 规范的发源地，会话选择器/标签头展示，Lua 事件（已发布，版本未确认）。
+- [Rex](https://www.superlogical.com/rex/docs/build/program-status) - 规范的发源地，会话选择器/标签头展示，Lua 事件（官方文档称已实现；版本未确认）。
 - [cmux](https://github.com/manaflow-ai/cmux/pull/18742) - 基于 Ghostty 的 agent 多路复用器，按 pane 存记录、侧栏按紧急度展示（已合并未发版）。
 - [termio](https://github.com/termio-sh/termio/pull/713) - agentic 开发环境，daemon 产生状态供 Mac/手机/CLI 共享（已发布）。
-- [SwiftTerm](https://github.com/migueldeicaza/SwiftTerm/pull/746) - 跨平台终端组件库（已发布）。
-- [TUIOS](https://github.com/Gaurav-Gosain/tuios/pull/546) - 终端（已发布）。
+- [SwiftTerm](https://github.com/migueldeicaza/SwiftTerm/pull/746) - Swift 写的 xterm/VT100 终端模拟器库（已发布）。
+- [TUIOS](https://github.com/Gaurav-Gosain/tuios/pull/546) - 终端窗口管理器（平铺窗格、统一 agent Inbox）（已发布）。
 - [Termy](https://github.com/lassejlv/termy/pull/408) - 终端（已发布）。
 - [con-terminal](https://github.com/nowledge-co/con-terminal/pull/451) - 记录了 SSH 与 tmux 转发细节的终端（已发布）。
 - [phux](https://github.com/no-phux/phux/pull/1050) - 多路复用器（已发布）。
@@ -161,6 +161,7 @@ printf '\033]7501;state=working:app=demo\033\\'
 - [diri](https://github.com/cristicretu/diri/pull/732) - 并行 agent 工作台（已合并未发版）。
 - [programa](https://github.com/darkroomengineering/programa/pull/405) - 基于 Ghostty 的 agent 终端（已合并未发版）。
 - [ServerBox](https://github.com/lollipopkit/flutter_server_box/pull/1662) - Flutter 终端/SSH 客户端（已合并未发版）。
+- [Tern](https://x.com/_can1357/status/2108468517217665065) - Stencil 的终端（Rust 原生 neoterminal，闭源；仅宣布，开发者自述），见[矩阵](docs/support-matrix.md)。
 - tmux / Kitty / WezTerm / Alacritty / Windows Terminal / zellij / iTerm2 / foot 等 - 见[支持矩阵](docs/support-matrix.md)（多数未支持；foot 未确认）。
 
 #### AI agent 与 coding CLI（发送端）
@@ -174,7 +175,7 @@ printf '\033]7501;state=working:app=demo\033\\'
 - [fx](https://github.com/vercel-labs/fx/pull/1181) - Vercel Labs coding agent（已合并未发版）。
 - [pi-subagents](https://github.com/nicobailon/pi-subagents/pull/2725) - pi 扩展，用层级 id `subagents/<run>` 上报子任务（已合并未发版）。
 - [omp](https://github.com/can1357/oh-my-pi) - 见[支持矩阵](docs/support-matrix.md)（已发布）。
-- Amp / Codex CLI / opencode / Tern - 仅宣布（作者自述，未见官方发布），详见[矩阵](docs/support-matrix.md)。
+- Amp / Codex CLI / opencode / Tern - 仅宣布（Amp、Codex、opencode 为 Mitchell Hashimoto 转述；Tern 为其开发者 @_can1357 自述），详见[矩阵](docs/support-matrix.md)。
 
 #### 非 AI CLI（发送端）
 
@@ -226,16 +227,17 @@ printf '\033]7501;state=working:app=demo\033\\'
 
 ### 支持概览
 
-状态类别统计（80 个条目，统计口径见 [docs/support-matrix.md](docs/support-matrix.md)）：
+状态类别统计（79 个条目，统计口径见 [docs/support-matrix.md](docs/support-matrix.md)）：
 
 | 状态 | 数量 |
 | --- | --- |
-| 已发布 | 19（含 Factory Droid（推断）、Rex（版本未确认）） |
+| 已发布 | 18（含 Factory Droid（推断）） |
+| 已实现（自述） | 1（Rex，版本未确认） |
 | 已合并未发版 | 24 |
 | 开发中 | 12 |
 | 仅宣布 | 5 |
 | 已关闭 | 1 |
-| 未支持 | 17 |
+| 未支持 | 16 |
 | 未确认 | 2 |
 
 ### 示例

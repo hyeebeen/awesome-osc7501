@@ -53,7 +53,7 @@ sh examples/wrap.sh -- rsync -a src/ host:dst/
 033 \
 ```
 
-（完整输出见 [RUNLOG · wrap.sh 一节](../examples/RUNLOG.md)。）
+（wrap.sh 的真实运行输出（经解析器还原）见 [RUNLOG](../examples/RUNLOG.md)。）
 
 ## 4 检测终端是否支持：detect.sh
 
@@ -82,7 +82,7 @@ script -q -c "sh examples/wrap.sh --app demo -- sleep 0.2" /tmp/ts.log
 python3 examples/osc7501_parser.py /tmp/ts.log
 ```
 
-真实输出（节选，完整见 [RUNLOG · 解析器一节](../examples/RUNLOG.md)）：
+输出形如（真实运行记录见 [RUNLOG](../examples/RUNLOG.md) 第 2 节）：
 
 ```json
 {"type": "report", "state": "working", "app": "demo", "msg": "Running: sleep 0.2", "raw_pairs": {"state": "working", "app": "demo", "msg": "UnVubmluZzogc2xlZXAgMC4y"}}

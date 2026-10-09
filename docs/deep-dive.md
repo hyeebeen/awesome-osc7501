@@ -39,7 +39,7 @@ ESC ] 7501 ; state=blocked:kind=permission:app=terraform:msg=QXBwbHkgMyB0byBhZGQ
 | `3a` | `:` | 键值对分隔符 |
 | `61 70 70 3d 74 65 72 72 61 66 6f 72 6d` | `app=terraform` | 报告者标识 |
 | `3a` | `:` | 键值对分隔符 |
-| `6d 73 67 3d` + 56 字节 base64 | `msg=QXBwbHkg…b3kv` | base64("Apply 3 to add, 1 to change, 0 to destroy?") |
+| `6d 73 67 3d` + 56 字节 base64 | `msg=QXBwbHkg…b3k/` | base64("Apply 3 to add, 1 to change, 0 to destroy?") |
 | `1b 5c` | `ESC \` | ST（String Terminator） |
 
 ### 查询序列
@@ -81,7 +81,7 @@ segment  := [A-Za-z0-9_.+-]{1,32}
 
 | state | 语义 | 专属可选键 | 终端侧生命周期 |
 | --- | --- | --- | --- |
-| `idle` | 空闲 / 已取消 | — | 可丢弃 |
+| `idle` | 空闲 / 已取消 | — | 直到被替换或清除；进程退出/新提示符时可丢弃（MAY） |
 | `working` | 正在工作中 | `progress` | 进程退出或新 shell 提示（OSC 133 A）时**必须丢弃** |
 | `blocked` | 等待外部输入（授权、提问、登录） | `kind`、`progress` | 同上，**必须丢弃** |
 | `done` | 成功完成 | — | 保留 |
@@ -109,9 +109,10 @@ segment  := [A-Za-z0-9_.+-]{1,32}
 - **层级 id**：`id=a/b/c` 表示树；`clear` 带 id 时递归删除该子树，不带 id 时清空
   该终端的全部记录。
 - **app 继承**：子记录的 `app` 从最近祖先继承（父记录写了 `app`，子报告可省略）。
-- **复位行为**：RIS（全复位）清除所有记录并要求接收端上报一次全清；DECSTR（软
-  复位）不清记录；主/备用屏切换无影响。
-- **容量**：每终端至少支持 64 条记录（建议 256），超出时淘汰最久未更新的。
+- **复位行为**：RIS（全复位）清除所有记录（Ghostty 的实现是向嵌入方上报一次全
+  清）；DECSTR（软复位）不清记录；主/备用屏切换无影响。
+- **容量**：每终端记录上限 256（终端可设更低，但至少支持 64），超出时淘汰最久
+  未更新的。
 
 ### 限制表
 
@@ -123,7 +124,7 @@ segment  := [A-Za-z0-9_.+-]{1,32}
 | title | 编码 256 / 解码 192 字节 |
 | app | 32 字节 |
 | id | 总 128 字节、每段 32、最深 8 层 |
-| 记录数 / 终端 | 至少 64（建议 256），LRU 淘汰 |
+| 记录数 / 终端 | 上限 256（终端可设更低，但至少支持 64），LRU 淘汰 |
 
 ## 2 要解决什么问题（元）
 
@@ -140,11 +141,11 @@ segment  := [A-Za-z0-9_.+-]{1,32}
 
 | 序列 | 现有能力 | 缺什么 |
 | --- | --- | --- |
-| OSC 9;4（ConEmu 进度） | 忙/百分比/错误 | 只能表达进度；与 iTerm2 的 OSC 9 通知撞号 |
+| OSC 9;4（进度） | 忙/百分比/错误 | 只能表达进度；与 iTerm2 的 OSC 9 通知撞号 |
 | OSC 9 / 99 / 777（通知） | 一次性 toast | 是事件不是状态：没有「当前状态」，错过即丢 |
 | OSC 133（shell integration） | 提示符/命令边界 | 由 shell 发，不是任意程序发；无状态语义 |
 | OSC 0 / 2（标题） | 任意文本 | 无结构、无状态语义，且是纯呈现指令 |
-| OSC 21337（iTerm2 session status） | 会话状态 | 作者认为它描述呈现；专有 |
+| OSC 21337（iTerm2 session status） | 会话状态 | 作者认为它描述呈现 |
 | OSC 9999（Orca） | 程序状态 | 作者认为依赖 JSON、方向不对 |
 
 规范同时规定了与 OSC 9;4 的共存规则：终端**可以**把 9;4 映射到根记录，但一旦
@@ -259,10 +260,10 @@ LRU 淘汰、RIS 全清。
 | 要求 | 为什么 |
 | --- | --- |
 | `msg`/`title` 解码后含控制字符必须拒收、不得当标记解析 | 防止把转义/控制字节当指令执行（注入）；base64 解码是统一检查点 |
-| 界面外展示 SHOULD 解除 bidi 方向覆盖等不可见格式字符 | 防止 RLO/LOI 等不可见字符在通知、侧栏等新上下文里重构显示语义（欺骗） |
+| 界面外展示 SHOULD 解除 bidi 方向覆盖等不可见格式字符 | 防止 RLO 等不可见字符在通知、侧栏等新上下文里重构显示语义（欺骗） |
 | 终端唯一回写是固定的检测回复 | 程序无法借 7501 让终端写任意字节（回显攻击面为零） |
 | 展示 SHOULD 标明状态来自哪个终端/会话 | 防冒充：任何程序都能发 `app=…`，标注来源让用户可归因 |
-| 外部效果（通知/声音）SHOULD 限速 | `blocked` 若被滥用可变成通知轰炸/摇粉工具 |
+| 外部效果（通知/声音）SHOULD 限速 | `blocked` 若被滥用可变成通知轰炸 |
 | 4096 字节整条上限 + 各字段限长 + 记录数上限 | 防资源耗尽；接收端可以放心按上限预分配 |
 
 实现注意（本仓库实践归纳）：
@@ -278,10 +279,10 @@ LRU 淘汰、RIS 全清。
 ### 时间
 
 阶段性叙述（完整带时间的表格见 [timeline.md](timeline.md)）：规范初稿以 gist
- 形式出现（9 月末）→ 博文公开发布、引入 RFC 2119 关键字（10 月初）→ 作者在
-Ghostty 提交参考实现并发布（次日）→ 24 小时内多家 agent/终端跟进（作者自述）→
-此后数日出现集成潮：coding agent、TUI 库、终端、多路复用器与大量小项目合并或
-发布（详见时间线与支持矩阵）。tmux 维护者同期表态观望。
+形式出现（9 月末）→ 博文与 rev 0.2 同日公开，作者同日向 Ghostty 提交
+libghostty-vt 参考实现 PR，数小时后合并（未进入任何 Ghostty release）→ 次日
+rev 0.3 → 24 小时内多家 agent/终端跟进（作者自述）→ 此后数日的集成潮（详见
+时间线与支持矩阵）。tmux 维护者同期表态观望。
 
 ### 空间（技术栈位置）
 
@@ -292,7 +293,7 @@ Ghostty 提交参考实现并发布（次日）→ 24 小时内多家 agent/终�
   PTY ──► ssh / 容器 / 多路复用器（tmux、zellij…）      ← 中间层：转发或丢弃
     ▼
 [接收端]  终端（Rex、TUIOS、wietty…）
-          或嵌入式 VT 库（libghostty-vt、SwiftTerm、xterm.dart、Bubble Tea…）
+          或嵌入式 VT 库（libghostty-vt、SwiftTerm、xterm.dart…）
     │  解析 + 记录存储 + 生命周期 + 回答查询
     ▼
 [呈现]  标签页标记 / 侧栏紧急度排序 / 系统通知 / 统一 inbox / 移动端
@@ -318,13 +319,15 @@ Ghostty 提交参考实现并发布（次日）→ 24 小时内多家 agent/终�
 - **tmux 维护者 nicm**：「This seems premature. Let's see if any other terminals
   and programs pick it up.」（[issue #5713](https://github.com/tmux/tmux/issues/5713)）
 - **Herdr**：issue 被以 bugs-only 策略关闭、外部 PR 因贡献者政策被拒——流程性
-  关闭而非技术否决（[#5069](https://github.com/herdrdev/herdr/issues/5069)）。
+  关闭而非技术否决（[#5069](https://github.com/herdrdev/herdr/issues/5069)、PR
+  [#5093](https://github.com/herdrdev/herdr/pull/5093)）。
 - **firebase-tools 重做**：两次实现被关闭，维护者计划以「fresh implementation」
   重做，关注点是从共享 chokepoint 推导状态、修复终端检测——说明「每个调用点
   手工包裹」的接入方式难维护（[#11245](https://github.com/firebase/firebase-tools/pull/11245)）。
 - **陈旧记录**：Bubble Tea [#1845](https://github.com/charmbracelet/bubbletea/pull/1845)
-  （open）修复程序退出/挂起后记录不消失的问题；para-code #324 讨论 Ctrl+Z 挂起
-  期间保留接收。
+  （open）修复程序退出/挂起后记录不消失的问题；para-code
+  [#324](https://github.com/MocA-Love/para-code/pull/324)（已合并）在 Ctrl+Z 挂起
+  期间暂停接收、fg 后重新打开。
 - **ssh 内 OOM 残留**：agent 被 OOM kill 后没有 OSC 133 A、远端 shell 无集成，
   blocked 记录会一直挂着
   （[指出](https://x.com/shahidcodes/status/2107995544065081475)）；作者回复是
@@ -333,8 +336,9 @@ Ghostty 提交参考实现并发布（次日）→ 24 小时内多家 agent/终�
   依赖 shell 集成，这条链在纯 SSH 远端是断的。
 - **竞品序列**：iTerm2 OSC 21337、Orca OSC 9999 先于 7501 存在且语义重叠；作者
   认为它们「描述呈现」或「依赖 JSON」，方向不对，但市场未定。
-- **利益相关**：规范源于 Superlogical/Rex 的工作（PR 原文自承）；Rex 是 beta
-  邀请制，早期验证多与 Rex 绑定。规范文本本身无产品专属内容。
+- **利益相关**：规范源于 Superlogical/Rex 的工作（PR 原文自承）；Rex 目前似为
+  beta 邀请制（推断：多名开发者在 X 上索要 Rex beta 邀请），早期验证多与 Rex
+  绑定。规范文本本身无产品专属内容。
 - **Ghostty 应用未展示**：参考实现已进 libghostty-vt，但 Ghostty 应用本身忽略
   报告（应用侧 `.program_status => {}`）。
 
@@ -346,7 +350,8 @@ Ghostty 提交参考实现并发布（次日）→ 24 小时内多家 agent/终�
    设计了 per-pane 存储与侧栏；tmux 无表态）。
 2. 〔规范缺口〕**SSH 断开后**远端残留记录如何处理（与「ssh 内 OOM 残留」同根）。
 3. 〔实践暴露〕**挂起（Ctrl+Z）** 的语义：挂起算不算「进程退出」？Bubble Tea
-   #1845 与 para-code #324 都在补这个洞。
+   #1845 与 para-code [#324](https://github.com/MocA-Love/para-code/pull/324)
+   （已合并：挂起期间暂停接收、fg 后重新打开）都在补这个洞。
 4. 〔规范缺口〕**多个程序共用一个 pty**（例如 wrapper 套 wrapper）时层级 id 的
    所有权与冲突。
 5. 〔实践暴露〕**DA1 竞态对中间层的要求**：多路复用器/工作台必须先于 DA1 回答
@@ -357,6 +362,9 @@ Ghostty 提交参考实现并发布（次日）→ 24 小时内多家 agent/终�
    cmux 只能在自己的 fork 里补——`Pst` 的分发渠道本身没设计好。
 8. 〔规范缺口〕`progress` 缺省「不确定」与 `idle` 的区分在不同 UI 上如何表达，
    规范不置可否（呈现无关的代价）。
+9. 〔规范缺口〕`progress` 的数字格式：规范只说 0–100 整数，前导零（如 `040`）
+   是否合法未写明；Ghostty 的 parseProgress 与本仓库解析器都接受 `040`=40
+   （实测/读源码）。
 
 这些空白就是贡献机会：测试套件、多路复用器参考行为、`Pst` 分发、9;4→7501
 迁移工具（见 [README 空白清单](../README.md#空白清单可贡献)）。

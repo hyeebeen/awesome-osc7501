@@ -18,7 +18,7 @@ Details in [docs/deep-dive.md](docs/deep-dive.md) (Chinese).
 
 - **The problem.** Terminals cannot tell what a long-running program (especially an
   AI coding agent) is doing. The author's [launch post](https://x.com/mitchellh/status/2107577887159386152)
-  cites 250+ orchestrators each guessing Claude Code's state via screen-reading
+  cites 250+ orchestrators each guessing Claude Code's state via
   heuristics, and Herdr making ~10 compatibility changes in 3 months. Proprietary
   out-of-band APIs have an O(N) integration problem and need extra bridging across
   SSH and containers ([blog post](https://mitchellh.com/writing/program-status-osc7501)).
@@ -67,22 +67,24 @@ Curated highlights (full lists with statuses in the
 - **Reference implementation** — [libghostty-vt PR #14560](https://github.com/ghostty-org/ghostty/pull/14560)
   by the author (merged, unreleased); parser, query-reply logic and a C API.
 - **Receivers (terminals / multiplexers / agent workbenches)** —
-  [Rex](https://www.superlogical.com/rex/docs/build/program-status) (released,
-  version unconfirmed),
+  [Rex](https://www.superlogical.com/rex/docs/build/program-status) (implemented
+  per its official docs; version unconfirmed),
   [cmux](https://github.com/manaflow-ai/cmux/pull/18742) (merged, unreleased),
   [termio](https://github.com/termio-sh/termio/pull/713) (released),
   [SwiftTerm](https://github.com/migueldeicaza/SwiftTerm/pull/746) (released),
-  TUIOS, Termy, con-terminal, phux, thurm, wietty (released); tmux and the major
-  terminals (Kitty, WezTerm, Alacritty, Windows Terminal, zellij, iTerm2) do not
-  support it yet; foot unconfirmed.
+  TUIOS, Termy, con-terminal, phux, thurm, wietty (released); Tern — Stencil's
+  closed-source Rust-native neoterminal, announced only by its developer; tmux and
+  the major terminals (Kitty, WezTerm, Alacritty, Windows Terminal, zellij, iTerm2)
+  do not support it yet; foot unconfirmed.
 - **Senders (AI agents / coding CLIs)** —
   [Claude Code](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
   (released), [pi](https://github.com/earendil-works/pi) (released),
   [Docker Agent](https://github.com/docker/docker-agent/pull/4544) (released),
   [Crush](https://github.com/charmbracelet/crush/pull/4041) (released),
   [Factory Droid](https://docs.factory.com/changelog/release-notes) (released
-  (inferred)), plus many more merged or in progress; Amp, Codex CLI, opencode and
-  Tern announced only.
+  (inferred)), plus many more merged or in progress; Amp, Codex CLI and opencode
+  announced only (per the author); Tern — a terminal, see receivers — announced
+  only by its developer.
 - **Non-AI CLIs** — tuist (merged, unreleased), git-stack (released), Hugo,
   Composer, Expo, bunny.net (in development), firebase-tools (closed, redo planned).
 - **TUI libraries / SDKs** — [Bubble Tea](https://github.com/charmbracelet/bubbletea)
@@ -100,8 +102,9 @@ Curated highlights (full lists with statuses in the
 
 ### Overview
 
-80 tracked entries: 19 released, 24 merged-but-unreleased, 12 in development,
-5 announced, 1 closed, 17 unsupported, 2 unconfirmed — breakdown and sources in the
+79 tracked entries: 18 released (incl. Factory Droid, inferred), 1 implemented per
+official docs (Rex), 24 merged-but-unreleased, 12 in development, 5 announced,
+1 closed, 16 unsupported, 2 unconfirmed — breakdown and sources in the
 [support matrix](docs/support-matrix.md).
 
 ### Examples

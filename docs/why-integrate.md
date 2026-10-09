@@ -16,7 +16,7 @@ pi-subagents [#2725](https://github.com/nicobailon/pi-subagents/pull/2725) 理�
 相同。
 
 **各方得到了什么**：终端/工作台拿到确定性的状态而不是概率猜测；agent 侧删掉
- 了脆弱的读屏管道；用户看到的状态不再「差一次模型调用」。（成本节省见第 6 节。）
+ 了脆弱的读屏管道（成本节省见第 6 节）。
 
 ## 2 「需要你」时能被感知（注意力管理）
 
@@ -114,7 +114,8 @@ N×M → N+M 的表述是对博文与发布推文所述 O(N) 集成问题的形�
   and programs pick it up.」（[#5713](https://github.com/tmux/tmux/issues/5713)）；
   实测裸序列被丢弃。
 - **Herdr**：issue 与外部 PR 均因流程被关（bugs-only 政策、非白名单贡献者），
-  非技术否决；目前仍依赖启发式 + 专用 socket 集成。
+  非技术否决；目前仍依赖启发式 + 专用 socket 集成（[作者博文](https://mitchellh.com/writing/program-status-osc7501)
+  所述 Herdr 的做法：检测 manifest 与 socket API）。
 - **firebase-tools**：两次实现被关闭、计划重做——「每个调用点手工包裹」不可
   维护，要改成从共享 chokepoint 推导状态。
 - **主流终端**（Kitty、WezTerm、iTerm2、Alacritty、Windows Terminal）尚无公开
@@ -125,8 +126,8 @@ N×M → N+M 的表述是对博文与发布推文所述 O(N) 集成问题的形�
 
 全部为（推断），基于上文动机与反对意见：
 
-- **agent / CLI 作者**：先加「检测 + 三个状态」（working/blocked/done）就覆盖
-  80% 价值；退出前务必发 done/error，取消发 idle；不要用 7501 传富文本。
+- **agent / CLI 作者**：先加「检测 + 三个状态」（working/blocked/done）就先覆盖
+  最常用的状态；退出前务必发 done/error，取消发 idle；不要用 7501 传富文本。
 - **终端作者**：接收端可以晚做，但**查询应答与 DA1 时序**要先做对（先答
   7501）；记录生命周期照规范实现，别发明心跳。
 - **多路复用器作者**：per-pane 存储是自然模型（参考 cmux）；同时想清楚要不要
