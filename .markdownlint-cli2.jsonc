@@ -1,0 +1,9 @@
+{
+  // OSC 7501 awesome repo — markdownlint config
+  // MD013 (line length) off: tables and Chinese text wrap naturally.
+  // MD033 (inline HTML) off: not used, but keep it lenient for future anchors.
+  "config": {
+    "MD013": false,
+    "MD033": false
+  }
+}

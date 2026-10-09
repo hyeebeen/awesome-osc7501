@@ -126,7 +126,7 @@ sh examples/tmux-passthrough.sh
 `state=working` 报告，然后检查外层 typescript 里是否出现对应字节，打印 4 个
 结果。预期（已在 tmux 3.5a 上验证）：
 
-```
+```text
 allow-passthrough=off  bare        -> absent  (as expected)
 allow-passthrough=off  DCS-wrapped -> absent  (as expected)
 allow-passthrough on   bare        -> absent  (as expected)
