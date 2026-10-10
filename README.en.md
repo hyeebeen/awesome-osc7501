@@ -66,18 +66,18 @@ printf '\033]7501;state=working:app=demo\033\\'
 #### 1 · Data flow
 
 ```mermaid
-flowchart TB
-  P["Program / agent<br/>printf writes OSC 7501 bytes to stdout"]
-  MID{"What sits in between?"}
-  TM{"tmux: wrapped in DCS passthrough<br/>and allow-passthrough on?"}
-  DROP["Dropped by tmux<br/>(tested on tmux 3.5a)"]
-  R{"Does the terminal<br/>know OSC 7501?"}
-  I["Unknown OSC is ignored<br/>nothing shown, no state changes"]
-  S["That terminal (one window/tab/pane)<br/>keeps one record per id<br/>each report replaces it completely"]
-  U["Presentation: up to the terminal<br/>e.g. Rex: spinner on unfocused tabs,<br/>marker in the session picker<br/>optional: notifications (rate-limited)"]
+flowchart LR
+  P["Program / agent<br/>printf to stdout"]
+  MID{"Through<br/>tmux?"}
+  TM{"DCS passthrough +<br/>allow-passthrough on?"}
+  DROP["Dropped by tmux<br/>(tested on 3.5a)"]
+  R{"Terminal knows<br/>OSC 7501?"}
+  I["Ignored: not shown,<br/>no state changes"]
+  S["That window/tab/pane<br/>keeps one record per id<br/>each report replaces it"]
+  U["UI: up to the terminal<br/>e.g. Rex tab spinner,<br/>session picker marker;<br/>optional notification<br/>(rate-limited)"]
   P --> MID
-  MID -- "direct / SSH / container: bytes arrive as-is" --> R
-  MID -- tmux --> TM
+  MID -- "no (direct / SSH / container:<br/>bytes arrive as-is)" --> R
+  MID -- yes --> TM
   TM -- yes --> R
   TM -- no --> DROP
   R -- no --> I
@@ -128,7 +128,6 @@ The seven segments of the simplest report, byte by byte:
 
 ```mermaid
 stateDiagram-v2
-  direction LR
   dropped: record dropped
   cleared: record removed
   [*] --> working : first report
@@ -143,7 +142,7 @@ stateDiagram-v2
   idle --> dropped : process exit / OSC 133 A (MAY)
   done --> cleared : state=clear
   error --> cleared : state=clear
-  note left of done
+  note right of done
     done / error survive process exit and new prompts,
     until replaced or cleared; the terminal decides
     when to stop showing them

@@ -77,22 +77,22 @@ printf '\033]7501;state=working:app=demo\033\\'
 #### ① 数据怎么流动
 
 ```mermaid
-flowchart TB
-  P["程序 / agent<br/>printf 把 OSC 7501 字节写到 stdout"]
-  MID{"中间经过什么？"}
-  TM{"tmux：已用 DCS passthrough 包装<br/>且 allow-passthrough on？"}
-  DROP["被 tmux 丢弃<br/>（本仓库实测 tmux 3.5a）"]
-  R{"终端认识 OSC 7501？"}
-  I["忽略这条未知 OSC<br/>不显示，也不改变任何状态"]
-  S["该终端（一个窗口/标签/窗格）<br/>按 id 保存记录，每次上报整条替换"]
-  U["UI 展示：由终端自定<br/>例：Rex 未聚焦标签转圈、会话选择器标记<br/>可选：桌面通知（规范建议限速）"]
+flowchart LR
+  P["程序 / agent<br/>printf 写到 stdout"]
+  MID{"经过<br/>tmux？"}
+  TM{"DCS 透传 +<br/>allow-passthrough on？"}
+  DROP["被 tmux 丢弃<br/>（实测 3.5a）"]
+  R{"终端认识<br/>OSC 7501？"}
+  I["忽略：不显示<br/>不改任何状态"]
+  S["该窗口/标签/窗格<br/>按 id 存记录<br/>每次整条替换"]
+  U["UI：由终端自定<br/>如 Rex 标签转圈、<br/>会话选择器标记；<br/>可选通知（应限速）"]
   P --> MID
-  MID -- "直连 / SSH / 容器：字节原样到达" --> R
-  MID -- tmux --> TM
+  MID -- "否（直连 / SSH / 容器：<br/>字节原样到达）" --> R
+  MID -- 是 --> TM
   TM -- 是 --> R
   TM -- 否 --> DROP
-  R -- 不支持 --> I
-  R -- 支持 --> S --> U
+  R -- 否 --> I
+  R -- 是 --> S --> U
 ```
 
 程序也可以先问一句「你支持吗」（可选）：
@@ -120,7 +120,7 @@ sequenceDiagram
 
 #### ② 这串字节长什么样
 
-![OSC 7501 字节分段图：ESC ] | 7501 | ; | state=working | : | app=demo | ESC \](docs/img/osc7501-bytes.svg)
+![OSC 7501 字节分段图：7 段字节及其含义](docs/img/osc7501-bytes.svg)
 
 | 字节 | 字符 | 含义 |
 | --- | --- | --- |
@@ -136,7 +136,6 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-  direction LR
   dropped: 记录被丢弃
   cleared: 记录被删除
   [*] --> working : 首次上报
@@ -151,7 +150,7 @@ stateDiagram-v2
   idle --> dropped : 进程退出 / OSC 133 A（MAY）
   done --> cleared : state=clear
   error --> cleared : state=clear
-  note left of done
+  note right of done
     done / error 挺过进程退出和新提示符，
     直到被替换或 clear；何时不再展示由终端决定
   end note

@@ -94,7 +94,6 @@ segment  := [A-Za-z0-9_.+-]{1,32}
 
 ```mermaid
 stateDiagram-v2
-  direction LR
   dropped: 记录被丢弃
   cleared: 记录被删除
   [*] --> working : 首次上报
@@ -109,7 +108,7 @@ stateDiagram-v2
   idle --> dropped : 进程退出 / OSC 133 A（MAY）
   done --> cleared : state=clear
   error --> cleared : state=clear
-  note left of done
+  note right of done
     done / error 挺过进程退出和新提示符，
     直到被替换或 clear；何时不再展示由终端决定
   end note
