@@ -19,6 +19,10 @@ VT 解析库解析后按自己的方式呈现（标签、侧栏、通知、统�
 
 ### 规范示例逐字节拆解
 
+最简示例的分段图见 [README · 30 秒看懂](../README.md#30-秒看懂)：
+
+![OSC 7501 字节分段图](img/osc7501-bytes.svg)
+
 规范用一条 Terraform 报告作示例：
 
 ```text
@@ -87,6 +91,35 @@ segment  := [A-Za-z0-9_.+-]{1,32}
 | `done` | 成功完成 | — | 保留 |
 | `error` | 失败 | — | 保留 |
 | `clear` | 删除记录 | `id` | 立即删除该 id 及其所有子记录；无 id 清空全部 |
+
+```mermaid
+stateDiagram-v2
+  direction LR
+  dropped: 记录被丢弃
+  cleared: 记录被删除
+  [*] --> working : 首次上报
+  working --> blocked : 需要用户（kind）
+  blocked --> working : 用户处理完
+  working --> idle : 用户中断/取消
+  idle --> working : 新指令
+  working --> done : 完成
+  working --> error : 失败
+  working --> dropped : 进程退出 / OSC 133 A（MUST）
+  blocked --> dropped : 进程退出 / OSC 133 A（MUST）
+  idle --> dropped : 进程退出 / OSC 133 A（MAY）
+  done --> cleared : state=clear
+  error --> cleared : state=clear
+  note left of done
+    done / error 挺过进程退出和新提示符，
+    直到被替换或 clear；何时不再展示由终端决定
+  end note
+```
+
+> **图注：** 这不是严格的状态机。每次上报都**整条替换**该 id 的记录，任何状态都可以
+> 直接换成任何其他状态（包括首次上报就是 done/blocked 等）；图里只画了常见路径和规范
+> 规定的丢弃规则。`clear` 不是状态：它删除指定 id 及其所有子记录，不带 id 时清空该终端
+> 全部记录，对任何状态都适用。用户中断或取消时程序应报 `idle`；即将退出的程序 SHOULD
+> 在退出前报 `done` 或 `error`，好留下记录给用户看。
 
 协议**无心跳**：终端不得要求程序重发保活；状态是快照而非事件流。
 
@@ -230,6 +263,23 @@ LRU 淘汰、RIS 全清。
   一次全清，以及「OSC7501 是 Ghostty 项目首个原创的终端规范」。
 
 ### 兼容检测与降级
+
+```mermaid
+sequenceDiagram
+  participant P as 程序
+  participant T as 终端
+  P->>T: OSC 7501 #59; ? ST（查询）
+  P->>T: CSI c（DA1，所有终端都会回答）
+  alt 支持 OSC 7501
+    T-->>P: OSC 7501 #59; ? ST（先到）
+    T-->>P: DA1 回复
+    Note over P: 支持 → 发送状态上报
+  else 不支持
+    T-->>P: 只有 DA1 回复（先到）
+    Note over P: 不支持 → 不发或照发（终端会忽略）
+  end
+  Note over P,T: 检测是可选的（rev 0.3）：程序可以不检测直接发
+```
 
 1. **查询 + DA1 竞态**：程序发 `OSC 7501 ; ? ST` 后紧跟 DA1（`CSI c` =
    `1b 5b 63`）。DA1 是几乎所有终端都必答的；**DA1 回复先到 ⇒ 不支持**。注意

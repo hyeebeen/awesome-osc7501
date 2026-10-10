@@ -27,14 +27,6 @@ Details in [docs/deep-dive.md](docs/deep-dive.md) (Chinese).
 - **Design principles.** Terminal-native (works over SSH/containers for free),
   presentation-agnostic, no heartbeat, unknown keys ignored (= extension
   mechanism), implementable in one line of POSIX sh, detection optional.
-- **30-second version.**
-
-  ```sh
-  printf '\033]7501;state=working:app=demo\033\\'
-  ```
-
-  `ESC ]` starts an OSC; `7501` is the number; `state=working:app=demo` are
-  `key=value` pairs joined by `:`; terminated by ST (`ESC \`) or BEL.
 - **State model.** `idle`, `working`, `blocked`, `done`, `error`, plus `clear`
   (deletes a record subtree). Working/blocked records must be dropped on process
   exit or a new shell prompt (OSC 133 A); done/error persist; no keep-alive.
@@ -54,6 +46,118 @@ Details in [docs/deep-dive.md](docs/deep-dive.md) (Chinese).
 - **Open questions** in the spec (per-pane multiplexer behavior, records after SSH
   disconnect, Ctrl+Z semantics, id collisions on a shared pty, DA1 race
   requirements for middle layers): see deep-dive §5.
+
+### 30-second version
+
+A program (an AI agent, say) writes a short run of escape bytes to stdout,
+starting with `ESC ] 7501` and carrying `key=value` pairs such as
+`state=working`. A supporting terminal **does not print those bytes**; it updates
+the status record for that window / tab / pane instead. How that status is shown
+— a spinner on the tab, a "needs you" hint, a notification — is up to the
+terminal: the spec shares state, not presentation (e.g. Rex shows a spinner and
+blocked symbols on unfocused tab headers and marks finished or blocked sessions
+in its session picker). Terminals that don't know it must ignore unknown OSCs
+anyway, so sending blindly is safe.
+
+```sh
+printf '\033]7501;state=working:app=demo\033\\'
+```
+
+#### 1 · Data flow
+
+```mermaid
+flowchart TB
+  P["Program / agent<br/>printf writes OSC 7501 bytes to stdout"]
+  MID{"What sits in between?"}
+  TM{"tmux: wrapped in DCS passthrough<br/>and allow-passthrough on?"}
+  DROP["Dropped by tmux<br/>(tested on tmux 3.5a)"]
+  R{"Does the terminal<br/>know OSC 7501?"}
+  I["Unknown OSC is ignored<br/>nothing shown, no state changes"]
+  S["That terminal (one window/tab/pane)<br/>keeps one record per id<br/>each report replaces it completely"]
+  U["Presentation: up to the terminal<br/>e.g. Rex: spinner on unfocused tabs,<br/>marker in the session picker<br/>optional: notifications (rate-limited)"]
+  P --> MID
+  MID -- "direct / SSH / container: bytes arrive as-is" --> R
+  MID -- tmux --> TM
+  TM -- yes --> R
+  TM -- no --> DROP
+  R -- no --> I
+  R -- yes --> S --> U
+```
+
+The program can also ask first ("do you support this?", optional):
+
+```mermaid
+sequenceDiagram
+  participant P as Program
+  participant T as Terminal
+  P->>T: OSC 7501 #59; ? ST (query)
+  P->>T: CSI c (DA1, every terminal answers)
+  alt supports OSC 7501
+    T-->>P: OSC 7501 #59; ? ST (arrives first)
+    T-->>P: DA1 reply
+    Note over P: supported → send reports
+  else unsupported
+    T-->>P: only the DA1 reply (arrives first)
+    Note over P: unsupported → skip, or send anyway (ignored)
+  end
+  Note over P,T: Detection is optional (rev 0.3): a program may just send reports
+```
+
+> The spec requires supporting terminals to reply to `OSC 7501 ; ?` verbatim; DA1
+> is answered by every terminal, so a DA1 reply arriving first means unsupported.
+> The tmux path is this repo's tested result on tmux 3.5a (see
+> [examples/RUNLOG.md](examples/RUNLOG.md)); it is not part of the spec.
+
+#### 2 · The bytes
+
+![OSC 7501 byte segments](docs/img/osc7501-bytes.svg)
+
+The seven segments of the simplest report, byte by byte:
+
+| Bytes | Characters | Meaning |
+| --- | --- | --- |
+| `1b 5d` | `ESC ]` | OSC (Operating System Command) introducer |
+| `37 35 30 31` | `7501` | OSC number |
+| `3b` | `;` | separator between number and data |
+| `73 74 61 74 65 3d 77 6f 72 6b 69 6e 67` | `state=working` | status key-value pair |
+| `3a` | `:` | pair separator |
+| `61 70 70 3d 64 65 6d 6f` | `app=demo` | reporter identity |
+| `1b 5c` | `ESC \` | ST (String Terminator); BEL (`07`) also works |
+
+#### 3 · State changes
+
+```mermaid
+stateDiagram-v2
+  direction LR
+  dropped: record dropped
+  cleared: record removed
+  [*] --> working : first report
+  working --> blocked : needs the user (kind)
+  blocked --> working : user handled it
+  working --> idle : user interrupted / cancelled
+  idle --> working : new instruction
+  working --> done : finished
+  working --> error : failed
+  working --> dropped : process exit / OSC 133 A (MUST)
+  blocked --> dropped : process exit / OSC 133 A (MUST)
+  idle --> dropped : process exit / OSC 133 A (MAY)
+  done --> cleared : state=clear
+  error --> cleared : state=clear
+  note left of done
+    done / error survive process exit and new prompts,
+    until replaced or cleared; the terminal decides
+    when to stop showing them
+  end note
+```
+
+> **Figure note:** This is not a strict state machine. Every report **completely
+> replaces** the record for its id, so any state can switch directly to any other
+> (including a first report of done/blocked); the diagram only shows common paths
+> and the drop rules the spec mandates. `clear` is not a state: it deletes the
+> given id and all of its child records — every record of that terminal when no id
+> is given — and applies from any state. On user interruption or cancellation the
+> program should report `idle`; a program about to exit SHOULD report `done` or
+> `error` before exiting, so a record is left for the user.
 
 ## Part 2 · Focus: ecosystem and practice
 

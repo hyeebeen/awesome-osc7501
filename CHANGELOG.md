@@ -3,6 +3,10 @@
 本仓库遵循「每次迭代一条」的记录方式；核实方法见
 [research/](research/) 笔记。
 
+## Unreleased
+
+- README「30 秒看懂」加入流向图、检测时序图、字节分段 SVG 与状态图（中英同步，deep-dive 同步）
+
 ## 2026-10-09
 
 - **examples**：新增 OSC 7501 示例套件——POSIX sh 函数库（`osc7501.sh`）、

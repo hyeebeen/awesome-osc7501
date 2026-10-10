@@ -63,9 +63,64 @@ OSC 7501 让程序通过**终端转义序列**（本来就走的 PTY 字节流�
 
 ### 30 秒看懂
 
+程序（比如一个 AI agent）往 stdout 写一小串以 `ESC ] 7501` 开头的转义字节，内容是
+`state=working` 这样的键值对。支持它的终端**不会把这串字节显示出来**，而是更新这个
+窗口 / 标签 / 窗格的状态记录；至于怎么展示——标签上转圈、提示「需要你」、弹通知——由终端
+自己决定，规范只共享状态、不规定展示（例如 Rex 在未聚焦标签上显示转圈和 blocked 符号，
+在会话选择器里标出已完成或被阻塞的会话）。不认识它的终端按规范本来就必须忽略未知
+OSC，所以直接发也是安全的。
+
 ```sh
 printf '\033]7501;state=working:app=demo\033\\'
 ```
+
+#### ① 数据怎么流动
+
+```mermaid
+flowchart TB
+  P["程序 / agent<br/>printf 把 OSC 7501 字节写到 stdout"]
+  MID{"中间经过什么？"}
+  TM{"tmux：已用 DCS passthrough 包装<br/>且 allow-passthrough on？"}
+  DROP["被 tmux 丢弃<br/>（本仓库实测 tmux 3.5a）"]
+  R{"终端认识 OSC 7501？"}
+  I["忽略这条未知 OSC<br/>不显示，也不改变任何状态"]
+  S["该终端（一个窗口/标签/窗格）<br/>按 id 保存记录，每次上报整条替换"]
+  U["UI 展示：由终端自定<br/>例：Rex 未聚焦标签转圈、会话选择器标记<br/>可选：桌面通知（规范建议限速）"]
+  P --> MID
+  MID -- "直连 / SSH / 容器：字节原样到达" --> R
+  MID -- tmux --> TM
+  TM -- 是 --> R
+  TM -- 否 --> DROP
+  R -- 不支持 --> I
+  R -- 支持 --> S --> U
+```
+
+程序也可以先问一句「你支持吗」（可选）：
+
+```mermaid
+sequenceDiagram
+  participant P as 程序
+  participant T as 终端
+  P->>T: OSC 7501 #59; ? ST（查询）
+  P->>T: CSI c（DA1，所有终端都会回答）
+  alt 支持 OSC 7501
+    T-->>P: OSC 7501 #59; ? ST（先到）
+    T-->>P: DA1 回复
+    Note over P: 支持 → 发送状态上报
+  else 不支持
+    T-->>P: 只有 DA1 回复（先到）
+    Note over P: 不支持 → 不发或照发（终端会忽略）
+  end
+  Note over P,T: 检测是可选的（rev 0.3）：程序可以不检测直接发
+```
+
+> 规范要求支持的终端原样回复 `OSC 7501 ; ?`；DA1 是所有终端都会回答的，所以 DA1
+> 回复先到就说明不支持。tmux 一路是本仓库在 tmux 3.5a 上的实测结果（见
+> [examples/RUNLOG.md](examples/RUNLOG.md)），不是规范内容。
+
+#### ② 这串字节长什么样
+
+![OSC 7501 字节分段图：ESC ] | 7501 | ; | state=working | : | app=demo | ESC \](docs/img/osc7501-bytes.svg)
 
 | 字节 | 字符 | 含义 |
 | --- | --- | --- |
@@ -76,6 +131,37 @@ printf '\033]7501;state=working:app=demo\033\\'
 | `3a` | `:` | pair 分隔符 |
 | `61 70 70 3d 64 65 6d 6f` | `app=demo` | 报告者标识 |
 | `1b 5c` | `ESC \` | ST（String Terminator）；也可用 BEL（`07`）结尾 |
+
+#### ③ 状态怎么变
+
+```mermaid
+stateDiagram-v2
+  direction LR
+  dropped: 记录被丢弃
+  cleared: 记录被删除
+  [*] --> working : 首次上报
+  working --> blocked : 需要用户（kind）
+  blocked --> working : 用户处理完
+  working --> idle : 用户中断/取消
+  idle --> working : 新指令
+  working --> done : 完成
+  working --> error : 失败
+  working --> dropped : 进程退出 / OSC 133 A（MUST）
+  blocked --> dropped : 进程退出 / OSC 133 A（MUST）
+  idle --> dropped : 进程退出 / OSC 133 A（MAY）
+  done --> cleared : state=clear
+  error --> cleared : state=clear
+  note left of done
+    done / error 挺过进程退出和新提示符，
+    直到被替换或 clear；何时不再展示由终端决定
+  end note
+```
+
+> **图注：** 这不是严格的状态机。每次上报都**整条替换**该 id 的记录，任何状态都可以
+> 直接换成任何其他状态（包括首次上报就是 done/blocked 等）；图里只画了常见路径和规范
+> 规定的丢弃规则。`clear` 不是状态：它删除指定 id 及其所有子记录，不带 id 时清空该终端
+> 全部记录，对任何状态都适用。用户中断或取消时程序应报 `idle`；即将退出的程序 SHOULD
+> 在退出前报 `done` 或 `error`，好留下记录给用户看。
 
 ### 状态模型
 
