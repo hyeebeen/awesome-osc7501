@@ -1,8 +1,8 @@
 # examples — OSC 7501 (Program Status Protocol) 示例
 
 针对 [OSC 7501 规范](https://www.superlogical.com/rex/docs/build/program-status)
-（rev 0.3）的一组发送端与接收端示例：shell 函数库、字节级演示、特性检测、
-带完整校验的 Python 增量解析器及单测、tmux 透传实验。
+（rev 0.4）的一组发送端与接收端示例：shell 函数库、字节级演示、特性检测、
+假终端挂具、带完整校验的 Python 增量解析器及单测、tmux 透传实验。
 
 运行记录见 examples/RUNLOG.md。
 
@@ -61,16 +61,43 @@ sh examples/detect.sh -t 2
 ```
 
 在 /dev/tty 上 `stty -echo -icanon min 0 time N` 后发送
-`ESC ] 7501 ; ? ESC \` + DA1（`ESC [ c`），按先到的回复判定。预期输出四选一：
+`ESC ] 7501 ; ? ESC \` + DA1（`ESC [ c`），按先到的回复判定。会一直读到
+OSC 回复终止（`ESC \` 或 BEL——规范不要求回复复用请求的终止符）或 DA1
+回复以 `c` 结束为止，因此 rev 0.4 里带 `states=`/`kinds=` 列表的回复不会被
+截断；超时前两者都没有则判不支持。预期输出（退出码）：
 
-- `supported`（退出码 0）
+- `supported`（0），随后两行 `states: …` 与 `kinds: …`——回复带列表时原样
+  打印；不带列表时打印固定缺省值并附 `(default)`
+  （idle,working,done,blocked,error / permission,question,auth，规范规定
+  这两组缺省值永远不变）。回复里不认识的 pair 一律忽略（规范要求）
 - `unsupported (DA1 first)`（1）
 - `unsupported (no reply)`（1）
 - `no tty`（2，无可用终端）
 
-随后打印 terminfo `Pst` 能力检查结果（`infocmp -x | grep Pst`）——仅供参考、
-不权威：缺 `Pst` 不能推断不支持（ssh/多路复用器下可能缺失或过期），查询回复才是
-权威。退出前用 trap 恢复 stty。
+退出前用 trap 恢复 stty。
+
+## fake_terminal.py — 假终端挂具
+
+Python 3 标准库。在 pty 里运行一条命令并扮演终端：盯着子进程输出，看到
+`ESC ] 7501 ; ?` 查询或 DA1 请求（`ESC [ c`）时按所选模式作答；子进程输出
+转义后（`^[` = ESC，`^G` = BEL）原样转发到 stdout，退出码与子进程一致：
+
+```sh
+python3 examples/fake_terminal.py --mode v04    -- sh examples/detect.sh
+python3 examples/fake_terminal.py --mode bare   -- sh examples/detect.sh
+python3 examples/fake_terminal.py --mode da1    -- sh examples/detect.sh
+python3 examples/fake_terminal.py --mode silent -- sh examples/detect.sh
+```
+
+- `--mode v04`：按 libghostty-vt（rev 0.4）回复完整查询应答
+  `ESC ] 7501 ; ?:states=idle,working,done,blocked,error:kinds=permission,question,auth ESC \`
+  随后 DA1 `ESC [ ?62;22c`
+- `--mode bare`：只回裸 `?`（`ESC ] 7501 ; ? ESC \`），随后 DA1
+- `--mode da1`：只回 DA1——复现「DA1 先到 → 不支持」路径
+- `--mode silent`：什么都不回——复现「无回复」路径
+
+box 上没有实现 OSC 7501 的真实终端，RUNLOG 里 supported / DA1-first
+两条路径无法覆盖；用这个挂具可以本地驱动 detect.sh 的全部四条路径。
 
 ## osc7501_parser.py — 增量解析器 + 记录存储
 
@@ -79,7 +106,7 @@ Python 3.11+，仅标准库。作为库：
 ```python
 from osc7501_parser import Osc7501Parser, RecordStore
 events = Osc7501Parser().feed(chunk_bytes)   # 可跨 chunk 边界，任意切分
-# Query() / Report(state, id, kind, progress, app, title, msg, raw_pairs)
+# Query(states, kinds) / Report(state, id, kind, progress, app, title, msg, raw_pairs)
 store = RecordStore()
 for ev in events:
     if isinstance(ev, Report):
@@ -92,6 +119,12 @@ for ev in events:
 整条 4096 字节上限等。`RecordStore` 实现整条替换、clear 子树、app 最近祖先继承、
 `on_process_exit()`/`on_prompt()` 清理 working/blocked、超 256 条 LRU 淘汰、
 `on_ris()` 全清。
+
+rev 0.4 的检测回复三件套：`parse_query_reply()` 解析 `?` 后可选的
+`states=`/`kinds=` 列表（缺列表即固定缺省值，未知 pair 忽略）；
+`make_query_reply()` 构造终端侧回复（`clear` 不计入 states 列表；终止符可选，
+规范不要求复用请求的）；`choose_state()` 是程序侧用法：想用新 state 时先查
+回复里的 states 列表，没有就回退到已有的。
 
 作为 CLI：
 
@@ -112,7 +145,7 @@ python3 examples/osc7501_parser.py typescript.log   # 缺省读 stdin
 python3 -m unittest discover -s examples -v
 ```
 
-预期输出：全部用例 `ok`，结尾 `OK`（当前 39 个用例，覆盖上述每条规则及
+预期输出：全部用例 `ok`，结尾 `OK`（当前 49 个用例，覆盖上述每条规则及
 RecordStore 语义）。任何回归都会非零退出。
 
 ## tmux-passthrough.sh — tmux 透传实验

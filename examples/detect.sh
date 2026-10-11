@@ -1,19 +1,23 @@
 #!/bin/sh
-# detect.sh — OSC 7501 feature detection.
+# detect.sh — OSC 7501 feature detection (spec rev 0.4).
 #
 #   detect.sh [-t SECONDS]      (default timeout: 1 second)
 #
 # Sends `OSC 7501 ; ? ST` immediately followed by a primary device attributes
 # query (DA1, CSI c) to /dev/tty, then looks at which reply arrives first:
-#   * `ESC ] 7501 ; ?` first  -> supported
-#   * DA1 reply (ESC [ ? ... c) first -> unsupported (DA1 first)
+#   * an OSC 7501 reply (starts with `ESC ] 7501 ; ?`) first -> supported
+#   * a DA1 reply (ESC [ ? ... c) first -> unsupported (DA1 first)
 #   * nothing before the timeout -> unsupported (no reply)
 # If there is no usable tty, prints "no tty" and exits 2.
 #
-# Also reports whether the current terminfo entry has the extended `Pst`
-# capability. NOTE: this is NOT authoritative — a missing Pst does not imply
-# the terminal lacks OSC 7501 support (ssh, multiplexers or stale terminfo
-# can all hide it); the query reply above is always authoritative.
+# Rev 0.4: the reply is `?` optionally followed by
+# `:states=<comma list>:kinds=<comma list>`; unknown pairs are ignored.
+# Reads until the OSC reply is terminated (ESC \ or BEL — the spec does not
+# require the reply to reuse the query's terminator) or the DA1 reply ends
+# with `c`, so a states=/kinds= listing is not truncated. A reply without
+# the lists means the fixed defaults: idle,working,done,blocked,error and
+# permission,question,auth — printed with "(default)". If supported, the
+# accepted states and kinds are printed after the verdict.
 #
 # Exit codes: 0 supported, 1 unsupported, 2 no tty.
 
@@ -21,7 +25,7 @@ timeout=1
 while getopts 't:h' _opt; do
     case "$_opt" in
         t) timeout=$OPTARG ;;
-        h) sed -n '2,5p' "$0"; exit 0 ;;
+        h) sed -n '2,4p' "$0"; exit 0 ;;
         *) echo "usage: $0 [-t SECONDS]" >&2; exit 2 ;;
     esac
 done
@@ -55,39 +59,92 @@ ESC=$(printf '\033')
 printf '%s]7501;?%s\\' "$ESC" "$ESC" >/dev/tty
 printf '%s[c' "$ESC" >/dev/tty
 
+# Decide from $reply: prints the result lines and exits 0 (supported),
+# 1 (unsupported) or 42 (nothing decidable yet — keep reading; pass the
+# argument "final" to force a decision at timeout).
+# $reply is passed through the environment because command substitution
+# strips trailing newlines and awk -v would eat backslashes in ESC \.
+decide() {
+    DT_REPLY="$reply" DT_FINAL="${1:-}" awk 'BEGIN {
+        r = ENVIRON["DT_REPLY"]
+        esc = "\033"
+        pre = esc "]7501;?"
+        pos_osc = index(r, pre)
+        pos_da1 = index(r, esc "[?")
+
+        # OSC reply body: after the prefix, up to ESC \ or BEL. The value
+        # charset has no ESC, so the first terminator ends the reply.
+        body = ""
+        osc_done = 0
+        if (pos_osc > 0) {
+            rest = substr(r, pos_osc + length(pre))
+            i = index(rest, esc "\\")   # ST
+            j = index(rest, "\007")     # BEL
+            if (i > 0 && (j == 0 || i < j)) {
+                body = substr(rest, 1, i - 1); osc_done = 1
+            } else if (j > 0) {
+                body = substr(rest, 1, j - 1); osc_done = 1
+            } else {
+                body = rest   # truncated: parse what arrived so far
+            }
+        }
+        # A DA1 reply always ends with `c`.
+        da1_done = (pos_da1 > 0 && substr(r, length(r)) == "c")
+
+        if (ENVIRON["DT_FINAL"] == "" && !osc_done && !da1_done) exit 42
+
+        if (pos_osc > 0 && (pos_da1 == 0 || pos_osc < pos_da1)) {
+            print "supported"
+            states = ""
+            kinds = ""
+            n = split(body, seg, ":")   # body: ":states=..:kinds=.." or ""
+            for (k = 1; k <= n; k++) {
+                eq = index(seg[k], "=")
+                if (eq == 0) continue
+                key = substr(seg[k], 1, eq - 1)
+                val = substr(seg[k], eq + 1)
+                if (key == "states") states = val
+                else if (key == "kinds") kinds = val
+                # unknown pairs: ignored, as the spec requires
+            }
+            if (states == "")
+                print "states: idle,working,done,blocked,error (default)"
+            else
+                print "states: " states
+            if (kinds == "")
+                print "kinds: permission,question,auth (default)"
+            else
+                print "kinds: " kinds
+            exit 0
+        }
+        if (pos_da1 > 0) {
+            print "unsupported (DA1 first)"
+            exit 1
+        }
+        print "unsupported (no reply)"
+        exit 1
+    }'
+}
+
+# Read until the OSC reply is complete, the DA1 reply has ended, or the
+# read times out with no data (min 0 time N makes each dd return then).
 reply=''
-_i=0
-while [ "$_i" -lt 2 ]; do
-    _i=$((_i + 1))
+result=''
+rc=42
+_iter=0
+while [ "$_iter" -lt 100 ]; do
+    _iter=$((_iter + 1))
     _chunk=$(dd bs=512 count=1 </dev/tty 2>/dev/null)
+    [ -n "$_chunk" ] || break
     reply="$reply$_chunk"
-    # Stop as soon as we have something decidable.
-    case "$reply" in
-        *"${ESC}]7501;?"*|*"${ESC}[?"*) break ;;
-    esac
+    result=$(decide)
+    rc=$?
+    [ "$rc" -ne 42 ] && break
 done
-
-osc_pat="${ESC}]7501;?"
-da1_pat="${ESC}[?"
-pos_osc=$(printf '%s' "$reply" | awk -v p="$osc_pat" 'NR == 1 { print index($0, p) + 0 }')
-pos_da1=$(printf '%s' "$reply" | awk -v p="$da1_pat" 'NR == 1 { print index($0, p) + 0 }')
-: "${pos_osc:=0}" "${pos_da1:=0}"   # empty reply -> awk prints nothing
-
-result=1
-if [ "$pos_osc" -gt 0 ] && { [ "$pos_da1" -eq 0 ] || [ "$pos_osc" -lt "$pos_da1" ]; }; then
-    echo "supported"
-    result=0
-elif [ "$pos_da1" -gt 0 ]; then
-    echo "unsupported (DA1 first)"
-else
-    echo "unsupported (no reply)"
+if [ "$rc" -eq 42 ]; then
+    result=$(decide final)
+    rc=$?
 fi
 
-# terminfo check — informational only, not authoritative (see header).
-if infocmp -x 2>/dev/null | grep -q Pst; then
-    echo "terminfo: Pst present (reports OSC 7501 support)"
-else
-    echo "terminfo: Pst absent (NOT authoritative — see comment in detect.sh)"
-fi
-
-exit "$result"
+printf '%s\n' "$result"
+exit "$rc"
