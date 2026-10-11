@@ -3,7 +3,8 @@
 本文是本仓库的**核心**部分：只讲协议本身——是什么、解决什么问题、字节格式与
 语义、状态与记录模型、兼容检测与降级、安全边界、以及规范没说清的地方。生态
 采纳与动机见 [why-integrate.md](why-integrate.md)，用法见 [practice.md](practice.md)。
-本文以规范 rev 0.3 文本为准；核实日期 2026-10-09（Asia/Shanghai，CST）。
+本文以规范 rev 0.4（2026-10-10）文本为准；核实日期 2026-10-11
+（Asia/Shanghai，CST）。
 
 - 规范正文：<https://www.superlogical.com/rex/docs/build/program-status>
 - 初稿 gist：<https://gist.github.com/mitchellh/7acae3abd8355c1c00287d67e96c913a>
@@ -55,14 +56,26 @@ ESC ] 7501 ; state=blocked:kind=permission:app=terraform:msg=QXBwbHkgMyB0byBhZGQ
 | ST 结尾 | `1b 5d 37 35 30 31 3b 3f 1b 5c` |
 | BEL 结尾 | `1b 5d 37 35 30 31 3b 3f 07` |
 
-支持的终端收到后**必须原样回同样的序列**（ST 请求回 ST、BEL 请求回 BEL——
-参考实现 Ghostty 的做法是用与请求相同的终止符回复）。
+rev 0.4 的回复规则：支持的终端必须回复以 `?` 开头的应答，之后**可选**跟
+`:states=<逗号列表>` 与 `:kinds=<逗号列表>`，列出它接受的值；回复不带
+`states` 就是恰好支持 idle、working、done、blocked、error，不带 `kinds` 就是
+恰好支持 permission、question、auth——这两组**固定不变**（规范承诺以后版本
+也不改）。想用后续版本新增 state 的程序先查列表，没有就回退到列表里有的
+state；回复里不认识的键值对必须忽略。规范**不要求**回复复用请求的终止符；
+参考实现 Ghostty 复用了请求的终止符（ST 请求回 ST、BEL 请求回 BEL）——那是
+实现行为，不是规范要求。Ghostty 回复的实际字节（[PR #14630](https://github.com/ghostty-org/ghostty/pull/14630)
+的测试断言）：
+
+```text
+ESC ] 7501 ; ?:states=idle,working,done,blocked,error:kinds=permission,question,auth ESC \
+```
 
 ### 语法（规范原文 EBNF）
 
 ```ebnf
 OSC 7501 ; pairs ST        report
 OSC 7501 ; ? ST            feature detection
+reply    := "?" (":" pair)*   feature detection reply (rev 0.4 正文；规范只给示例)
 pairs    := pair (":" pair)*
 pair     := key "=" value
 key      := [a-z]+
@@ -77,7 +90,9 @@ segment  := [A-Za-z0-9_.+-]{1,32}
 - 畸形 pair（无 `=`、空 key、值含集合外字节）**跳过该 pair，其余继续处理**。
 - 未知 key **必须忽略**（这就是扩展机制）；重复 key **后者生效**。
 - `msg`/`title` 是 UTF-8 文本的标准 base64（padding 可选）；解码后不得含控制字符
-  （U+0000–U+001F、U+007F、U+0080–U+009F）。
+  （U+0000–U+001F、U+007F、U+0080–U+009F，**含换行与 tab**）。rev 0.4 补了
+  理由：这两个值是单行值，会展示在网格之外（标签标题、桌面通知、其他程序），
+  单行纯文本便于换行与标签动画。
 - 超限、base64 解码失败、解码含控制字符 → **整条报告丢弃**。
 - `state` 必填；缺失或未知 state → **整条忽略**。
 
@@ -130,7 +145,7 @@ stateDiagram-v2
 | `id` | 缺省 = 根记录；总长 128、每段 32、最深 8 层 | 层级路径 `a/b/c`；不合语法整条忽略 |
 | `kind` | 仅 blocked：`permission` / `question` / `auth` | 阻塞原因分类 |
 | `progress` | 仅 working/blocked：0–100 整数 | 缺省 = 不确定进度 |
-| `app` | `[A-Za-z0-9_.+-]{1,32}` | 报告者标识；子记录从最近祖先继承 |
+| `app` | `[A-Za-z0-9_.+-]{1,32}` | 程序标识：分组/过滤/图标用的键，不是标签（title 才是标签）；子记录从最近祖先继承 |
 | `title` | base64，编码 256 / 解码 192 字节 | 展示标题 |
 | `msg` | base64，编码 2732 / 解码 2048 字节 | 展示消息 |
 
@@ -157,6 +172,19 @@ stateDiagram-v2
 | app | 32 字节 |
 | id | 总 128 字节、每段 32、最深 8 层 |
 | 记录数 / 终端 | 上限 256（终端可设更低，但至少支持 64），LRU 淘汰 |
+
+### rev 0.4 变化
+
+修订起因是 kitty 作者的公开审阅（[kitty #10638](https://github.com/kovidgoyal/kitty/issues/10638)）。
+Limits、状态集合、生命周期在 0.4 中均未变。
+
+| 项目 | 0.3 | 0.4 |
+| --- | --- | --- |
+| 检测回复 | 必须回同样的 `?`；「未来版本可能加 pairs」 | 必须回 `?`，可选跟 `states=` / `kinds=` 列表 |
+| 缺省语义 | 未定义 | 不带列表 = 恰好五 state、三 kind，固定不变 |
+| terminfo | 终端 SHOULD 加 `Pst` 能力 | 整节删除 |
+| 控制字符 | 只列范围 | 明确含换行/tab；理由：两值是单行值 |
+| `app` | 机器可读的程序名 | 标识符（分组/过滤/图标用），不是标签；title 才是标签 |
 
 ## 2 要解决什么问题（元）
 
@@ -198,8 +226,9 @@ stateDiagram-v2
 4. **为什么未知 state 整条忽略**：state 是记录的锚点，未知 state 意味着接收端
    无法对这条记录建模；静默忽略比猜测安全。与之对照，**未知 key 忽略**才是
    前向兼容的扩展机制——未来加新键，旧终端不丢整条。
-5. **为什么只回固定字节**：终端对程序的全部回写就是那一条固定的检测回复
-   `ESC ] 7501 ; ? ESC \`，没有任何程序可控的内容——把注入攻击面压到零。
+5. **为什么只回检测应答**：终端对程序的全部回写只有检测回复，内容以 `?`
+   开头、可选带 states/kinds 列表，不含任何来自报告的字节——把注入攻击面
+   压到零。
 6. **终端原生、呈现无关**：字节流顺着 PTY 走，SSH、容器、多路复用器都天然在
    路径上；协议只描述「程序处于什么状态」，从不描述「该怎么画」。
 7. **零依赖可实现**：博文里的 shell 函数一行 `printf` 即为完整发送端（见 §3）；
@@ -252,14 +281,18 @@ LRU 淘汰、RIS 全清。
   的序列少 1 字节余量；带大量 `test "OSC 7501: …"` 边界用例。
 - [stream_terminal.zig](https://github.com/ghostty-org/ghostty/blob/main/src/terminal/stream_terminal.zig)
   的 `fn programStatus`：`.query => if (self.effects.program_status != null)
-  writePty("\x1b]7501;?" ++ 终止符)`——**只有宿主设置了 program status effect
-  才回答查询**，且回复使用与请求相同的终止符。
+  writePty(…)`——**只有宿主设置了 program status effect 才回答查询**；rev 0.4
+  起回复正文为 `query_reply`（`?` + states/kinds 列表，由 State/Kind 枚举在
+  编译期生成），终止符与请求相同。
 - [ghostty/vt C API](https://github.com/ghostty-org/ghostty/blob/main/include/ghostty/vt/terminal.h)：
   `GHOSTTY_TERMINAL_OPT_PROGRAM_STATUS` 选项 + `GhosttyProgramStatusState` 枚举
   （IDLE=0 … CLEAR=5），嵌入方每 id 保存一条记录并执行生命周期。
-- Ghostty 应用本身目前**忽略**这些报告（`stream_handler.zig` 中
-  `.program_status => {}`）——库先行、应用后至的策略；PR 原文还注明 RIS 时上报
-  一次全清，以及「OSC7501 是 Ghostty 项目首个原创的终端规范」。
+- **rev 0.4 跟进**：[PR #14630](https://github.com/ghostty-org/ghostty/pull/14630)
+  （合并 2026-10-11 03:44 CST）把 libghostty-vt main 更新到 0.4，唯一的行为
+  变化就是查询回复列出 states/kinds；仍未发版（最新 tag v1.3.1 不含）。Ghostty
+  应用本身目前**忽略**这些报告（`stream_handler.zig` 中
+  `.program_status => {}`）——库先行、应用后至的策略；PR #14560 原文还注明
+  RIS 时上报一次全清，以及「OSC7501 是 Ghostty 项目首个原创的终端规范」。
 
 ### 兼容检测与降级
 
@@ -270,14 +303,14 @@ sequenceDiagram
   P->>T: OSC 7501 #59; ? ST（查询）
   P->>T: CSI c（DA1，所有终端都会回答）
   alt 支持 OSC 7501
-    T-->>P: OSC 7501 #59; ? ST（先到）
+    T-->>P: OSC 7501 #59; ?:states=…:kinds=…（先到）
     T-->>P: DA1 回复
     Note over P: 支持 → 发送状态上报
   else 不支持
     T-->>P: 只有 DA1 回复（先到）
     Note over P: 不支持 → 不发或照发（终端会忽略）
   end
-  Note over P,T: 检测是可选的（rev 0.3）：程序可以不检测直接发
+  Note over P,T: 检测是可选的：程序可以不检测直接发（rev 0.3 起）
 ```
 
 1. **查询 + DA1 竞态**：程序发 `OSC 7501 ; ? ST` 后紧跟 DA1（`CSI c` =
@@ -285,21 +318,20 @@ sequenceDiagram
    这对中间层有时序要求：[termio #713](https://github.com/termio-sh/termio/pull/713)
    专门让 termiod 在读路径上**先于 DA1** 回答 7501 查询，因为 Claude Code 和 pi
    都是查询与 DA1 一起发、DA1 一到就判负。
-2. **Pst 不权威**：终端 SHOULD 在 terminfo 里加扩展能力
-   `Pst=\E]7501;%p1%s\E\\`；但 SSH/多路复用器下 terminfo 可能缺失或过期，
-   找不到 `Pst` **不得**推断不支持，查询回复才是权威。顺带一提：上游 Ghostty
-   的 terminfo 目前还没有 `Pst`（cmux 的 fork 补了）。
-3. **检测可选**：rev 0.3 明确可不检测直接发送；不支持 7501 的终端会忽略未知
+2. **检测可选**：rev 0.3 起明确可不检测直接发送；不支持 7501 的终端会忽略未知
    OSC，最坏情况等于什么都没发生。
-4. **未来兼容**：查询回复将来可能在 `?` 后附 pairs；程序必须忽略不认识的内容。
-5. **tmux 透传（实测）**：tmux 不识别 7501，裸序列被丢弃；需要 DCS passthrough
+3. **能力协商（rev 0.4）**：查询回复可在 `?` 后带 `states=` / `kinds=` 支持
+   列表；不带即等于固定的五 state、三 kind（规范承诺以后版本也不变）。想用
+   后续版本新增 state 的程序先查列表，没有就回退到列表里有的 state；回复里
+   不认识的键值对必须忽略。
+4. **tmux 透传（实测）**：tmux 不识别 7501，裸序列被丢弃；需要 DCS passthrough
    （`ESC P tmux; <内部 ESC 加倍的序列> ESC \`）且开启
    `set -g allow-passthrough on`。本仓库在 tmux 3.5a 上四象限实测确认，脚本与
    结果见 [examples/tmux-passthrough.sh](../examples/tmux-passthrough.sh) 与
    [examples/RUNLOG.md](../examples/RUNLOG.md)。
-6. **OSC 9;4 并发**： Hugo 与 Composer 的 PR 都同时支持 9;4 与 7501；接收端按
+5. **OSC 9;4 并发**： Hugo 与 Composer 的 PR 都同时支持 9;4 与 7501；接收端按
    规范把 9;4 映射到根记录、收到 7501 后停止映射即可。
-7. **体验建议**：作者建议检测到 7501 支持时，应用应隐藏自己在标题栏画的
+6. **体验建议**：作者建议检测到 7501 支持时，应用应隐藏自己在标题栏画的
    spinner（与 Rex 的 spinner 冲突）（[推文](https://x.com/mitchellh/status/2107681182649667671)）。
 
 ## 4 安全边界
@@ -310,7 +342,7 @@ sequenceDiagram
 | --- | --- |
 | `msg`/`title` 解码后含控制字符必须拒收、不得当标记解析 | 防止把转义/控制字节当指令执行（注入）；base64 解码是统一检查点 |
 | 界面外展示 SHOULD 解除 bidi 方向覆盖等不可见格式字符 | 防止 RLO 等不可见字符在通知、侧栏等新上下文里重构显示语义（欺骗） |
-| 终端唯一回写是固定的检测回复 | 程序无法借 7501 让终端写任意字节（回显攻击面为零） |
+| 终端唯一回写是检测回复，且不含任何来自报告的内容 | 程序无法借 7501 让终端写任意字节（回显攻击面为零） |
 | 展示 SHOULD 标明状态来自哪个终端/会话 | 防冒充：任何程序都能发 `app=…`，标注来源让用户可归因 |
 | 外部效果（通知/声音）SHOULD 限速 | `blocked` 若被滥用可变成通知轰炸 |
 | 4096 字节整条上限 + 各字段限长 + 记录数上限 | 防资源耗尽；接收端可以放心按上限预分配 |
@@ -321,7 +353,7 @@ sequenceDiagram
   （pi 的做法：控制字符替换为空格、msg 截断到 2048；我们的解析器：任一项不过
   就整条丢弃）。
 - 展示层把 `msg` 当**纯文本**渲染，不做任何标记解释。
-- 检测回复直接写常量字节，不要把请求内容回显回去。
+- 检测回复只写 `?` 与自己的 states/kinds 列表，不要把报告内容回显回去。
 
 ## 5 时间 / 空间 / 变量 / 反 / 空
 
@@ -331,7 +363,11 @@ sequenceDiagram
 形式出现（9 月末）→ 博文与 rev 0.2 同日公开，作者同日向 Ghostty 提交
 libghostty-vt 参考实现 PR，数小时后合并（未进入任何 Ghostty release）→ 次日
 rev 0.3 → 24 小时内多家 agent/终端跟进（作者自述）→ 此后数日的集成潮（详见
-时间线与支持矩阵）。tmux 维护者同期表态观望。
+时间线与支持矩阵）→ kitty 作者审阅并提出 5 点
+（[#10638](https://github.com/kovidgoyal/kitty/issues/10638)）→ 作者逐条回复并
+发布 rev 0.4（2026-10-10）→ Ghostty
+[PR #14630](https://github.com/ghostty-org/ghostty/pull/14630) 跟进到 0.4
+（2026-10-11 合并）。tmux 维护者同期表态观望。
 
 ### 空间（技术栈位置）
 
@@ -358,7 +394,7 @@ rev 0.3 → 24 小时内多家 agent/终端跟进（作者自述）→ 此后数
 | 编码 | pair `k=v`、`:` 分隔、msg/title 必须 base64 | 决定解析器复杂度与安全性 |
 | 生命周期 | working/blocked 必须丢弃；done/error 保留；无心跳 | 陈旧记录风险 vs 刷新负担 |
 | 记录模型 | 整条替换、层级 id、clear 递归、app 继承 | 决定接收端存储结构 |
-| 检测 | 查询 + DA1 竞态；Pst 不权威；检测可选 | 决定首包时序与降级行为 |
+| 检测 | 查询 + DA1 竞态；回复可列 states/kinds；检测可选 | 决定首包时序与降级行为 |
 | 限制 | 4096/2048/192/128/32… | 决定资源上界 |
 | 安全 | 控制字符、回写、来源标注、限速 | 决定实现的红线 |
 | 透传 | 多路复用器需 DCS passthrough 等 | 决定 tmux 类环境可用性 |
@@ -407,13 +443,17 @@ rev 0.3 → 24 小时内多家 agent/终端跟进（作者自述）→ 此后数
    查询（termio #713 被迫自行约定；规范未提）。
 6. 〔规范缺口〕**无一致性测试套件**：没有官方 compliance tests，各接收端行为
    是否一致无从检验（libghostty-vt 的 test 块是最接近的东西）。
-7. 〔实践暴露〕**terminfo `Pst` 缺位**：上游 Ghostty terminfo 尚未包含 `Pst`，
-   cmux 只能在自己的 fork 里补——`Pst` 的分发渠道本身没设计好。
-8. 〔规范缺口〕`progress` 缺省「不确定」与 `idle` 的区分在不同 UI 上如何表达，
+7. 〔规范缺口〕`progress` 缺省「不确定」与 `idle` 的区分在不同 UI 上如何表达，
    规范不置可否（呈现无关的代价）。
-9. 〔规范缺口〕`progress` 的数字格式：规范只说 0–100 整数，前导零（如 `040`）
+8. 〔规范缺口〕`progress` 的数字格式：规范只说 0–100 整数，前导零（如 `040`）
    是否合法未写明；Ghostty 的 parseProgress 与本仓库解析器都接受 `040`=40
    （实测/读源码）。
+9. 〔规范缺口〕**id 总长上限 128 与 8×32+7=263 不一致**：kitty 作者指出 8 层、
+   每段 32 字节加 7 个分隔符应为 263，规范却写总长 128 且未解释；Ghostty 的
+   `max_id_bytes` 仍为 128。截至 2026-10-11 未修
+   （[kitty #10638 评论](https://github.com/kovidgoyal/kitty/issues/10638#issuecomment-6102046211)）。
+10. 〔规范缺口〕**回复是否必须复用请求的终止符**（ST/BEL）未写明；参考实现
+    Ghostty 复用请求的终止符（实现行为，非规范要求）。
 
-这些空白就是贡献机会：测试套件、多路复用器参考行为、`Pst` 分发、9;4→7501
-迁移工具（见 [README 空白清单](../README.md#空白清单可贡献)）。
+这些空白就是贡献机会：测试套件、多路复用器参考行为、9;4→7501 迁移工具（见
+[README 空白清单](../README.md#空白清单可贡献)）。

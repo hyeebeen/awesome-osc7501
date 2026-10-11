@@ -118,7 +118,7 @@ flowchart LR
 | JdeBP（HN） | 身份未知 | —（观点转述） | 认为它不是真正的 OSC，而是 APC。mitchellh 回复：APC 支持更差（macOS Terminal.app 会把 APC 直接打印出来），OSC 有编号多路复用和明确定界，未知值会被忽略。 | 10-09 10:56 / 11:07 | <https://news.ycombinator.com/item?id=50015442> · <https://news.ycombinator.com/item?id=50015511> |
 | Vegenoid（HN） | 身份未知 | "we already have the terminal bell … The total lack of mention of the terminal bell in the article is weird." | 已经有终端响铃了，文章完全没提响铃很奇怪。 | 10-09 07:19 | <https://news.ycombinator.com/item?id=50013800> |
 
-> **kitty 一组的结果**：kitty 作者 10-10 审阅并提出 5 点。作者随后发布 rev 0.4：删除 terminfo `Pst`，查询回复可带 `states=` / `kinds=`（规范 Revision history，起因即这次审阅）。issue 仍 open；kitty 作者表示实现时可能还会发现问题。
+> **kitty 一组的结果**：kitty 作者 10-10 审阅并提出 5 点。作者 10-11 逐条回复并发布 rev 0.4：删除 terminfo `Pst`，查询回复可带 `states=` / `kinds=`（规范 Revision history，起因即这次审阅）。kitty 作者随后回 "OK, I can live with that."，接受删除 terminfo、能力协商、控制字符与 app 的回答；同时指出 id 上限算术应为 8×32+7=263 而非 128，截至 2026-10-11 规范与 Ghostty 均未改（[评论](https://github.com/kovidgoyal/kitty/issues/10638#issuecomment-6102046211)）。issue 仍 open；kitty 作者表示实现时可能还会发现问题。
 
 ### 观望与边界问题
 
@@ -149,7 +149,7 @@ flowchart LR
 ### agent 开发者
 
 - **【观察】** 一个 printf 就能接入所有支持的终端，不用给每个 inbox 写插件。（[博文](https://mitchellh.com/writing/program-status-osc7501)：POSIX sh 函数）
-- **【观察】** 已有实例：Claude Code v2.1.295、pi v1.1.0 已发布；Codex 上游 PR [openai/codex#52725](https://github.com/openai/codex/pull/52725) 已合并（2026-10-10 07:43 CST），是否进入 release 未确认（PARTIAL）；opencode 有 open PR [anomalyco/opencode#54402](https://github.com/anomalyco/opencode/pull/54402)（2026-10-11 06:21 CST 创建）。矩阵尚未更新这两项。（[support-matrix.md](support-matrix.md) 及 2026-10-11 新核实）
+- **【观察】** 已有实例：Claude Code v2.1.295、pi v1.1.0 已发布；Codex 上游 PR [openai/codex#52725](https://github.com/openai/codex/pull/52725) 已合并（2026-10-10 07:43 CST）、尚未进任何 release（最新 tag 均不含该 commit，核实 2026-10-11）；opencode 有 open PR [anomalyco/opencode#54402](https://github.com/anomalyco/opencode/pull/54402)（2026-10-11 06:21 CST 开）。矩阵尚未更新这两项。（[support-matrix.md](support-matrix.md) 及 2026-10-11 新核实）
 - **【观察】** 库层已发布：Bubble Tea v2.1.0、SwiftTerm v1.99.0 等；用库的程序直接获得发送能力（[support-matrix.md](support-matrix.md)）。
 
 ### 终端与工作台开发者
@@ -177,7 +177,7 @@ flowchart LR
 - 只有少数终端展示时，发送端收益有限（先有鸡还是先有蛋）。
 - 带内信令的安全顾虑（[HN](https://news.ycombinator.com/item?id=50012157)）。
 - 与 OSC 3008、OSC 9;4、响铃的重叠之争。
-- 规范仍在快速变化，早期实现可能按旧版写（例如仍提 terminfo `Pst`）。
+- 规范仍在快速变化，早期实现可能按旧版写（例如按 rev 0.3 要求的 terminfo `Pst`；rev 0.4 已整节删除）。
 
 ### 可观察信号
 
@@ -196,7 +196,7 @@ flowchart LR
 
 ### 现在就能用
 
-- 发送端用已支持的程序：Claude Code ≥ v2.1.295、pi ≥ v1.1.0；Codex 上游 PR 已合并（是否进 release 未确认，PARTIAL）。
+- 发送端用已支持的程序：Claude Code ≥ v2.1.295、pi ≥ v1.1.0；Codex 上游 PR [openai/codex#52725](https://github.com/openai/codex/pull/52725) 已合并、尚未进 release（核实 2026-10-11）；opencode PR [anomalyco/opencode#54402](https://github.com/anomalyco/opencode/pull/54402) open。
 - 接收端用已支持的工作台：termio v0.56.0、TUIOS v0.9.0、cmux 主分支等（见 [support-matrix.md](support-matrix.md)）。
 - 在 tmux 里：需要 DCS passthrough 并开 `allow-passthrough`；或参照 @shipwithai11 的 pipe-pane + awk 做法（未验证）。
 

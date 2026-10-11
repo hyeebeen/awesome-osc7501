@@ -1,7 +1,7 @@
 # OSC 7501 实践指南（重点）
 
 可复制运行的用法集。所有示例都在 Linux + tmux 3.5a 上实际运行过，真实输出
-记录在 [examples/RUNLOG.md](../examples/RUNLOG.md)。核实日期 2026-10-09
+记录在 [examples/RUNLOG.md](../examples/RUNLOG.md)。核实日期 2026-10-11
 （Asia/Shanghai，CST）。
 
 ## 1 最小发送端：一个 shell 函数
@@ -63,14 +63,21 @@ sh examples/detect.sh -t 2
 ```
 
 发送 `OSC 7501 ; ? ST` + DA1（`CSI c`），按先到的回复判定：`supported` /
-`unsupported (DA1 first)` / `unsupported (no reply)` / `no tty`。末尾附带
-terminfo `Pst` 检查——仅供参考，**缺 `Pst` 不能推断不支持**，查询回复才权威。
-在无应答环境（`script` 包一层 pty）里的真实输出：
+`unsupported (DA1 first)` / `unsupported (no reply)` / `no tty`。rev 0.4 起
+回复可在 `?` 后带 `:states=…:kinds=…`，detect.sh 会解析并打印；不带列表时
+打印固定缺省并标注 `(default)`。在 pty 里用模拟终端跑
+（`python3 examples/fake_terminal.py --mode v04 -- sh examples/detect.sh`，
+回复字节取自 Ghostty PR #14630 的测试断言）的真实输出：
 
 ```text
-unsupported (no reply)
-terminfo: Pst absent (NOT authoritative — see comment in detect.sh)
+^[]7501;?^[\^[[csupported
+states: idle,working,done,blocked,error
+kinds: permission,question,auth
+exit=0
 ```
+
+裸 `?` 回复、DA1 先到、无回复三条路径的输出见
+[examples/RUNLOG.md](../examples/RUNLOG.md) 第 2 节。
 
 ## 5 解析器 CLI：验证你发出的字节
 
@@ -151,8 +158,9 @@ python3 examples/osc7501_parser.py /tmp/session.log
 5. **发送前自检**：msg/title 先 base64；控制字符先替换掉；msg ≤ 2048 解码字节；
    整条 ≤ 4096。
 6. **检测（可选但推荐）**：用 `OSC 7501 ; ?` + DA1 探测（照抄
-   [detect.sh](../examples/detect.sh) 的时序）；不支持就静默跳过或降级到
-   OSC 9;4。检测到支持时，建议顺手隐藏你自己画的 spinner。
+   [detect.sh](../examples/detect.sh) 的时序）；回复若带 `states=` / `kinds=`
+   列表，可据此决定能用哪些值（不带即固定的五 state、三 kind）；不支持就
+   静默跳过或降级到 OSC 9;4。检测到支持时，建议顺手隐藏你自己画的 spinner。
 7. **多路复用器**：tmux 里要么放弃（静默降级），要么透传（第 6 节）；不要
    重试或告警——丢弃是正常降级。
 

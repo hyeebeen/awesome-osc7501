@@ -1,10 +1,11 @@
 # 示例运行记录（RUNLOG）
 
-以下输出均为在 box 上真实运行所得，原样保留（不可见控制字节已转义：`^[` = ESC，`^G` = BEL）。
+以下输出均为在 box 上真实运行所得，原样保留（不可见控制字节已转义：`^[` = ESC，`^G` = BEL）。按规范 rev 0.4（2026-10-10）更新。
 
-- 运行时间：2026-10-09 23:53–23:55 CST
+- 运行时间：2026-10-11 17:49–17:50 CST
 - 运行环境：Linux 6.12.94+ x86_64 / Debian GNU/Linux 13 (trixie) / Python 3.13.5 / tmux 3.5a / GNU coreutils od 9.7 / `/bin/sh` = dash
-- 未覆盖：box 上没有实现 OSC 7501 的真实终端，`detect.sh` 只验证了「无 tty」和「无回复」两条路径；`supported` 与 `DA1 first` 路径需要在真实终端（如 cmux、Rex 或接了 libghostty-vt 的宿主）里复核。
+- `detect.sh` 的四条路径（supported 带列表 / supported 裸 `?` / DA1 先到 / 无回复）用 `fake_terminal.py` 在 pty 里模拟终端应答覆盖；`v04` 模式的回复字节取自 Ghostty PR #14630 的测试断言。
+- 未覆盖：box 上没有实现 OSC 7501 的真实终端；`fake_terminal.py` 是模拟，真实终端（如 cmux、Prowl 或接了 libghostty-vt 的宿主）里仍需复核。
 
 ## 1. 单元测试、字节演示、tmux 透传实验
 
@@ -15,10 +16,10 @@ Debian GNU/Linux 13 (trixie)
 Python 3.13.5
 tmux 3.5a
 od (GNU coreutils) 9.7
-2026-10-09 23:53 CST
+2026-10-11 17:49 CST
 ### unittest
 ----------------------------------------------------------------------
-Ran 39 tests in 0.101s
+Ran 49 tests in 0.078s
 
 OK
 ### bytes-demo
@@ -84,14 +85,29 @@ wrap exit=0
 wrap exit=3
 {"type": "report", "state": "working", "id": null, "kind": null, "progress": null, "app": "demo", "title": null, "msg": "Running: sh -c exit 3", "raw_pairs": {"state": "working", "app": "demo", "msg": "UnVubmluZzogc2ggLWMgZXhpdCAz"}}
 {"type": "report", "state": "error", "id": null, "kind": null, "progress": null, "app": "demo", "title": null, "msg": "Failed: sh -c exit 3 (exit 3)", "raw_pairs": {"state": "error", "app": "demo", "msg": "RmFpbGVkOiBzaCAtYyBleGl0IDMgKGV4aXQgMyk="}}
-### parser on mixed stream (BEL + ST + noise + other OSC + query + hierarchical ids)
+### parser on mixed stream (BEL + ST + noise + other OSC + query + 0.4 query reply + hierarchical ids)
 {"type": "report", "state": "working", "id": null, "kind": null, "progress": null, "app": "deploy", "title": null, "msg": "Deploying v2.4.1", "raw_pairs": {"state": "working", "app": "deploy", "msg": "RGVwbG95aW5nIHYyLjQuMQ=="}}
 {"type": "report", "state": "blocked", "id": "eu-west", "kind": "permission", "progress": null, "app": null, "title": "EU West", "msg": "Approve?", "raw_pairs": {"state": "blocked", "kind": "permission", "id": "eu-west", "title": "RVUgV2VzdA==", "msg": "QXBwcm92ZT8="}}
-{"type": "query"}
+{"type": "query", "states": ["idle", "working", "done", "blocked", "error"], "kinds": ["permission", "question", "auth"]}
+{"type": "query", "states": ["idle", "working", "done", "blocked", "error"], "kinds": ["permission", "question", "auth"]}
+{"type": "query", "states": ["idle", "working"], "kinds": ["permission", "question", "auth"]}
 ### detect.sh without tty
 no tty
 exit=2
-### detect.sh inside script(1) pty (no terminal emulator answers)
+### detect.sh under fake_terminal.py --mode v04
+^[]7501;?^[\^[[csupported
+states: idle,working,done,blocked,error
+kinds: permission,question,auth
+exit=0
+### detect.sh under fake_terminal.py --mode bare
+^[]7501;?^[\^[[csupported
+states: idle,working,done,blocked,error (default)
+kinds: permission,question,auth (default)
+exit=0
+### detect.sh under fake_terminal.py --mode da1
+^[]7501;?^[\^[[cunsupported (DA1 first)
+exit=1
+### detect.sh under fake_terminal.py --mode silent
 ^[]7501;?^[\^[[cunsupported (no reply)
-terminfo: Pst absent (NOT authoritative — see comment in detect.sh)
+exit=1
 ```
