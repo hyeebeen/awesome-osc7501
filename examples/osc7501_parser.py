@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Incremental parser for OSC 7501 (Program Status Protocol).
 
-Spec: https://www.superlogical.com/rex/docs/build/program-status (rev 0.3)
+Spec: https://www.superlogical.com/rex/docs/build/program-status (rev 0.4)
 
 Feed raw bytes (from a pty, a log file, a socket, ...) to ``Osc7501Parser``
 and get back ``Query`` / ``Report`` events. Parsing is fully incremental:
@@ -12,6 +12,10 @@ Non-7501 OSC sequences and plain data are skipped.
 parser: whole-record replacement, subtree clears, ``app`` inheritance from
 the nearest ancestor, working/blocked cleanup on process exit / new prompt,
 LRU eviction past 256 records, and RIS reset.
+
+Rev 0.4 feature-detection replies: ``parse_query_reply`` and
+``choose_state`` are the program side, ``make_query_reply`` the terminal
+side.
 
 CLI: ``python3 osc7501_parser.py [file]`` reads the file (stdin by default)
 and prints one JSON object per parsed event per line.
@@ -37,6 +41,10 @@ MAX_MSG_DECODED = 2048
 MAX_TITLE_ENCODED = 256
 MAX_TITLE_DECODED = 192
 MAX_APP_BYTES = 32
+# Spec rev 0.4 still caps id at 128 bytes total. kitty's author points out
+# that 8 full segments plus separators need 8*32 + 7 = 263 bytes, so a
+# maximal id does not fit; unresolved as of 2026-10-11.
+# https://github.com/kovidgoyal/kitty/issues/10638
 MAX_ID_TOTAL = 128
 MAX_ID_SEGMENT = 32
 MAX_ID_DEPTH = 8
@@ -45,6 +53,12 @@ MAX_RECORDS = 256
 STATES = ("idle", "working", "done", "blocked", "error", "clear")
 KINDS = ("permission", "question", "auth")
 TRANSIENT_STATES = ("working", "blocked")
+
+# Query-reply defaults (rev 0.4): a reply without states means exactly these
+# five (not counting clear); without kinds, exactly these three. The lists
+# are fixed and do not change in later revisions.
+DEFAULT_STATES = ("idle", "working", "done", "blocked", "error")
+DEFAULT_KINDS = ("permission", "question", "auth")
 
 KEY_RE = re.compile(r"[a-z]+")
 VALUE_RE = re.compile(r"[A-Za-z0-9_.,+/=-]*")
@@ -72,9 +86,14 @@ class Event:
 class Query(Event):
     """`OSC 7501 ; ? ST` — feature-detection query (or a terminal's reply).
 
-    Replies may append pairs after the `?` in future revisions; everything
-    after the `?` is ignored, as the spec requires.
+    Rev 0.4: a reply starts with `?` and MAY append `states=...` and
+    `kinds=...` pairs. Programs MUST ignore pairs they do not understand;
+    a missing list means the fixed defaults, so `states`/`kinds` are always
+    populated (a bare `?` → DEFAULT_STATES / DEFAULT_KINDS).
     """
+
+    states: tuple[str, ...] = DEFAULT_STATES
+    kinds: tuple[str, ...] = DEFAULT_KINDS
 
 
 @dataclass
@@ -146,6 +165,77 @@ def _valid_id(v: str) -> bool:
     if len(segments) > MAX_ID_DEPTH:
         return False
     return all(ID_SEGMENT_RE.fullmatch(s) for s in segments)
+
+
+# --- query reply (rev 0.4) ----------------------------------------------------
+
+def parse_query_reply(body: bytes | str) -> Optional[dict]:
+    """Parse the body of a query reply: `?` + optional `:key=value` pairs.
+
+    The body must start with `?`, else None. `states` / `kinds` become
+    tuples of comma-separated names (empty items ignored); unknown pairs
+    are ignored, as the spec requires. A missing list means the fixed
+    defaults (DEFAULT_STATES without clear / DEFAULT_KINDS), so a bare `?`
+    and a reply without the pairs parse the same.
+    """
+    if isinstance(body, bytes):
+        body = body.decode("ascii", "replace")
+    if not body.startswith("?"):
+        return None
+    info: dict = {}
+    for segment in body[1:].split(":"):
+        if "=" not in segment:
+            continue  # malformed pair: no '=' → ignore
+        key, val = segment.split("=", 1)
+        key = key.strip(" \t")
+        val = val.strip(" \t")
+        if key in ("states", "kinds"):  # unknown pairs: ignored
+            info[key] = tuple(
+                item for item in (i.strip(" \t") for i in val.split(",")) if item
+            )
+    if "states" not in info:
+        info["states"] = DEFAULT_STATES
+    if "kinds" not in info:
+        info["kinds"] = DEFAULT_KINDS
+    return info
+
+
+def make_query_reply(
+    states: Optional[tuple] = None,
+    kinds: Optional[tuple] = None,
+    terminator: bytes | str = b"\x1b\\",
+) -> bytes:
+    """Build a terminal's reply to `OSC 7501 ; ?` (receiver side).
+
+    Lists are omitted when None (a bare `?` reply means the fixed
+    defaults). `clear` is never listed: the states pair counts it out.
+    The spec does not require reusing the request's terminator — Ghostty
+    does; pass ``terminator=b"\x07"`` for a BEL reply.
+    """
+    body = "?"
+    if states:
+        listed = [s for s in states if s != "clear"]
+        if listed:
+            body += ":states=" + ",".join(listed)
+    if kinds:
+        body += ":kinds=" + ",".join(kinds)
+    if isinstance(terminator, str):
+        terminator = terminator.encode("ascii")
+    return b"\x1b]7501;" + body.encode("ascii") + terminator
+
+
+def choose_state(wanted: str, fallback: str, reply_info: Optional[dict]) -> str:
+    """Pick the state to report, given a parsed query reply (program side).
+
+    Rev 0.4: a program that wants a state from a later revision checks the
+    reply's states list and falls back to one that is present. Without
+    reply info there is nothing to check: the wanted state is returned.
+    """
+    if not reply_info:
+        return wanted
+    if wanted in (reply_info.get("states") or ()):
+        return wanted
+    return fallback
 
 
 # --- parser ------------------------------------------------------------------
@@ -258,7 +348,8 @@ class Osc7501Parser:
             return None
         stripped = body.strip(b" \t")
         if stripped.startswith(b"?"):
-            return Query()
+            info = parse_query_reply(stripped)
+            return Query(states=info["states"], kinds=info["kinds"])
         return self._parse_report(body)
 
     # -- report parsing
@@ -306,6 +397,8 @@ class Osc7501Parser:
         app = pairs.get("app")
         if app is not None and not APP_RE.fullmatch(app):
             app = None  # charset/length violation → treated as absent
+        # rev 0.4: app is an identifier for grouping/filtering/icons, not a
+        # label to show the user — title is the label.
 
         msg = None
         enc = pairs.get("msg")
@@ -424,7 +517,11 @@ class RecordStore:
 
 def event_to_json(ev: Event) -> dict:
     if isinstance(ev, Query):
-        return {"type": "query"}
+        return {
+            "type": "query",
+            "states": list(ev.states),
+            "kinds": list(ev.kinds),
+        }
     return {
         "type": "report",
         "state": ev.state,

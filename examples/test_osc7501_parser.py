@@ -15,10 +15,15 @@ import unittest
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from osc7501_parser import (  # noqa: E402
+    DEFAULT_KINDS,
+    DEFAULT_STATES,
     Osc7501Parser,
     Query,
     RecordStore,
     Report,
+    choose_state,
+    make_query_reply,
+    parse_query_reply,
 )
 
 ESC = b"\x1b"
@@ -132,11 +137,93 @@ class TestOsc7501Parser(unittest.TestCase):
         events = parse(ESC + b"]7501;?" + BEL)
         self.assertEqual([type(e) for e in events], [Query])
 
-    def test_query_with_future_pairs_ignored(self):
-        # Replies may append pairs after '?' in future revisions; the spec
-        # says programs must ignore what they don't recognize.
-        events = parse(ESC + b"]7501;?:state=idle:future=1" + ST)
-        self.assertEqual([type(e) for e in events], [Query])
+    def test_query_bare_question_mark_means_defaults(self):
+        # rev 0.4: a bare `?` reply means exactly the five states (not
+        # counting clear) and three kinds, fixed forever.
+        info = parse_query_reply(b"?")
+        self.assertEqual(info, {"states": DEFAULT_STATES, "kinds": DEFAULT_KINDS})
+        ev = parse(ESC + b"]7501;?" + ST)[0]
+        self.assertIsInstance(ev, Query)
+        self.assertEqual(ev.states, DEFAULT_STATES)
+        self.assertEqual(ev.kinds, DEFAULT_KINDS)
+
+    def test_ghostty_reply_string(self):
+        # libghostty-vt answers the query with exactly this body (rev 0.4).
+        body = (
+            b"?:states=idle,working,done,blocked,error"
+            b":kinds=permission,question,auth"
+        )
+        info = parse_query_reply(body)
+        self.assertEqual(
+            info["states"], ("idle", "working", "done", "blocked", "error")
+        )
+        self.assertEqual(info["kinds"], ("permission", "question", "auth"))
+        ev = parse(ESC + b"]7501;" + body + ST)[0]
+        self.assertIsInstance(ev, Query)
+        self.assertEqual(ev.states, DEFAULT_STATES)
+        self.assertEqual(ev.kinds, DEFAULT_KINDS)
+
+    def test_reply_with_only_states(self):
+        info = parse_query_reply("?:states=working,done")
+        self.assertEqual(info["states"], ("working", "done"))
+        self.assertEqual(info["kinds"], DEFAULT_KINDS)
+
+    def test_reply_unknown_pairs_ignored(self):
+        info = parse_query_reply(b"?:x=1")
+        self.assertEqual(info, {"states": DEFAULT_STATES, "kinds": DEFAULT_KINDS})
+        info = parse_query_reply(b"?:states=idle:x=1:kinds=auth")
+        self.assertEqual(info["states"], ("idle",))
+        self.assertEqual(info["kinds"], ("auth",))
+
+    def test_reply_empty_items_ignored(self):
+        info = parse_query_reply(b"?:states=idle,,working,done:")
+        self.assertEqual(info["states"], ("idle", "working", "done"))
+        self.assertEqual(info["kinds"], DEFAULT_KINDS)
+
+    def test_reply_body_must_start_with_question_mark(self):
+        self.assertIsNone(parse_query_reply(b"state=done"))
+        self.assertIsNone(parse_query_reply(b""))
+
+    # --- query-reply helpers (rev 0.4) ------------------------------------
+
+    def test_make_query_reply_roundtrip_st(self):
+        reply = make_query_reply(states=("working", "blocked"),
+                                 kinds=("permission",))
+        self.assertEqual(
+            reply,
+            ESC + b"]7501;?:states=working,blocked:kinds=permission" + ST,
+        )
+        ev = parse(reply)[0]
+        self.assertIsInstance(ev, Query)
+        self.assertEqual(ev.states, ("working", "blocked"))
+        self.assertEqual(ev.kinds, ("permission",))
+
+    def test_make_query_reply_bare_and_bel(self):
+        # no lists → bare `?`; BEL terminator is allowed (the spec does not
+        # require reusing the request's terminator — Ghostty does).
+        self.assertEqual(make_query_reply(), ESC + b"]7501;?" + ST)
+        reply = make_query_reply(terminator=BEL)
+        self.assertEqual(reply, ESC + b"]7501;?" + BEL)
+        ev = parse(reply)[0]
+        self.assertIsInstance(ev, Query)
+        self.assertEqual(ev.states, DEFAULT_STATES)
+
+    def test_make_query_reply_never_lists_clear(self):
+        reply = make_query_reply(states=("working", "clear", "done"))
+        self.assertEqual(reply, ESC + b"]7501;?:states=working,done" + ST)
+        # clear alone → no states pair at all
+        reply = make_query_reply(states=("clear",))
+        self.assertEqual(reply, ESC + b"]7501;?" + ST)
+
+    def test_choose_state_falls_back_to_present_state(self):
+        info = parse_query_reply(b"?")
+        self.assertEqual(choose_state("working", "idle", info), "working")
+        # a state from a later revision: fall back to one that is present
+        self.assertEqual(choose_state("thinking", "working", info), "working")
+        narrow = parse_query_reply(b"?:states=idle,done")
+        self.assertEqual(choose_state("working", "done", narrow), "done")
+        # no reply info: nothing to check against
+        self.assertEqual(choose_state("thinking", "working", None), "thinking")
 
     # --- pair-level rules ----------------------------------------------------
 
@@ -214,6 +301,15 @@ class TestOsc7501Parser(unittest.TestCase):
         for text in ("a\x01b", "a\x7fb", "a\x85b", "a\x9fb"):
             seq = ESC + b"]7501;state=done:msg=" + b64(text).encode() + ST
             self.assertEqual(parse(seq), [], msg=repr(text))
+
+    def test_msg_title_newline_tab_rejected(self):
+        # rev 0.4 spells it out: the control-character ranges include
+        # newline and tab — msg/title are single-line values.
+        for text in ("a\nb", "a\tb"):
+            for key in ("msg", "title"):
+                seq = ESC + b"]7501;state=done:" + key.encode() + b"=" \
+                    + b64(text).encode() + ST
+                self.assertEqual(parse(seq), [], msg=f"{key}={text!r}")
 
     def test_msg_length_limits(self):
         # encoded 2732 / decoded 2047: accepted
