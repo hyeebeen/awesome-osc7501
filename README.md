@@ -6,7 +6,7 @@
 
 [English](README.en.md) · 简体中文（本文件）
 
-**核实日期：2026-10-09（Asia/Shanghai，CST）。** 本清单只收录可回溯到一手源
+**核实日期：2026-10-11（Asia/Shanghai，CST）。** 本清单只收录可回溯到一手源
 （规范/源码/PR/release/作者帖子）的事实；版本号与发布日期集中在
 [docs/support-matrix.md](docs/support-matrix.md) 与 [docs/timeline.md](docs/timeline.md)，
 正文一律只写状态类别。未核实的内容标「未确认」。
@@ -319,16 +319,16 @@ stateDiagram-v2
 
 ### 支持概览
 
-状态类别统计（79 个条目，统计口径见 [docs/support-matrix.md](docs/support-matrix.md)）：
+状态类别统计（100 个条目，统计口径见 [docs/support-matrix.md](docs/support-matrix.md)）：
 
 | 状态 | 数量 |
 | --- | --- |
-| 已发布 | 18（含 Factory Droid（推断）） |
+| 已发布 | 34（含 Factory Droid（推断）） |
 | 已实现（自述） | 1（Rex，版本未确认） |
-| 已合并未发版 | 24 |
+| 已合并未发版 | 30 |
 | 开发中 | 12 |
-| 仅宣布 | 5 |
-| 已关闭 | 1 |
+| 仅宣布 | 3 |
+| 已关闭 | 2 |
 | 未支持 | 16 |
 | 未确认 | 2 |
 

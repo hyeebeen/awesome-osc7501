@@ -6,7 +6,7 @@
 
 [简体中文](README.md) · English (this file)
 
-**Verification date: 2026-10-09 (Asia/Shanghai, CST).** Every entry traces back to a
+**Verification date: 2026-10-11 (Asia/Shanghai, CST).** Every entry traces back to a
 primary source (spec, source code, PR, release, or a first-party post). Version
 numbers and release dates live only in [docs/support-matrix.md](docs/support-matrix.md)
 and [docs/timeline.md](docs/timeline.md); everywhere else we state a status category only. Anything
@@ -213,9 +213,9 @@ Curated highlights (full lists with statuses in the
 
 ### Overview
 
-79 tracked entries: 18 released (incl. Factory Droid, inferred), 1 implemented per
-official docs (Rex), 24 merged-but-unreleased, 12 in development, 5 announced,
-1 closed, 16 unsupported, 2 unconfirmed — breakdown and sources in the
+100 tracked entries: 34 released (incl. Factory Droid, inferred), 1 implemented per
+official docs (Rex), 30 merged-but-unreleased, 12 in development, 3 announced,
+2 closed, 16 unsupported, 2 unconfirmed — breakdown and sources in the
 [support matrix](docs/support-matrix.md).
 
 ### Examples
