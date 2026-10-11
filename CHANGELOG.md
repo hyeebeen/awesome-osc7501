@@ -6,6 +6,7 @@
 ## Unreleased
 
 - README「30 秒看懂」加入流向图、检测时序图、字节分段 SVG 与状态图（中英同步，deep-dive 同步）
+- 新增 docs/why.md：动机、前后对比、社区声音（X/HN/GitHub）、现实意义与前景
 
 ## 2026-10-09
 
