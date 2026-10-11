@@ -34,15 +34,20 @@ Details in [docs/deep-dive.md](docs/deep-dive.md) (Chinese).
   `id`; children inherit `app` from the nearest ancestor; RIS clears everything;
   DECSTR does not; alternate-screen switches are unaffected.
 - **Detection & fallback.** Send `OSC 7501 ; ?` followed by DA1 (`CSI c`): a DA1
-  reply arriving first means unsupported. The terminfo capability `Pst` is a
-  SHOULD and is never authoritative. Terminals that never heard of 7501 simply
-  ignore the unknown OSC, so blind sending degrades safely. tmux drops unknown
-  OSC; a DCS passthrough with `allow-passthrough on` works (verified on tmux 3.5a,
-  see [examples/RUNLOG.md](examples/RUNLOG.md)).
+  reply arriving first means unsupported. A supporting terminal must reply with
+  `?`, optionally followed by `states=` / `kinds=` lists of what it accepts (rev
+  0.4); the spec does not require reusing the request's terminator (Ghostty's
+  implementation happens to). A program wanting a state from a later revision
+  checks the list and falls back to one that is present, and must ignore pairs
+  it does not understand; a reply without lists means exactly the fixed five
+  states and three kinds. Detection itself is optional. Terminals that never
+  heard of 7501 simply ignore the unknown OSC, so blind sending degrades safely.
+  tmux drops unknown OSC; a DCS passthrough with `allow-passthrough on` works
+  (verified on tmux 3.5a, see [examples/RUNLOG.md](examples/RUNLOG.md)).
 - **Security.** Control characters in decoded `msg`/`title` must be rejected; the
-  only bytes a terminal may ever write back is the fixed query reply; show which
-  session a status came from; rate-limit notifications. Reports are capped at
-  4096 bytes.
+  only bytes a terminal may ever write back is the query reply, which contains
+  nothing from any report; show which session a status came from; rate-limit
+  notifications. Reports are capped at 4096 bytes.
 - **Open questions** in the spec (per-pane multiplexer behavior, records after SSH
   disconnect, Ctrl+Z semantics, id collisions on a shared pty, DA1 race
   requirements for middle layers): see deep-dive §5.
@@ -93,20 +98,21 @@ sequenceDiagram
   P->>T: OSC 7501 #59; ? ST (query)
   P->>T: CSI c (DA1, every terminal answers)
   alt supports OSC 7501
-    T-->>P: OSC 7501 #59; ? ST (arrives first)
+    T-->>P: OSC 7501 #59; ?:states=…:kinds=… (arrives first)
     T-->>P: DA1 reply
     Note over P: supported → send reports
   else unsupported
     T-->>P: only the DA1 reply (arrives first)
     Note over P: unsupported → skip, or send anyway (ignored)
   end
-  Note over P,T: Detection is optional (rev 0.3): a program may just send reports
+  Note over P,T: Detection is optional: a program may just send reports (since rev 0.3)
 ```
 
-> The spec requires supporting terminals to reply to `OSC 7501 ; ?` verbatim; DA1
-> is answered by every terminal, so a DA1 reply arriving first means unsupported.
-> The tmux path is this repo's tested result on tmux 3.5a (see
-> [examples/RUNLOG.md](examples/RUNLOG.md)); it is not part of the spec.
+> A supporting terminal must reply starting with `?`, optionally followed by
+> `states=` / `kinds=` lists (rev 0.4); DA1 is answered by every terminal, so a
+> DA1 reply arriving first means unsupported. The tmux path is this repo's tested
+> result on tmux 3.5a (see [examples/RUNLOG.md](examples/RUNLOG.md)); it is not
+> part of the spec.
 
 #### 2 · The bytes
 
@@ -163,10 +169,12 @@ stateDiagram-v2
 Curated highlights (full lists with statuses in the
 [support matrix](docs/support-matrix.md)):
 
-- **Spec & origin** — [the spec](https://www.superlogical.com/rex/docs/build/program-status),
-  the [original gist](https://gist.github.com/mitchellh/7acae3abd8355c1c00287d67e96c913a),
+- **Spec & origin** — [the spec](https://www.superlogical.com/rex/docs/build/program-status)
+  (rev 0.4, 2026-10-10), the [original gist](https://gist.github.com/mitchellh/7acae3abd8355c1c00287d67e96c913a),
   the author's [blog post](https://mitchellh.com/writing/program-status-osc7501)
-  and [announcement](https://x.com/mitchellh/status/2107577887159386152).
+  and [announcement](https://x.com/mitchellh/status/2107577887159386152). Rev 0.4
+  came out of the kitty author's review in
+  [kitty #10638](https://github.com/kovidgoyal/kitty/issues/10638).
 - **Reference implementation** — [libghostty-vt PR #14560](https://github.com/ghostty-org/ghostty/pull/14560)
   by the author (merged, unreleased); parser, query-reply logic and a C API.
 - **Receivers (terminals / multiplexers / agent workbenches)** —

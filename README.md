@@ -106,18 +106,19 @@ sequenceDiagram
   P->>T: OSC 7501 #59; ? ST（查询）
   P->>T: CSI c（DA1，所有终端都会回答）
   alt 支持 OSC 7501
-    T-->>P: OSC 7501 #59; ? ST（先到）
+    T-->>P: OSC 7501 #59; ?:states=…:kinds=…（先到）
     T-->>P: DA1 回复
     Note over P: 支持 → 发送状态上报
   else 不支持
     T-->>P: 只有 DA1 回复（先到）
     Note over P: 不支持 → 不发或照发（终端会忽略）
   end
-  Note over P,T: 检测是可选的（rev 0.3）：程序可以不检测直接发
+  Note over P,T: 检测是可选的：程序可以不检测直接发（rev 0.3 起）
 ```
 
-> 规范要求支持的终端原样回复 `OSC 7501 ; ?`；DA1 是所有终端都会回答的，所以 DA1
-> 回复先到就说明不支持。tmux 一路是本仓库在 tmux 3.5a 上的实测结果（见
+> 支持的终端必须回复以 `?` 开头的应答，之后可选跟 `states=` / `kinds=` 支持
+> 列表（rev 0.4）；DA1 是所有终端都会回答的，所以 DA1 回复先到就说明不支持。
+> tmux 一路是本仓库在 tmux 3.5a 上的实测结果（见
 > [examples/RUNLOG.md](examples/RUNLOG.md)），不是规范内容。
 
 #### ② 这串字节长什么样
@@ -184,10 +185,13 @@ stateDiagram-v2
 
 ### 兼容检测与降级
 
-- 程序发 `ESC ] 7501 ; ? ESC \` 查询，支持的终端**必须回同样的字节**；可紧跟
-  DA1（`CSI c`）作为「不支持」的哨兵——DA1 回复先到即视为不支持。
-- terminfo 能力 `Pst` 只是 SHOULD：找不到 `Pst` **不能**推断不支持（SSH/多路
-  复用器下可能缺失或过期），查询回复才权威。检测本身是可选的（rev 0.3）。
+- 程序发 `ESC ] 7501 ; ? ESC \` 查询，支持的终端必须回复 `?`，之后可选跟
+  `states=` / `kinds=` 支持列表；可紧跟 DA1（`CSI c`）作为「不支持」的哨兵——
+  DA1 回复先到即视为不支持。规范不要求回复复用请求的终止符（Ghostty 的实现
+  恰好用了相同终止符）。检测本身是可选的。
+- 支持列表怎么用（rev 0.4）：想用后续版本新增 state 的程序先查 `states=`，没有
+  就回退到列表里有的状态；回复里不认识的键值对必须忽略；回复不带列表时，按
+  固定的 5 个 state、3 个 kind 算（规范承诺以后版本也不变）。
 - 不支持 7501 的终端本来就会忽略未知 OSC，所以「盲发」安全降级为零。
 - tmux 等会丢弃未知 OSC 的多路复用器需要 DCS passthrough（`ESC P tmux; … ESC \`，
   内部 ESC 加倍）并开启 `allow-passthrough`；本仓库在 tmux 3.5a 上实测确认
@@ -197,7 +201,7 @@ stateDiagram-v2
 
 - `msg`/`title` 解码后含控制字符必须拒收、不得当标记解析。
 - 在协议界面之外展示时，SHOULD 解除 bidi 方向覆盖等不可见格式字符。
-- 终端唯一允许回写的是固定的检测回复（防注入）。
+- 终端唯一允许回写的是检测回复，其中不含任何报告内容（防注入）。
 - 展示 SHOULD 标明状态来自哪个终端/会话（防冒充）；外部效果（通知、声音）SHOULD 限速。
 - 整条报告上限 4096 字节，`msg`/`title`/`id`/`app` 各有限长（见 deep-dive 限制表）。
 
@@ -219,7 +223,8 @@ stateDiagram-v2
 
 #### 规范与原始出处
 
-- [OSC 7501 规范正文](https://www.superlogical.com/rex/docs/build/program-status) - 唯一权威规范（Rex 文档，作者 Mitchell Hashimoto）。
+- [OSC 7501 规范正文](https://www.superlogical.com/rex/docs/build/program-status) - 唯一权威规范（Rex 文档，作者 Mitchell Hashimoto），现行 rev 0.4（2026-10-10）。
+- [kitty #10638](https://github.com/kovidgoyal/kitty/issues/10638) - kitty 作者的评审触发了 rev 0.4（删除 terminfo `Pst`、检测回复可带 states/kinds 等），issue 仍 open。
 - [初稿 gist](https://gist.github.com/mitchellh/7acae3abd8355c1c00287d67e96c913a) - 最早的规范草稿（rev 0.1）。
 - [Why OSC 7501（博文）](https://mitchellh.com/writing/program-status-osc7501) - 作者亲述动机、设计取舍与 PoC。
 - [发布推文](https://x.com/mitchellh/status/2107577887159386152) - 问题陈述：250+ 编排器、Herdr 的 10 次兼容改动、O(N) 集成。
@@ -343,7 +348,7 @@ POSIX sh 函数库、字节级演示、命令包装器、特性检测、带完�
 2. 多路复用器的 per-pane 记录模型与上报约定（tmux/zellij 侧）。
 3. OSC 9;4 → 7501 的映射/迁移工具与文档。
 4. 各语言的小型发送端库（Go/Rust/TS…）与「id 规划」最佳实践。
-5. 帮 `Pst` 进入更多 terminfo（上游 Ghostty terminfo 尚未包含）。
+5. 跟进 id 长度上限问题（kitty 作者指出 128 < 8×32+7，规范未解释，未修）。
 
 ---
 
