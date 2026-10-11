@@ -3,10 +3,27 @@
 本仓库遵循「每次迭代一条」的记录方式；核实方法见
 [research/](research/) 笔记。
 
-## Unreleased
+## 2026-10-11
 
-- README「30 秒看懂」加入流向图、检测时序图、字节分段 SVG 与状态图（中英同步，deep-dive 同步）
-- 新增 docs/why.md：动机、前后对比、社区声音（X/HN/GitHub）、现实意义与前景
+- **规范 rev 0.4**（Revision history 日期 2026-10-10）：删除 terminfo
+  （`Pst`）整节；检测回复可带 `states=` / `kinds=` 支持列表（裸 `?`
+  永远等于原五个 state、三个 kind）；控制字符拒收补「单行值」理由；
+  `app` 定位为标识符（`title` 才是展示名）。全仓库文档同步到 rev 0.4。
+- **examples**：解析器与单测覆盖 rev 0.4 回复列表（单测增至 49 个）；
+  `detect.sh` 解析 `states=`/`kinds=` 并处理 DA1 竞态；新增
+  `fake_terminal.py` 假终端挂具（v04 / bare / da1 / silent 四种回复模式）。
+- **docs**：deep-dive / practice 同步 rev 0.4；「规范未说清之处」更新，
+  新增 id 长度上限问题（128 < 8×32+7，规范未解释，未修）；why.md 措辞
+  匿名化。
+- **矩阵**：全部条目于 2026-10-11 重新核实，扩至 100 行；新增 Codex CLI
+  （已合并未发版）、opencode（开发中）、Prowl 等一批新集成方。
+- **时间线**：增补 2026-10-10 至 2026-10-11 事件——kitty issue #10638
+  审阅触发 rev 0.4、Ghostty PR #14630、opencode PR #54402、Prowl 与
+  omp v18.9.0 等发布。
+- README「30 秒看懂」加入流向图、检测时序图、字节分段 SVG 与状态图
+  （中英同步，deep-dive 同步）；新增 docs/why.md（动机、前后对比、
+  社区声音、现实意义与前景）；正文与支持概览更新到 rev 0.4 与
+  2026-10-11 核实口径。
 
 ## 2026-10-09
 

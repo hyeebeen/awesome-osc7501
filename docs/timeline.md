@@ -45,11 +45,36 @@ release / issue / 核实。版本细节与状态另见 [support-matrix.md](suppo
 | 2026-10-09 10:10 | omp 实现提交 commit fd84fae | commit | <https://github.com/can1357/oh-my-pi/commit/fd84fae07caecfaba7b1beb28d741effafd12acb> |
 | 2026-10-09 16:04 | @_can1357 推文预告「tern 0.6.4 & omp v18.9.0 will be out soon」 | 推文 | <https://x.com/_can1357/status/2108468517217665065> |
 | 2026-10-09 16:05 | cmux PR #18742 合并 | PR | <https://github.com/manaflow-ai/cmux/pull/18742> |
+| 2026-10-09 17:37 | jazz v0.16.13 发布 | release | <https://github.com/lvndry/jazz/releases/tag/v0.16.13> |
 | 2026-10-09 18:28 | tmux issue #5713 提出；18:35 维护者 nicm 回复「This seems premature.」 | issue | <https://github.com/tmux/tmux/issues/5713> |
 | 2026-10-09 19:39 | docker-agent v1.150.0 发布 | release | <https://github.com/docker/docker-agent/releases/tag/v1.150.0> |
+| 2026-10-09 19:44 | dozer-sandbox v0.32.0 发布 | release | <https://github.com/dozer-sandbox/dozer-sandbox/pull/5> |
 | 2026-10-09 20:49 | con-terminal v0.1.0-beta.122 发布 | release | <https://github.com/nowledge-co/con-terminal/releases/tag/v0.1.0-beta.122> |
+| 2026-10-09 20:53 | diri v0.9.6 发布 | release | <https://github.com/cristicretu/diri/releases/tag/v0.9.6> |
 | 2026-10-09 21:31 | termio v0.56.0 发布 | release | <https://github.com/termio-sh/termio/releases/tag/v0.56.0> |
 | 2026-10-09 21:45 | omp v18.8.7 发布（CHANGELOG 18.8.7 节载 OSC 7501） | release | <https://github.com/can1357/oh-my-pi/releases/tag/v18.8.7> |
 | 2026-10-09 22:03 | SwiftTerm 第二个 OSC 7501 PR #748 合并 | PR | <https://github.com/migueldeicaza/SwiftTerm/pull/748> |
 | 2026-10-09 23:04 | wietty v0.0.17 发布 | release | <https://github.com/kloostermanw/wietty/releases/tag/v0.0.17> |
 | 2026-10-09 23:00–23:45 | 本仓库完成全量核实并撰写本轮文档（见 research 笔记） | 核实 | [research/2026-10-09.md](../research/2026-10-09.md) |
+| 2026-10-10 01:45 | kitty issue #10638 提出：请求支持 OSC 7501（讨论采纳，不规定 UI） | issue | <https://github.com/kovidgoyal/kitty/issues/10638> |
+| 2026-10-10 04:55 | Armadra v0.2.5 发布 | release | <https://github.com/AMA-Link/Armadra/pull/217> |
+| 2026-10-10 07:18 | yolop v0.20.0 发布 | release | <https://github.com/everruns/yolop/releases/tag/v0.20.0> |
+| 2026-10-10 07:43 | Codex CLI PR #52725 合并（Report terminal program status with OSC 7501；尚未进任何 release） | PR | <https://github.com/openai/codex/pull/52725> |
+| 2026-10-10 10:32 | botmux v3.40.0 发布（读 Claude Code 的 7501 状态） | release | <https://github.com/deepcoldy/botmux/pull/1781> |
+| 2026-10-10 13:26 | pi-subagents v0.77.0 发布 | release | <https://github.com/nicobailon/pi-subagents/releases/tag/v0.77.0> |
+| 2026-10-10 14:20 | kitty 作者 kovidgoyal 在 #10638 提出 5 点审阅（terminfo、扩展性、控制字符、app、字段上限） | issue | <https://github.com/kovidgoyal/kitty/issues/10638#issuecomment-6094592240> |
+| 2026-10-10（当日） | 规范 0.4：检测回复可带 states=/kinds= 支持列表；删除 terminfo 节；控制字符补「单行值」理由；app 定位为标识符 | 规范 | <https://www.superlogical.com/rex/docs/build/program-status>（修订史） |
+| 2026-10-10 19:46 | para-code v1.139.1-paracode-165 发布 | release | <https://github.com/MocA-Love/para-code/releases/tag/v1.139.1-paracode-165> |
+| 2026-10-10 22:06 | rove v0.9.245 发布 | release | <https://github.com/Sma1lboy/rove/pull/1232> |
+| 2026-10-10 23:57 | wovenmatter v0.2.7 发布 | release | <https://github.com/wovenmatter/wovenmatter/releases/tag/v0.2.7> |
+| 2026-10-11 02:58 | 作者在 kitty #10638 逐条回复，宣布「All of the above is in the doc now as revision 0.4.」 | issue | <https://github.com/kovidgoyal/kitty/issues/10638#issuecomment-6101058210> |
+| 2026-10-11 03:26 | uncurses v0.0.6 发布 | release | <https://github.com/aymanbagabas/uncurses/pull/89> |
+| 2026-10-11 03:44 | Ghostty PR #14630 合并：libghostty-vt 跟到 rev 0.4（回复可列 states/kinds；id 上限 128 未改） | PR | <https://github.com/ghostty-org/ghostty/pull/14630> |
+| 2026-10-11 04:51 | kovidgoyal 跟进：接受多数回答（「OK, I can live with that.」），指出 id 上限算错（满 8 段应为 8×32+7=263 而非 128；截至核实未修） | issue | <https://github.com/kovidgoyal/kitty/issues/10638#issuecomment-6102046211> |
+| 2026-10-11 05:01 | rho rho-sdk-v5.9.0 发布（tag 名为 sdk，CLI 是否同包未确认） | release | <https://github.com/matthewyjiang/rho/releases/tag/rho-sdk-v5.9.0> |
+| 2026-10-11 06:21 | opencode PR #54402 开（层级 id 上报） | PR | <https://github.com/anomalyco/opencode/pull/54402> |
+| 2026-10-11 06:51 | atomic 0.9.33 发布（#3558 为修复 PR，首个实现 PR 未核实） | release | <https://github.com/bastani-inc/atomic/pull/3558> |
+| 2026-10-11 10:38 | toastty v0.9.1 发布 | release | <https://github.com/figelwump/toastty/releases/tag/v0.9.1> |
+| 2026-10-11 14:11 | agent v0.2.0 发布（lydakis/agent） | release | <https://github.com/lydakis/agent/pull/85> |
+| 2026-10-11 15:25 | Prowl v2026.10.11 发布（经 GhosttyKit 接收）；15:45 作者 @onevcat 发帖宣布 | release | <https://github.com/onevcat/Prowl/pull/887> · <https://x.com/onevcat/status/2109188629885243596> |
+| 2026-10-11 16:08 | omp v18.9.0 发布（release notes 未提 7501；7501 首发仍为 v18.8.7） | release | <https://github.com/can1357/oh-my-pi/releases/tag/v18.9.0> |
