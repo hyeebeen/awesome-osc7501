@@ -329,6 +329,8 @@ the full list. The highest-value items right now:
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). Primary sources only; every status claim
 needs a link and a verification date; versions go into the matrix/timeline only.
+The data contract for agents and maintainers (data flow, field glossary,
+status/evidence enums, verification and AI policy) is [AGENTS.md](AGENTS.md).
 
 ## License
 

@@ -1,7 +1,8 @@
 # 贡献指南
 
 欢迎贡献！本仓库是 awesome list + 深度解读的混合体，所以收录标准比普通
-awesome list 更严。
+awesome list 更严。面向 agent 与维护者的数据契约（数据流、字段表、状态/
+证据枚举、核验方法、AI 贡献政策）见 [AGENTS.md](AGENTS.md)。
 
 ## 收录标准
 

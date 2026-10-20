@@ -16,6 +16,10 @@ Outputs (regenerated in place; no wall-clock timestamps, so runs are idempotent)
                            支持概览 count table, verification date and inline
                            unit-test count
   README.en.md             same blocks, English variants
+  llms.txt                 whole-file LLM entry point (NO markers — build.py
+                           owns the file end to end; counts, dates and research
+                           links are computed from data/*.yml + research/, so
+                           they can never drift)
 
 Markers (everything between BEGIN/END is replaced wholesale on every run; all
 bytes outside the markers are left untouched). A missing marker is an error:
@@ -324,6 +328,139 @@ def dumps_json(doc: dict) -> str:
     return json.dumps(doc, indent=2, ensure_ascii=False) + "\n"
 
 
+# ------------------------------------------------------------------ llms ---
+def research_notes() -> list[str]:
+    """Names of research/*.md, sorted; files are date-named, so lexical order
+    is chronological and the last one is the latest verification round."""
+    names = sorted(p.name for p in (REPO / "research").glob("*.md"))
+    if not names:
+        raise BuildError("research/ contains no notes")
+    return names
+
+
+def llms_txt(entries: list[dict], latest_verified: str, research: list[str]) -> str:
+    """Whole-file llms.txt (format: H1 name; blockquote summary; short details;
+    H2 sections of `- [title](url): note` lists; `## Optional` last). No
+    markers — this script owns the file, so counts, dates and research links
+    always match data/*.yml and research/."""
+    counts = Counter(e["status"] for e in entries)
+    items = [f"{s} {counts[s]}" for s in STATUS_ORDER if counts.get(s)]
+    prefix = f"- Tracked integrations: {len(entries)} — "
+    wrapped: list[str] = []  # label + tally chunked at ~92 cols, 2-space continuation
+    for item in items:
+        if wrapped and len(wrapped[-1]) + len(item) + 3 > 92:
+            wrapped[-1] += " ·"
+            wrapped.append("  " + item)
+        elif wrapped:
+            wrapped[-1] = f"{wrapped[-1]} · {item}"
+        elif len(prefix) + len(item) > 92:
+            wrapped.append(prefix)
+            wrapped.append("  " + item)
+        else:
+            wrapped.append(prefix + item)
+    tally = "\n".join(wrapped)
+    rev, spec = SPEC["revision"], SPEC["url"]
+    latest_research = research[-1]
+    older_research = "".join(
+        f"- [research/{n}](research/{n}): earlier verification notes.\n" for n in research[:-1]
+    )
+    return f"""# Awesome OSC 7501
+
+> OSC 7501 is a terminal escape-sequence protocol ("Program Status Protocol") that
+> lets long-running programs report structured status — working, blocked, done, error,
+> idle — to their terminal through the PTY byte stream. Supporting terminals present
+> that status however they choose (tab markers, sidebars, notifications, unified
+> inboxes) and terminals that do not simply ignore it, so sending is always safe.
+
+This repo explains the protocol byte by byte, ships runnable sender/receiver
+examples, and tracks ecosystem adoption in a support matrix where every entry is
+backed by first-hand sources and a verification date.
+
+- Spec: rev {rev} — <{spec}>
+- Latest verified: {latest_verified} (Asia/Shanghai, CST)
+{tally}
+
+## Spec essentials
+
+- [Wire format]({spec}): `ESC ] 7501 ; key=value(:key=value)* ST|BEL` —
+  pairs are `key=value` joined by `:`, the value charset excludes `:` and `;` so
+  nothing needs escaping, a malformed pair is skipped, unknown keys are ignored
+  (that is the extension mechanism), duplicate keys: the last one wins.
+- [States](docs/deep-dive.md#状态表含生命周期): five states — `idle` (free/cancelled),
+  `working` (optional `progress` 0–100), `blocked` (waiting on external input),
+  `done`, `error` — plus `clear`, which is not a state but a deletion command: remove
+  the record for `id` and its subtree, or every record of the terminal without `id`.
+- [Blocked kinds](docs/deep-dive.md#键表): `kind` is only valid with `state=blocked`
+  and takes `permission` / `question` / `auth`; detection replies may also advertise
+  the accepted values (`kinds=`, rev 0.4).
+- [Record model](docs/deep-dive.md#记录模型): each report completely replaces the
+  record of its `id` — keys missing from the report vanish, so `app` must be resent
+  every time; `id` is a hierarchy path (`a/b/c`) at most 8 levels deep; child records
+  inherit `app` from the nearest ancestor.
+- [Detection](docs/deep-dive.md#兼容检测与降级): optional query `ESC ] 7501 ; ? ST`
+  followed by DA1 (`CSI c`) as the unsupported sentinel — a DA1 reply arriving first
+  means no support; a supporting terminal must reply starting with `?`, optionally
+  followed by `states=` / `kinds=` lists (rev 0.4).
+- [Lifecycle](docs/deep-dive.md#状态表含生命周期): `working` and `blocked` records
+  MUST be dropped when the process exits or a new prompt appears (OSC 133 A);
+  `done` and `error` survive until replaced or cleared; `idle` MAY be dropped; there
+  is no heartbeat — terminals must not require keep-alive refreshes.
+- [Limits](docs/deep-dive.md#限制表): a whole report is at most 4096 bytes; per-field
+  caps: `msg` 2732 encoded / 2048 decoded, `title` 256 / 192, `app` 32, `id` 128
+  bytes total / 32 per segment / 8 levels, keys 16 bytes; at most 256 records per
+  terminal (lower allowed, but at least 64).
+- [Security](docs/deep-dive.md#4-安全边界): `msg`/`title` are base64 and rejected
+  when they decode to control characters; displays outside the protocol surface
+  should strip bidi overrides; the only write-back allowed is the detection reply,
+  which never echoes report bytes; label the reporting terminal/session and
+  rate-limit notifications and sounds.
+
+## Data (machine-readable)
+
+- [data/integrations.yml](data/integrations.yml): source of truth for the support
+  matrix — one entry per integration with status, evidence, first-hand sources and
+  verified_at.
+- [data/integrations.json](data/integrations.json): generated export of the
+  integrations plus counts and labels; regenerate with scripts/build.py, never
+  hand-edit.
+- [data/resources.json](data/resources.json): generated export of the curated
+  non-integration resources (spec, reference code, articles, discussions).
+- [data/schema.json](data/schema.json): JSON Schema shared by data/integrations.yml
+  and data/resources.yml (category / status / evidence_type enums).
+- [AGENTS.md#data-model](AGENTS.md#data-model): field glossary — every field with
+  type, required flag and meaning, plus the exact status and evidence enums.
+
+## Docs
+
+- [README.md](README.md): Chinese main document — the problem, design principles, a
+  30-second tour, state and record models, common misconceptions.
+- [README.en.md](README.en.md): English counterpart of the README.
+- [docs/support-matrix.md](docs/support-matrix.md): the registry of versions and
+  release dates — four category tables with stable `#id` anchors, status
+  definitions and recheck recipes.
+- [docs/deep-dive.md](docs/deep-dive.md): byte-level format, EBNF, detection,
+  lifecycle, limits, security, and what the spec leaves open.
+- [docs/practice.md](docs/practice.md): hands-on guide for senders and receivers,
+  tied to the runnable examples.
+- [docs/why.md](docs/why.md): why the protocol exists — motivation, community
+  voices, outlook.
+- [docs/why-integrate.md](docs/why-integrate.md): why terminals, agents, CLIs and
+  libraries adopt it, organized by evidence.
+- [docs/timeline.md](docs/timeline.md): dated chronology of spec revisions and
+  integrations.
+- [research/{latest_research}](research/{latest_research}): latest verification
+  notes — method, queries, findings and the next-round checklist.
+- [examples/](examples/): POSIX sh sender library, byte-level demo, command wrapper,
+  feature detection, a fully validated Python parser with unit tests, tmux
+  passthrough experiments and real run logs.
+
+## Optional
+
+{older_research}- [CHANGELOG.md](CHANGELOG.md): per-iteration change log of this repo.
+- [CONTRIBUTING.md](CONTRIBUTING.md): inclusion rules and contribution workflow.
+"""
+
+
 # -------------------------------------------------------------- rewriting ---
 def replace_region(text: str, path: Path, begin: str, end: str, mid: str) -> str:
     """Replace the exact span between the two markers with `mid`; abort on a
@@ -366,6 +503,10 @@ def generate() -> dict[Path, str]:
     # JSON exports
     outputs[REPO / "data" / "integrations.json"] = dumps_json(export_doc(integrations, "data/integrations.yml", anchored=True))
     outputs[REPO / "data" / "resources.json"] = dumps_json(export_doc(resources, "data/resources.yml", anchored=False))
+
+    # llms.txt: whole file generated from data (no markers — counts, dates and
+    # research links can never drift from data/*.yml and research/)
+    outputs[REPO / "llms.txt"] = llms_txt(integrations, latest_verified, research_notes())
 
     # README.md (zh) / README.en.md (en): top3 + featured + count table +
     # verification date + inline test count
