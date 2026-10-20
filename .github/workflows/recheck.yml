@@ -1,0 +1,70 @@
+# Weekly report-only status recheck against the GitHub API.
+# This workflow NEVER commits: the report goes to an issue + an artifact,
+# and a human must verify and edit data/integrations.yml.
+name: Weekly status recheck
+
+on:
+  schedule:
+    - cron: '0 1 * * 1' # Mondays 01:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  recheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: Install Python deps
+        run: pip install pyyaml jsonschema
+
+      # Exit 0 = no suggestions, 2 = suggestions found (report below),
+      # anything else is a real failure and fails the job.
+      - name: Run report-only recheck
+        id: recheck
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set +e
+          python3 scripts/recheck.py --format md --out recheck.md --fail-on-change
+          code=$?
+          set -e
+          echo "exit_code=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" -ne 0 ] && [ "$code" -ne 2 ]; then
+            exit "$code"
+          fi
+
+      - name: Find existing recheck issue
+        if: steps.recheck.outputs.exit_code == '2'
+        id: existing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          num="$(gh api "repos/${GITHUB_REPOSITORY}/issues?labels=status-recheck&state=open&per_page=100" \
+            --jq '[.[] | select(.title == "Weekly status recheck") | .number] | first // ""')"
+          echo "number=$num" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update the recheck issue
+        if: steps.recheck.outputs.exit_code == '2'
+        uses: peter-evans/create-issue-from-file@v6
+        with:
+          title: Weekly status recheck
+          content-filepath: recheck.md
+          labels: status-recheck
+          issue-number: ${{ steps.existing.outputs.number }}
+
+      - name: Upload report artifact
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: recheck-report
+          path: recheck.md

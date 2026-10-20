@@ -1,0 +1,36 @@
+# Weekly link check (lychee) across all markdown and data files.
+# Broken links never fail the workflow (fail: false); if any are found,
+# an issue labelled "links" is opened from the lychee report instead.
+name: Link check
+
+on:
+  schedule:
+    - cron: '0 1 * * 1' # Mondays 01:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  lychee:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Run lychee
+        id: lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --no-progress '**/*.md' 'data/*.yml'
+          fail: false
+          output: lychee/out.md
+
+      - name: Open issue for broken links
+        if: steps.lychee.outputs.exit_code != '0'
+        uses: peter-evans/create-issue-from-file@v6
+        with:
+          title: Broken links detected
+          content-filepath: lychee/out.md
+          labels: links

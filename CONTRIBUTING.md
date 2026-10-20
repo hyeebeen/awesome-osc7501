@@ -27,8 +27,12 @@ awesome list 更严。
 2. 核实新条目时：在 `research/<日期>.md` 记录方法与查询记录（gh 命令、代码
    搜索、原帖链接），再更新矩阵、时间线与 README 概览计数。
 3. 示例类贡献必须在真实环境跑过，并把输出追加到 `examples/RUNLOG.md`。
-4. 运行 `markdownlint-cli2 "**/*.md"` 保证 0 错误。
-5. 在 `CHANGELOG.md` 记一条。
+4. 批量复核状态（只读）：`python3 scripts/recheck.py --format md` 用 GitHub
+   API 重查 merged-unreleased / in-progress 等状态条目的 PR/issue 与 release，
+   输出仅为建议，人工确认后再改 `data/integrations.yml`（`--fail-on-change`
+   时有差异退出码 2；CI 每周一自动跑）。
+5. 运行 `markdownlint-cli2 "**/*.md"` 保证 0 错误。
+6. 在 `CHANGELOG.md` 记一条。
 
 ## markdownlint
 

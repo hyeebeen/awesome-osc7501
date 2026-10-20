@@ -1,0 +1,20 @@
+# lychee link-checker config — used by .github/workflows/links.yml (weekly) and local runs:
+#
+#   lychee --config lychee.toml --no-progress '**/*.md' 'data/*.yml'
+#
+# Reference: https://lycheeverse.github.io/lychee/usage/config.html
+
+# 206 Partial Content is a fine response; 429 means the site rate-limits bots,
+# not that the link is broken.
+accept = ["200", "206", "429"]
+
+# Links that cannot be checked automatically:
+#   - x.com / twitter.com block unauthenticated bots (403)
+#   - localhost / loopback addresses are never publicly reachable
+exclude = [
+  "^https?://([^/]+\\.)?x\\.com/",
+  "^https?://([^/]+\\.)?twitter\\.com/",
+  "^https?://localhost",
+  "^https?://127\\.0\\.0\\.1",
+  "^https?://\\[::1\\]",
+]
