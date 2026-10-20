@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OSC 7501 integrations & resources data files",
+  "description": "Shared schema for data/integrations.yml (support matrix, migrated from docs/support-matrix.md) and data/resources.yml (curated non-integration resources from README.md).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["entries"],
+  "properties": {
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/entry" }
+    }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "url",
+        "category",
+        "role",
+        "status",
+        "version",
+        "evidence_type",
+        "source",
+        "verified_at",
+        "featured"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "minLength": 1,
+          "description": "Stable kebab-case slug; unique across both data files; never change once published."
+        },
+        "name": { "type": "string", "minLength": 1 },
+        "url": {
+          "type": "string",
+          "minLength": 1,
+          "description": "First link of the entry; http(s) URL or repo-root-relative path."
+        },
+        "category": {
+          "enum": ["receiver", "agent", "cli", "library", "spec", "reference", "article", "discussion"]
+        },
+        "role": { "type": "string", "minLength": 1 },
+        "status": {
+          "enum": [
+            "released",
+            "implemented-self-reported",
+            "merged-unreleased",
+            "in-progress",
+            "announced",
+            "closed",
+            "unsupported",
+            "unconfirmed"
+          ]
+        },
+        "status_note": { "type": ["string", "null"] },
+        "version": { "type": "string", "minLength": 1 },
+        "evidence_type": {
+          "enum": ["verified", "self-reported", "self-reported-third-party", "inferred", "not-found"]
+        },
+        "evidence_note": { "type": ["string", "null"] },
+        "source": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["url"],
+            "properties": {
+              "url": { "type": "string", "minLength": 1 },
+              "label": { "type": ["string", "null"] }
+            }
+          }
+        },
+        "verified_at": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "format": "date"
+        },
+        "why": { "type": ["string", "null"] },
+        "why_en": { "type": "string" },
+        "featured": { "type": "boolean" },
+        "track": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "repo": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+            "pr": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "aliases": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+      }
+    }
+  }
+}
