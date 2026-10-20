@@ -118,7 +118,7 @@ flowchart LR
 | JdeBP（HN） | 身份未知 | —（观点转述） | 认为它不是真正的 OSC，而是 APC。mitchellh 回复：APC 支持更差（macOS Terminal.app 会把 APC 直接打印出来），OSC 有编号多路复用和明确定界，未知值会被忽略。 | 10-09 10:56 / 11:07 | <https://news.ycombinator.com/item?id=50015442> · <https://news.ycombinator.com/item?id=50015511> |
 | Vegenoid（HN） | 身份未知 | "we already have the terminal bell … The total lack of mention of the terminal bell in the article is weird." | 已经有终端响铃了，文章完全没提响铃很奇怪。 | 10-09 07:19 | <https://news.ycombinator.com/item?id=50013800> |
 
-> **kitty 一组的结果**：kitty 作者 10-10 审阅并提出 5 点。作者 10-11 逐条回复并发布 rev 0.4：删除 terminfo `Pst`，查询回复可带 `states=` / `kinds=`（规范 Revision history，起因即这次审阅）。kitty 作者随后回 "OK, I can live with that."，接受删除 terminfo、能力协商、控制字符与 app 的回答；同时指出 id 上限算术应为 8×32+7=263 而非 128，截至 2026-10-11 规范与 Ghostty 均未改（[评论](https://github.com/kovidgoyal/kitty/issues/10638#issuecomment-6102046211)）。issue 仍 open；kitty 作者表示实现时可能还会发现问题。
+> **kitty 一组的结果**：kitty 作者 10-10 审阅并提出 5 点。作者 10-11 逐条回复并发布 rev 0.4：删除 terminfo `Pst`，查询回复可带 `states=` / `kinds=`（规范 Revision history，起因即这次审阅）。kitty 作者随后回 "OK, I can live with that."，接受删除 terminfo、能力协商、控制字符与 app 的回答；同时指出 id 上限算术应为 8×32+7=263 而非 128，截至 2026-10-11 规范与 Ghostty 均未改（[评论](https://github.com/kovidgoyal/kitty/issues/10638#issuecomment-6102046211)）。issue 已于 2026-10-13 11:58 关闭：master 已实现，id 上限用 263（见 [research/2026-10-21.md](../research/2026-10-21.md)）。
 
 ### 观望与边界问题
 
@@ -149,7 +149,7 @@ flowchart LR
 ### agent 开发者
 
 - **【观察】** 一个 printf 就能接入所有支持的终端，不用给每个 inbox 写插件。（[博文](https://mitchellh.com/writing/program-status-osc7501)：POSIX sh 函数）
-- **【观察】** 已有实例：Claude Code v2.1.295、pi v1.1.0 已发布；Codex 上游 PR [openai/codex#52725](https://github.com/openai/codex/pull/52725) 已合并（2026-10-10 07:43 CST）、尚未进任何 release（最新 tag 均不含该 commit，核实 2026-10-11）；opencode 有 open PR [anomalyco/opencode#54402](https://github.com/anomalyco/opencode/pull/54402)（2026-10-11 06:21 CST 开）。矩阵尚未更新这两项。（[support-matrix.md](support-matrix.md) 及 2026-10-11 新核实）
+- **【观察】** 已有实例：Claude Code v2.1.295、pi v1.1.0 已发布；Codex 已随 [rust-v0.163.0](https://github.com/openai/codex/releases/tag/rust-v0.163.0) 发布（2026-10-16 05:30 CST）；opencode 经 [anomalyco/opencode#55172](https://github.com/anomalyco/opencode/pull/55172) 合并（2026-10-14 04:48 CST，经 OpenTUI 0.6.3 `setProgramStatus`，是否已随 release 发出未确认）。（[support-matrix.md](support-matrix.md)，2026-10-21 核实）
 - **【观察】** 库层已发布：Bubble Tea v2.1.0、SwiftTerm v1.99.0 等；用库的程序直接获得发送能力（[support-matrix.md](support-matrix.md)）。
 
 ### 终端与工作台开发者
@@ -159,7 +159,7 @@ flowchart LR
 
 ### 非 AI 工具
 
-- **【观察】** 问题不限于 AI：构建、部署、包升级、数据处理同样适用（Homebrew、Terraform、Cargo 等，[博文](https://mitchellh.com/writing/program-status-osc7501)）；tuist 用 `blocked kind=auth` 报浏览器登录等待；Hugo、Composer 有进行中的 PR。
+- **【观察】** 问题不限于 AI：构建、部署、包升级、数据处理同样适用（Homebrew、Terraform、Cargo 等，[博文](https://mitchellh.com/writing/program-status-osc7501)）；tuist 用 `blocked kind=auth` 报浏览器登录等待；Hugo 已随 v0.168.0 发布，Composer 有进行中的 PR。
 - **【观察】PARTIAL** systemd 支持仅为 @ProgrammerDude 自述（「已经在写 PR」），PR 是否存在未核实。
 
 ## 未来前景
@@ -169,7 +169,7 @@ flowchart LR
 可能走向：
 
 1. **成为事实标准。** 依据：发送端与接收端在首日到首周密集落地，多家已发布（见 [support-matrix.md](support-matrix.md)）。
-2. **停留在 agent 工作台圈子。** 依据：主流终端（WezTerm、iTerm2、Windows Terminal、Alacritty、zellij）未见实现；tmux 观望。
+2. **停留在 agent 工作台圈子。** 依据：主流终端（WezTerm、iTerm2、Windows Terminal、Alacritty、zellij）未见实现；kitty 仅 master 实现未发版；tmux 观望后关闭 issue（2026-10-13，无上游提交）。
 3. **被并入或对齐其他标准（如 UAPI、OSC 3008）。** 依据：UAPI 托管建议与作者「independent group」表态；OSC 3008 扩展建议。
 
 风险：
@@ -183,9 +183,9 @@ flowchart LR
 
 | 信号 | 现在的状态（链接，日期） | 怎么看 |
 | --- | --- | --- |
-| kitty 是否出现实现提交 | kitty 作者已审阅，说 "When I look at implementing it"（不是承诺）；issue open（[kitty#10638](https://github.com/kovidgoyal/kitty/issues/10638)，2026-10-11） | 主流终端的第一家；实现提交出现即强信号 |
+| kitty 是否出现实现提交 | 已出现：master merge 0e1b7f4812（2026-10-13 10:59，id 上限 263）；#10638 已关闭，最新 release v0.49.2 不含（[research/2026-10-21.md](../research/2026-10-21.md)） | 主流终端的第一家；进入 release 即强信号 |
 | WezTerm / iTerm2 / Windows Terminal 是否开 issue / PR | 未见实现（代码搜索，2026-10-09） | 每新增一家，发送端收益扩大 |
-| tmux 维护者立场 | nicm：premature；现有 pane 标题 + OSC 9 + OSC 133 够用（[tmux#5713](https://github.com/tmux/tmux/issues/5713)，2026-10-09 / 10） | 立场改变前，tmux 用户要用 DCS passthrough + `allow-passthrough on` |
+| tmux 维护者立场 | nicm：premature；现有 pane 标题 + OSC 9 + OSC 133 够用（[tmux#5713](https://github.com/tmux/tmux/issues/5713)，2026-10-09 / 10；issue 2026-10-13 关闭、无上游提交） | 立场改变前，tmux 用户要用 DCS passthrough + `allow-passthrough on` |
 | Ghostty 应用是否在 release 里展示记录 | 未支持；最新 tag v1.3.1，libghostty-vt 已合并（2026-10-11） | 某个 release 展示记录，即「作者自家终端」落地 |
 | 标准化去处 | UAPI 托管建议 + 作者："I like the idea of an independent group owning it."（[X](https://x.com/mitchellh/status/2108316851537322111)，2026-10-09） | 迁到独立组织 / 仓库、出现版本号与兼容性测试，即走向标准 |
 | 规范变化速度 | rev 0.1→0.4 共 12 天（2026-09-28 → 10-10）；rev 0.4 删 terminfo、加能力协商 | 快速变化是活力也是风险：盯紧 Revision history，别按旧版实现 |
@@ -196,7 +196,7 @@ flowchart LR
 
 ### 现在就能用
 
-- 发送端用已支持的程序：Claude Code ≥ v2.1.295、pi ≥ v1.1.0；Codex 上游 PR [openai/codex#52725](https://github.com/openai/codex/pull/52725) 已合并、尚未进 release（核实 2026-10-11）；opencode PR [anomalyco/opencode#54402](https://github.com/anomalyco/opencode/pull/54402) open。
+- 发送端用已支持的程序：Claude Code ≥ v2.1.295、pi ≥ v1.1.0、Codex ≥ rust-v0.163.0；opencode main 已合并（[anomalyco/opencode#55172](https://github.com/anomalyco/opencode/pull/55172)，是否已随 release 发出未确认）。
 - 接收端用已支持的工作台：termio v0.56.0、TUIOS v0.9.0、cmux 主分支等（见 [support-matrix.md](support-matrix.md)）。
 - 在 tmux 里：需要 DCS passthrough 并开 `allow-passthrough`；或参照 @shipwithai11 的 pipe-pane + awk 做法（未验证）。
 
@@ -220,7 +220,7 @@ printf '\033]7501;state=error:app=recon\033\\'
 - tmux 侧方案。
 - xterm.js 实现（目前未见）。
 - 中文用户的实践文档。
-- 向 kitty / wezterm 的 issue 提供真实用例数据。
+- 向 wezterm 的 issue 提供真实用例数据（kitty 已在 master 实现）。
 
 ## 来源
 

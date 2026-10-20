@@ -402,7 +402,8 @@ rev 0.3 → 24 小时内多家 agent/终端跟进（作者自述）→ 此后数
 ### 反（反对、局限、失败模式）
 
 - **tmux 维护者 nicm**：「This seems premature. Let's see if any other terminals
-  and programs pick it up.」（[issue #5713](https://github.com/tmux/tmux/issues/5713)）
+  and programs pick it up.」（[issue #5713](https://github.com/tmux/tmux/issues/5713)，
+  2026-10-13 由维护者关闭，无上游提交）
 - **Herdr**：issue 被以 bugs-only 策略关闭、外部 PR 因贡献者政策被拒——流程性
   关闭而非技术否决（[#5069](https://github.com/herdrdev/herdr/issues/5069)、PR
   [#5093](https://github.com/herdrdev/herdr/pull/5093)）。
@@ -450,8 +451,10 @@ rev 0.3 → 24 小时内多家 agent/终端跟进（作者自述）→ 此后数
    （实测/读源码）。
 9. 〔规范缺口〕**id 总长上限 128 与 8×32+7=263 不一致**：kitty 作者指出 8 层、
    每段 32 字节加 7 个分隔符应为 263，规范却写总长 128 且未解释；Ghostty 的
-   `max_id_bytes` 仍为 128。截至 2026-10-11 未修
-   （[kitty #10638 评论](https://github.com/kovidgoyal/kitty/issues/10638#issuecomment-6102046211)）。
+   `max_id_bytes` 仍为 128。截至 2026-10-21 规范仍未修（仍 rev 0.4）
+   （[kitty #10638 评论](https://github.com/kovidgoyal/kitty/issues/10638#issuecomment-6102046211)）；
+   kitty master 已按 263 实现（2026-10-13 合并，见
+   [research/2026-10-21.md](../research/2026-10-21.md)）。
 10. 〔规范缺口〕**回复是否必须复用请求的终止符**（ST/BEL）未写明；参考实现
     Ghostty 复用请求的终止符（实现行为，非规范要求）。
 

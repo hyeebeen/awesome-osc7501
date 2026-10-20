@@ -108,7 +108,7 @@ tmux 不识别 7501，裸序列被丢弃。两种出路：
    ```
 
 2. 等/推动 tmux 原生支持（见 [tmux #5713](https://github.com/tmux/tmux/issues/5713)，
-   维护者目前观望）。
+   issue 已于 2026-10-13 关闭，无上游提交）。
 
 tmux 3.5a 上的四象限实测（[examples/tmux-passthrough.sh](../examples/tmux-passthrough.sh)）：
 

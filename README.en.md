@@ -215,19 +215,19 @@ Curated highlights (full lists with statuses in the
 
 <!-- BEGIN GENERATED: status-counts -->
 
-Status counts (100 tracked entries; methodology in the [support matrix](docs/support-matrix.md); latest verified 2026-10-11):
+Status counts (121 tracked entries; methodology in the [support matrix](docs/support-matrix.md); latest verified 2026-10-21):
 
 | Status | Count |
 | --- | --- |
-| Released | 34 |
+| Released | 51 |
 | Implemented (self-reported) | 1 |
-| Merged, unreleased | 30 |
-| In development | 12 |
+| Merged, unreleased | 26 |
+| In development | 17 |
 | Announced | 3 |
-| Closed | 2 |
-| Unsupported | 16 |
-| Unconfirmed | 2 |
-| Total | 100 |
+| Closed | 6 |
+| Unsupported | 14 |
+| Unconfirmed | 3 |
+| Total | 121 |
 
 <!-- END GENERATED: status-counts -->
 

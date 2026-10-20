@@ -3,6 +3,34 @@
 本仓库遵循「每次迭代一条」的记录方式；核实方法见
 [research/](research/) 笔记。
 
+## 2026-10-21
+
+- **数据迁移**：支持矩阵从 docs/support-matrix.md 的手写表格迁移到
+  `data/integrations.yml`（单一事实源，121 个条目），配 JSON Schema
+  （`data/schema.json`）与校验器 `scripts/validate.py`（schema、id 唯一、
+  url 可达、entry url == 首个 source）；`data/resources.yml` 同构维护
+  精选清单（15 条）；JSON 导出 `data/integrations.json` /
+  `data/resources.json`。
+- **生成器**：`scripts/build.py` 从 yml 确定性生成 support-matrix 四张表
+  （带稳定锚点）、JSON 导出与 README 支持概览/单测计数（`--check` 可验
+  幂等）；`scripts/check.sh` / Makefile 固化 CI 序列；
+  `scripts/migrate_matrix.py` 留存迁移溯源。
+- **矩阵全量复核**（方法见 [research/2026-10-21.md](research/2026-10-21.md)）：
+  100 → 121 行。kitty master 已实现（id 上限 263 而非规范 128，已合并未
+  发版）；tmux #5713 关闭（维持未支持）；Codex rust-v0.163.0、cmux v0.65.1、
+  Hugo v0.168.0、ServerBox、zz、cherry、noctty、MonkeySSH、go-term、agentd、
+  fx、the-last-harness、8gent-code、Armadra Agent 共 14 行转已发布；
+  wintty/cleat/bub/MiniMax Code/iCode/opencode 转已合并未发版；bunny.net CLI
+  关闭；Warp 转开发中；tincan 仓库 404 转未确认；新增 goose、OpenClaw、
+  OpenTUI、DeepSeek-Reasonix、Orca、Gradle、MSBuild、tqdm、crossterm 等
+  21 行。校验器计数：released=51、merged-unreleased=26、in-progress=17、
+  closed=6、unsupported=14、announced=3、unconfirmed=3、
+  implemented-self-reported=1。
+- **时间线/文档**：补 2026-10-13 至 10-20 事件（kitty master、tmux 关闭、
+  Codex/Hugo/OpenTUI/Orca 发版、goose/OpenClaw 合并）；deep-dive/why/
+  why-integrate/practice 中与新一轮事实相悖的旧表述（kitty issue 仍 open、
+  Codex 未发版、tmux 观望等）已更新。
+
 ## 2026-10-11
 
 - **规范 rev 0.4**（Revision history 日期 2026-10-10）：删除 terminfo

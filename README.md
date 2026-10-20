@@ -321,19 +321,19 @@ stateDiagram-v2
 
 <!-- BEGIN GENERATED: status-counts -->
 
-状态类别统计（100 个条目，统计口径见 [docs/support-matrix.md](docs/support-matrix.md)；最近核实 2026-10-11）：
+状态类别统计（121 个条目，统计口径见 [docs/support-matrix.md](docs/support-matrix.md)；最近核实 2026-10-21）：
 
 | 状态 | 数量 |
 | --- | --- |
-| 已发布 | 34 |
+| 已发布 | 51 |
 | 已实现（自述） | 1 |
-| 已合并未发版 | 30 |
-| 开发中 | 12 |
+| 已合并未发版 | 26 |
+| 开发中 | 17 |
 | 仅宣布 | 3 |
-| 已关闭 | 2 |
-| 未支持 | 16 |
-| 未确认 | 2 |
-| 合计 | 100 |
+| 已关闭 | 6 |
+| 未支持 | 14 |
+| 未确认 | 3 |
+| 合计 | 121 |
 
 <!-- END GENERATED: status-counts -->
 

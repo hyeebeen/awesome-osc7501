@@ -16,7 +16,7 @@ entries:
     label: null
   - url: https://github.com/ghostty-org/ghostty/pull/14630
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: ghostty-app
@@ -72,9 +72,9 @@ entries:
   url: https://github.com/manaflow-ai/cmux/pull/18742
   category: receiver
   role: agent 多路复用器（基于 Ghostty）
-  status: merged-unreleased
+  status: released
   status_note: null
-  version: '正式版本未确认（最新 v0.65.0，2026-10-06，不含；新 PR #19091 open）'
+  version: v0.65.1（2026-10-13 07:11）
   evidence_type: verified
   evidence_note: null
   source:
@@ -84,7 +84,9 @@ entries:
     label: 文档
   - url: https://github.com/manaflow-ai/cmux/pull/19091
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/manaflow-ai/cmux/releases/tag/v0.65.1
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: termio
@@ -314,15 +316,17 @@ entries:
   url: https://github.com/lollipopkit/flutter_server_box/pull/1662
   category: receiver
   role: Flutter 终端 / SSH 客户端
-  status: merged-unreleased
+  status: released
   status_note: null
-  version: —
+  version: v1.0.1765（2026-10-12 02:32）
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/lollipopkit/flutter_server_box/pull/1662
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/lollipopkit/flutter_server_box/releases/tag/v1.0.1765
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: diri
@@ -356,7 +360,7 @@ entries:
   source:
   - url: https://github.com/darkroomengineering/programa/pull/405
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: agent-os
@@ -372,7 +376,7 @@ entries:
   source:
   - url: https://github.com/saadnvd1/agent-os/pull/100
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: zz
@@ -380,15 +384,17 @@ entries:
   url: https://github.com/demfabris/zz/pull/10
   category: receiver
   role: 小项目
-  status: merged-unreleased
+  status: released
   status_note: null
-  version: —
+  version: v0.17.0（2026-10-18 02:28）
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/demfabris/zz/pull/10
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/demfabris/zz/releases/tag/v0.17.0
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: toastty
@@ -416,13 +422,13 @@ entries:
   role: agent 工作台（小项目）
   status: merged-unreleased
   status_note: null
-  version: —
+  version: 'PR #2597（滚动 tag `stable` 已包含；无版本号 release）'
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/verkyyi/claude-fleet/pull/2597
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: para-code
@@ -458,7 +464,7 @@ entries:
     label: null
   - url: https://github.com/SolenesInc/attn/pull/631
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: cherry
@@ -466,15 +472,17 @@ entries:
   url: https://github.com/patrick91/cherry/pull/10
   category: receiver
   role: agent 状态工具（PR 标题：从 7501 取 agent 状态）
-  status: merged-unreleased
+  status: released
   status_note: null
-  version: 'PR #10（合并 2026-10-10 22:29）；无 release'
+  version: v2026.10.12.1（2026-10-13 06:46）
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/patrick91/cherry/pull/10
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/patrick91/cherry/releases/tag/v2026.10.12.1
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: noctty
@@ -482,15 +490,17 @@ entries:
   url: https://github.com/amanthanvi/noctty/pull/301
   category: receiver
   role: Windows 原生终端（原 winghostty，fork）
-  status: merged-unreleased
+  status: released
   status_note: null
-  version: 'PR #301（合并 2026-10-11 05:24；最新 v1.3.131 早于合并）'
+  version: v1.3.132（2026-10-16 20:02）
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/amanthanvi/noctty/pull/301
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/amanthanvi/noctty/releases/tag/v1.3.132
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: monkeyssh
@@ -498,15 +508,17 @@ entries:
   url: https://github.com/depollsoft/MonkeySSH/pull/977
   category: receiver
   role: Flutter SSH 客户端
-  status: merged-unreleased
+  status: released
   status_note: null
-  version: 'PR #977（合并 2026-10-10 13:21；最新 v0.9.2 早于合并）'
+  version: v0.10.0（2026-10-18 15:57）
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/depollsoft/MonkeySSH/pull/977
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/depollsoft/MonkeySSH/releases/tag/v0.10.0
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: go-term
@@ -514,15 +526,17 @@ entries:
   url: https://github.com/go-gui-org/go-term/pull/265
   category: receiver
   role: go-gui 的终端组件
-  status: merged-unreleased
+  status: released
   status_note: null
-  version: 'PR #265（合并 2026-10-10 06:09；最新 v0.15.1 早于合并）'
+  version: v0.16.0（2026-10-12 06:58）
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/go-gui-org/go-term/pull/265
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/go-gui-org/go-term/releases/tag/v0.16.0
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: agentd
@@ -530,15 +544,17 @@ entries:
   url: https://github.com/robmorgan/agentd/pull/29
   category: receiver
   role: agent 工作区守护进程
-  status: merged-unreleased
+  status: released
   status_note: null
-  version: 'PR #29（合并 2026-10-11 11:07；无 release）'
+  version: v0.1.0（2026-10-20 20:50）
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/robmorgan/agentd/pull/29
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/robmorgan/agentd/releases/tag/v0.1.0
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: tmux-agent-panel
@@ -562,15 +578,15 @@ entries:
   url: https://github.com/deblasis/wintty/pull/1316
   category: receiver
   role: Windows 上的 Ghostty 移植
-  status: in-progress
+  status: merged-unreleased
   status_note: null
-  version: PR open
+  version: 'PR #1316（合并 2026-10-12 09:58；w1.0.0-rc.7 不含）'
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/deblasis/wintty/pull/1316
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: royalterminal
@@ -586,7 +602,7 @@ entries:
   source:
   - url: https://github.com/royalapplications/RoyalTerminal/pull/121
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: luvus
@@ -602,7 +618,7 @@ entries:
   source:
   - url: https://github.com/RizRiyz/luvus/pull/498
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: cleat
@@ -610,15 +626,15 @@ entries:
   url: https://github.com/flotilla-org/cleat/pull/329
   category: receiver
   role: 会话守护进程
-  status: in-progress
+  status: merged-unreleased
   status_note: null
-  version: PR open（ADR）
+  version: 'PR #329（合并 2026-10-13 04:54；无 tag）'
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/flotilla-org/cleat/pull/329
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: tmux
@@ -628,13 +644,13 @@ entries:
   role: 多路复用器
   status: unsupported
   status_note: null
-  version: —（实测 3.5a：裸序列丢弃；DCS passthrough + `allow-passthrough on` 可透传；issue open，最后更新 2026-10-10 01:51）
+  version: '—（issue #5713 于 2026-10-13 15:50 由维护者关闭，无上游提交；DCS passthrough + allow-passthrough on 仍可透传）'
   evidence_type: verified
-  evidence_note: issue + 本仓库实测
+  evidence_note: issue + 本仓库实测；维护者 nicm（2026-10-10 01:51）：“I think between pane titles, OSC 9 progress bars and OSC 133 we have enough coverage of this kind of thing for the moment, let's see if this one takes off.”
   source:
   - url: https://github.com/tmux/tmux/issues/5713
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: screen
@@ -658,15 +674,17 @@ entries:
   url: https://github.com/kovidgoyal/kitty/issues/10638
   category: receiver
   role: 终端
-  status: unsupported
+  status: merged-unreleased
   status_note: null
-  version: —（作者在 issue 中审阅规范，主分支无实现）
+  version: master（merge 0e1b7f4812，2026-10-13 10:59；最新 release v0.49.2 发于 2026-10-01，不含）
   evidence_type: verified
-  evidence_note: null
+  evidence_note: '关闭 #10638 时维护者留言（2026-10-13 11:58）：“now implemented in master using 263 ans the id length limit and base64 padding bytes being optional”（原文照录，“ans” 拼写为原始）；即 kitty 的 id 上限为 263 而非规范的 128；PR #10657（ttys3）closed 未合并，实现经维护者 commit 落地'
   source:
   - url: https://github.com/kovidgoyal/kitty/issues/10638
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/kovidgoyal/kitty/commit/0e1b7f4812bf297639999a362672c4271e42ed0c
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: wezterm
@@ -786,15 +804,19 @@ entries:
   url: research/2026-10-09.md
   category: receiver
   role: 终端
-  status: unsupported
+  status: in-progress
   status_note: null
-  version: —（主分支代码搜索无）
+  version: 'PR #16460 open（外部贡献者，2026-10-14 10:00 开）；另有 issue #16407 open（2026-10-11 07:49 开）'
   evidence_type: verified
   evidence_note: null
   source:
   - url: research/2026-10-09.md
     label: research 笔记
-  verified_at: '2026-10-11'
+  - url: https://github.com/warpdotdev/warp/pull/16460
+    label: null
+  - url: https://github.com/warpdotdev/warp/issues/16407
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: wave
@@ -861,6 +883,104 @@ entries:
   verified_at: '2026-10-11'
   why: null
   featured: false
+- id: orca
+  name: Orca
+  url: https://github.com/stablyai/orca/pull/30261
+  category: receiver
+  role: agent 工作台（接收端）
+  status: released
+  status_note: null
+  version: v1.4.232（2026-10-20 14:20）
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/stablyai/orca/pull/30261
+    label: null
+  - url: https://github.com/stablyai/orca/pull/30262
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: paseo
+  name: Paseo
+  url: https://github.com/getpaseo/paseo/pull/6962
+  category: receiver
+  role: agent 工作台
+  status: in-progress
+  status_note: null
+  version: 'PR #6962 open（外部贡献者）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/getpaseo/paseo/pull/6962
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: supacode
+  name: Supacode
+  url: https://github.com/supabitapp/supacode/pull/911
+  category: receiver
+  role: 终端/agent 工作台
+  status: in-progress
+  status_note: null
+  version: 'PR #911 open（成员）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/supabitapp/supacode/pull/911
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: zmx
+  name: zmx
+  url: https://github.com/neurosnap/zmx/pull/289
+  category: receiver
+  role: 会话守护进程
+  status: closed
+  status_note: null
+  version: '—（PR #289 closed 未合并）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/neurosnap/zmx/pull/289
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: psmux
+  name: psmux
+  url: https://github.com/psmux/psmux/pull/797
+  category: receiver
+  role: Windows 多路复用器
+  status: closed
+  status_note: null
+  version: '—（PR #797 closed 未合并）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/psmux/psmux/pull/797
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: ghostel
+  name: ghostel
+  url: https://github.com/dakra/ghostel/pull/740
+  category: receiver
+  role: Emacs 终端（libghostty）
+  status: closed
+  status_note: null
+  version: '—（PR #740 closed 未合并）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/dakra/ghostel/pull/740
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
 - id: claude-code
   name: Claude Code
   url: https://github.com/anthropics/claude-code/releases/tag/v2.1.295
@@ -924,7 +1044,7 @@ entries:
   source:
   - url: https://docs.factory.com/changelog/release-notes
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: docker-agent
@@ -1016,15 +1136,17 @@ entries:
   url: https://github.com/vercel-labs/fx/pull/1181
   category: agent
   role: coding agent
-  status: merged-unreleased
+  status: released
   status_note: null
-  version: 'PR #1181（合并 2026-10-08 00:14）'
+  version: v0.0.14（2026-10-16 16:27）
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/vercel-labs/fx/pull/1181
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/vercel-labs/fx/releases/tag/v0.0.14
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: pi-subagents
@@ -1112,7 +1234,7 @@ entries:
   source:
   - url: https://github.com/lpdink/wing-agent/pull/177
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: shikigami
@@ -1128,7 +1250,7 @@ entries:
   source:
   - url: https://github.com/Sannrox/shikigami/pull/438
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: the-last-harness
@@ -1136,15 +1258,17 @@ entries:
   url: https://github.com/diegopetrucci/the-last-harness/pull/749
   category: agent
   role: coding agent（小项目）
-  status: merged-unreleased
+  status: released
   status_note: null
-  version: 'PR #749'
+  version: v0.44.0（2026-10-13 05:52）
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/diegopetrucci/the-last-harness/pull/749
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/diegopetrucci/the-last-harness/releases/tag/v0.44.0
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: haskell-agent
@@ -1160,7 +1284,7 @@ entries:
   source:
   - url: https://github.com/digitallyinduced/haskell-agent/pull/1389
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: cyrup
@@ -1176,7 +1300,7 @@ entries:
   source:
   - url: https://github.com/cyrup-ai/cyrup/pull/221
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: tincan
@@ -1184,15 +1308,15 @@ entries:
   url: https://github.com/AarushSah/tincan/pull/1
   category: agent
   role: Mac 消息 / 通讯录应用（小项目）
-  status: merged-unreleased
+  status: unconfirmed
   status_note: null
-  version: 'PR #1（无 release）'
-  evidence_type: verified
-  evidence_note: null
+  version: —（仓库 2026-10-21 访问返回 404，无法复核）
+  evidence_type: not-found
+  evidence_note: 仓库 2026-10-21 访问返回 404，无法复核
   source:
   - url: https://github.com/AarushSah/tincan/pull/1
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: armadra-agent
@@ -1200,15 +1324,17 @@ entries:
   url: https://github.com/AMA-Link/armadra-agent/pull/126
   category: agent
   role: Armadra 画布的 agent 端（发送端）
-  status: merged-unreleased
+  status: released
   status_note: null
-  version: 'PR #126'
+  version: v0.7.2（2026-10-09 22:35；10-11 版误记为未发版，已更正）
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/AMA-Link/armadra-agent/pull/126
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/AMA-Link/armadra-agent/releases/tag/v0.7.2
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: prime-agent
@@ -1224,7 +1350,7 @@ entries:
   source:
   - url: https://github.com/PrimeIntellect-ai/prime-agent/pull/3424
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: 8gent-code
@@ -1232,15 +1358,17 @@ entries:
   url: https://github.com/8gi-foundation/8gent-code/pull/3738
   category: agent
   role: AI agent
-  status: merged-unreleased
+  status: released
   status_note: null
-  version: 'PR #3738（合并 2026-10-10 07:09；最新 v0.19.0 早于合并）'
+  version: v0.20.0（2026-10-14 07:29）
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/8gi-foundation/8gent-code/pull/3738
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/8gi-foundation/8gent-code/releases/tag/v0.20.0
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: bub
@@ -1248,15 +1376,15 @@ entries:
   url: https://github.com/bubbuild/bub/pull/345
   category: agent
   role: AI agent
-  status: in-progress
+  status: merged-unreleased
   status_note: null
-  version: PR open
+  version: 'PR #345（合并 2026-10-19 09:36；0.6.0a3 不含）'
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/bubbuild/bub/pull/345
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: wovenmatter
@@ -1282,15 +1410,15 @@ entries:
   url: https://github.com/MiniMax-AI/minimax-code/pull/471
   category: agent
   role: AI coding agent
-  status: in-progress
+  status: merged-unreleased
   status_note: null
-  version: 'PR #471 open（2026-10-10 00:45 开）'
+  version: 'PR #471（合并 2026-10-13 16:02；v0.6.5 不含）'
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/MiniMax-AI/minimax-code/pull/471
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: icode
@@ -1298,15 +1426,15 @@ entries:
   url: https://github.com/openJiuwen-ai/iCode/pull/80
   category: agent
   role: 离线开发平台 / agent 工具包
-  status: in-progress
+  status: merged-unreleased
   status_note: null
-  version: 'PR #80 open'
+  version: 'PR #80（合并 2026-10-16 17:37；v0.30.1 不含）'
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/openJiuwen-ai/iCode/pull/80
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: amp
@@ -1322,7 +1450,7 @@ entries:
   source:
   - url: https://x.com/mitchellh/status/2107894687587795079
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: codex-cli
@@ -1330,15 +1458,17 @@ entries:
   url: https://github.com/openai/codex/pull/52725
   category: agent
   role: AI coding agent
-  status: merged-unreleased
+  status: released
   status_note: null
-  version: 'PR #52725（合并 2026-10-10 07:43；尚未进任何 release：最新预发布 rust-v0.163.0-alpha.5 与最新正式版 rust-v0.162.1 均不含）'
+  version: rust-v0.163.0（2026-10-16 05:30）
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/openai/codex/pull/52725
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/openai/codex/releases/tag/rust-v0.163.0
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: opencode
@@ -1346,9 +1476,9 @@ entries:
   url: https://github.com/anomalyco/opencode/pull/54402
   category: agent
   role: AI coding agent
-  status: in-progress
+  status: merged-unreleased
   status_note: null
-  version: 'PR #54402 open（2026-10-11 06:21 开）；另有 issue #54179（2026-10-10 01:39）'
+  version: 'PR #55172（合并 2026-10-14 04:48，经 OpenTUI 0.6.3 setProgramStatus）；#54402 closed 未合并；最新 v1.19.3 与合并提交 diverged，是否已随 release 发出未确认；2026-10-14 #55300 临时回退 OpenTUI 0.6 升级，但 dev 分支 program-status.ts 仍在'
   evidence_type: verified
   evidence_note: null
   source:
@@ -1356,7 +1486,13 @@ entries:
     label: null
   - url: https://github.com/anomalyco/opencode/issues/54179
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/anomalyco/opencode/pull/55172
+    label: null
+  - url: https://github.com/anomalyco/opencode/pull/55300
+    label: null
+  - url: https://github.com/anomalyco/opencode/pull/54560
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: gemini-cli
@@ -1372,7 +1508,7 @@ entries:
   source:
   - url: https://github.com/google-gemini/gemini-cli/issues/29710
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: cursor-cli
@@ -1388,7 +1524,119 @@ entries:
   source:
   - url: https://cursor.com/changelog
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: goose
+  name: goose
+  url: https://github.com/aaif-goose/goose/pull/12928
+  category: agent
+  role: AI agent CLI
+  status: merged-unreleased
+  status_note: null
+  version: 'PR #12928（合并 2026-10-16 10:47；v1.55.0 不含）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/aaif-goose/goose/pull/12928
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: openclaw
+  name: OpenClaw
+  url: https://github.com/openclaw/openclaw/pull/175692
+  category: agent
+  role: agent TUI
+  status: merged-unreleased
+  status_note: null
+  version: 'PR #175692（合并 2026-10-18 09:10；v2026.10.5 不含）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/openclaw/openclaw/pull/175692
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: deepseek-reasonix
+  name: DeepSeek-Reasonix
+  url: https://github.com/esengine/DeepSeek-Reasonix/pull/12976
+  category: agent
+  role: AI agent TUI
+  status: released
+  status_note: null
+  version: studio-v2.39.0（2026-10-14 09:24）
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/esengine/DeepSeek-Reasonix/pull/12976
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: dsh-tui
+  name: dsh-TUI
+  url: https://github.com/ccch1mneyyy/dsh-TUI/pull/1561
+  category: agent
+  role: agent TUI
+  status: merged-unreleased
+  status_note: null
+  version: 'PR #1561（合并 2026-10-20 03:18；v0.16.1 不含）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/ccch1mneyyy/dsh-TUI/pull/1561
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: qwen-code
+  name: Qwen Code
+  url: https://github.com/QwenLM/qwen-code/pull/13994
+  category: agent
+  role: AI coding CLI
+  status: in-progress
+  status_note: null
+  version: 'PR #13994 open（外部贡献者）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/QwenLM/qwen-code/pull/13994
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: hermes-agent
+  name: Hermes Agent
+  url: https://github.com/NousResearch/hermes-agent/pull/140837
+  category: agent
+  role: AI agent CLI/TUI
+  status: in-progress
+  status_note: null
+  version: 'PR #140837 open（协作者）；另 #138152 open'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/NousResearch/hermes-agent/pull/140837
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: cua
+  name: cua
+  url: https://github.com/trycua/cua/pull/5155
+  category: agent
+  role: computer-use agent
+  status: in-progress
+  status_note: null
+  version: 'PR #5155 open（协作者）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/trycua/cua/pull/5155
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: git-stack
@@ -1416,13 +1664,13 @@ entries:
   role: Xcode 项目工具
   status: merged-unreleased
   status_note: null
-  version: 'PR #13956（合并 2026-10-08 17:02；含 blocked kind=auth；最新 4.212.0-rc.2 不含）'
+  version: 'PR #13956（已进预发布 4.213.0-rc.2，2026-10-16 17:02；未见含它的正式版）'
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/tuist/tuist/pull/13956
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: hugo
@@ -1430,15 +1678,17 @@ entries:
   url: https://github.com/gohugoio/hugo/pull/15428
   category: cli
   role: 静态站点生成器
-  status: merged-unreleased
+  status: released
   status_note: null
-  version: 'PR #15428（合并 2026-10-10 01:18；最新 v0.167.0，2026-09-28，早于合并；与 OSC 9;4 并发）'
+  version: v0.168.0（2026-10-14 01:24）
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/gohugoio/hugo/pull/15428
     label: null
-  verified_at: '2026-10-11'
+  - url: https://github.com/gohugoio/hugo/releases/tag/v0.168.0
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: composer
@@ -1454,7 +1704,7 @@ entries:
   source:
   - url: https://github.com/composer/composer/pull/13117
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: expo-cli
@@ -1470,7 +1720,7 @@ entries:
   source:
   - url: https://github.com/expo/expo/pull/51289
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: bunny-net-cli
@@ -1478,15 +1728,15 @@ entries:
   url: https://github.com/BunnyWay/cli/pull/244
   category: cli
   role: CDN CLI
-  status: in-progress
+  status: closed
   status_note: null
-  version: PR open
+  version: '—（PR #244 closed 未合并）'
   evidence_type: verified
   evidence_note: null
   source:
   - url: https://github.com/BunnyWay/cli/pull/244
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: firebase-tools
@@ -1521,6 +1771,86 @@ entries:
   verified_at: '2026-10-11'
   why: null
   featured: false
+- id: solana-pay-cli
+  name: Solana Pay CLI
+  url: https://github.com/solana-foundation/pay/pull/509
+  category: cli
+  role: 密钥库 auth 提示上报
+  status: merged-unreleased
+  status_note: null
+  version: 'PR #509（合并 2026-10-16 21:54；pay-v0.29.0 不含）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/solana-foundation/pay/pull/509
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: gradle
+  name: Gradle
+  url: https://github.com/gradle/gradle/pull/39468
+  category: cli
+  role: 构建工具
+  status: in-progress
+  status_note: null
+  version: 'PR #39468 open（成员）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/gradle/gradle/pull/39468
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: msbuild
+  name: MSBuild
+  url: https://github.com/dotnet/msbuild/pull/15263
+  category: cli
+  role: .NET 构建
+  status: in-progress
+  status_note: null
+  version: 'PR #15263 open（成员）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/dotnet/msbuild/pull/15263
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: aspire
+  name: Aspire
+  url: https://github.com/microsoft/aspire/pull/20988
+  category: cli
+  role: .NET 应用编排 CLI
+  status: in-progress
+  status_note: null
+  version: 'PR #20988 open（成员）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/microsoft/aspire/pull/20988
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: buildkite-agent
+  name: Buildkite Agent
+  url: https://github.com/buildkite/agent/pull/4534
+  category: cli
+  role: CI agent
+  status: in-progress
+  status_note: null
+  version: 'PR #4534 open（成员）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/buildkite/agent/pull/4534
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
 - id: bubble-tea
   name: Bubble Tea
   url: https://github.com/charmbracelet/bubbletea/releases/tag/v2.1.0
@@ -1550,7 +1880,7 @@ entries:
   source:
   - url: https://github.com/charmbracelet/x/pull/1004
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: charmbracelet-ultraviolet
@@ -1566,7 +1896,7 @@ entries:
   source:
   - url: https://github.com/charmbracelet/ultraviolet/pull/207
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: libvaxis
@@ -1616,7 +1946,7 @@ entries:
   source:
   - url: https://github.com/termio-sh/libghostty-rs/pull/6
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: xterm-dart
@@ -1632,7 +1962,7 @@ entries:
   source:
   - url: https://github.com/lollipopkit/xterm.dart/pull/26
     label: null
-  verified_at: '2026-10-11'
+  verified_at: '2026-10-21'
   why: null
   featured: false
 - id: uncurses
@@ -1649,5 +1979,53 @@ entries:
   - url: https://github.com/aymanbagabas/uncurses/pull/89
     label: null
   verified_at: '2026-10-11'
+  why: null
+  featured: false
+- id: opentui
+  name: OpenTUI
+  url: https://github.com/anomalyco/opentui/pull/1657
+  category: library
+  role: TS 终端 UI 框架（发送端 API setProgramStatus）
+  status: released
+  status_note: null
+  version: v0.6.3（2026-10-13 16:20）
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/anomalyco/opentui/pull/1657
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: crossterm
+  name: crossterm
+  url: https://github.com/crossterm-rs/crossterm/pull/1144
+  category: library
+  role: Rust 终端库
+  status: in-progress
+  status_note: null
+  version: 'PR #1144 open（外部贡献者）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/crossterm-rs/crossterm/pull/1144
+    label: null
+  verified_at: '2026-10-21'
+  why: null
+  featured: false
+- id: tqdm
+  name: tqdm
+  url: https://github.com/tqdm/tqdm/pull/1884
+  category: library
+  role: Python 进度条
+  status: in-progress
+  status_note: null
+  version: 'PR #1884 open（外部贡献者）'
+  evidence_type: verified
+  evidence_note: null
+  source:
+  - url: https://github.com/tqdm/tqdm/pull/1884
+    label: null
+  verified_at: '2026-10-21'
   why: null
   featured: false

@@ -59,7 +59,7 @@ release / issue / 核实。版本细节与状态另见 [support-matrix.md](suppo
 | 2026-10-10 01:45 | kitty issue #10638 提出：请求支持 OSC 7501（讨论采纳，不规定 UI） | issue | <https://github.com/kovidgoyal/kitty/issues/10638> |
 | 2026-10-10 04:55 | Armadra v0.2.5 发布 | release | <https://github.com/AMA-Link/Armadra/pull/217> |
 | 2026-10-10 07:18 | yolop v0.20.0 发布 | release | <https://github.com/everruns/yolop/releases/tag/v0.20.0> |
-| 2026-10-10 07:43 | Codex CLI PR #52725 合并（Report terminal program status with OSC 7501；尚未进任何 release） | PR | <https://github.com/openai/codex/pull/52725> |
+| 2026-10-10 07:43 | Codex CLI PR #52725 合并（Report terminal program status with OSC 7501） | PR | <https://github.com/openai/codex/pull/52725> |
 | 2026-10-10 10:32 | botmux v3.40.0 发布（读 Claude Code 的 7501 状态） | release | <https://github.com/deepcoldy/botmux/pull/1781> |
 | 2026-10-10 13:26 | pi-subagents v0.77.0 发布 | release | <https://github.com/nicobailon/pi-subagents/releases/tag/v0.77.0> |
 | 2026-10-10 14:20 | kitty 作者 kovidgoyal 在 #10638 提出 5 点审阅（terminfo、扩展性、控制字符、app、字段上限） | issue | <https://github.com/kovidgoyal/kitty/issues/10638#issuecomment-6094592240> |
@@ -78,3 +78,11 @@ release / issue / 核实。版本细节与状态另见 [support-matrix.md](suppo
 | 2026-10-11 14:11 | agent v0.2.0 发布（lydakis/agent） | release | <https://github.com/lydakis/agent/pull/85> |
 | 2026-10-11 15:25 | Prowl v2026.10.11 发布（经 GhosttyKit 接收）；15:45 作者 @onevcat 发帖宣布 | release | <https://github.com/onevcat/Prowl/pull/887> · <https://x.com/onevcat/status/2109188629885243596> |
 | 2026-10-11 16:08 | omp v18.9.0 发布（release notes 未提 7501；7501 首发仍为 v18.8.7） | release | <https://github.com/can1357/oh-my-pi/releases/tag/v18.9.0> |
+| 2026-10-13 10:59 | kitty master 合并 OSC 7501 实现（merge commit 0e1b7f4812，id 上限 263 而非规范 128；PR #10657 关闭未合并）；11:58 维护者关闭 #10638 | commit | <https://github.com/kovidgoyal/kitty/commit/0e1b7f4812bf297639999a362672c4271e42ed0c> · <https://github.com/kovidgoyal/kitty/issues/10638> |
+| 2026-10-13 15:50 | tmux issue #5713 由维护者关闭，无上游提交（DCS passthrough + `allow-passthrough on` 仍可透传） | issue | <https://github.com/tmux/tmux/issues/5713> |
+| 2026-10-13 16:20 | OpenTUI v0.6.3 发布（core 发送端 API setProgramStatus；PR #1657） | release | <https://github.com/anomalyco/opentui/pull/1657> |
+| 2026-10-14 01:24 | Hugo v0.168.0 发布（首个含 PR #15428 的 release） | release | <https://github.com/gohugoio/hugo/releases/tag/v0.168.0> |
+| 2026-10-16 05:30 | Codex CLI rust-v0.163.0 发布（PR #52725 首次进 release） | release | <https://github.com/openai/codex/releases/tag/rust-v0.163.0> |
+| 2026-10-16 10:47 | goose PR #12928 合并（v1.55.0 不含） | PR | <https://github.com/aaif-goose/goose/pull/12928> |
+| 2026-10-18 09:10 | OpenClaw PR #175692 合并（v2026.10.5 不含） | PR | <https://github.com/openclaw/openclaw/pull/175692> |
+| 2026-10-20 14:20 | Orca v1.4.232 发布（接收端，PR #30261 / #30262） | release | <https://github.com/stablyai/orca/pull/30261> · <https://github.com/stablyai/orca/pull/30262> |

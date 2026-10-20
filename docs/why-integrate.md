@@ -111,15 +111,16 @@ N×M → N+M 的表述是对博文与发布推文所述 O(N) 集成问题的形�
 ## 反对与观望
 
 - **tmux**：维护者 nicm「This seems premature. Let's see if any other terminals
-  and programs pick it up.」（[#5713](https://github.com/tmux/tmux/issues/5713)）；
-  实测裸序列被丢弃。
+  and programs pick it up.」（[#5713](https://github.com/tmux/tmux/issues/5713)，
+  2026-10-13 关闭，无上游提交）；实测裸序列被丢弃。
 - **Herdr**：issue 与外部 PR 均因流程被关（bugs-only 政策、非白名单贡献者），
   非技术否决；目前仍依赖启发式 + 专用 socket 集成（[作者博文](https://mitchellh.com/writing/program-status-osc7501)
   所述 Herdr 的做法：检测 manifest 与 socket API）。
 - **firebase-tools**：两次实现被关闭、计划重做——「每个调用点手工包裹」不可
   维护，要改成从共享 chokepoint 推导状态。
-- **主流终端**（Kitty、WezTerm、iTerm2、Alacritty、Windows Terminal）尚无公开
-  动作；Ghostty 应用本身也未展示（库已实现）。
+- **主流终端**（WezTerm、iTerm2、Alacritty、Windows Terminal）尚无公开
+  动作；kitty 已在 master 实现（id 上限 263，未发版）；Ghostty 应用本身也未展示
+  （库已实现）。
 - **竞品**：iTerm2 OSC 21337、Orca OSC 9999 语义重叠；协议竞争未定。
 
 ## 对不同角色的建议
