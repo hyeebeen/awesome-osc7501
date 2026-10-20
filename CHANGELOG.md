@@ -30,6 +30,11 @@
   Codex/Hugo/OpenTUI/Orca 发版、goose/OpenClaw 合并）；deep-dive/why/
   why-integrate/practice 中与新一轮事实相悖的旧表述（kitty issue 仍 open、
   Codex 未发版、tmux 观望等）已更新。
+- **agent 友好**：新增 `AGENTS.md`（数据流、字段表、状态/证据枚举、核验
+  方法、规则与 AI 贡献政策，README/CONTRIBUTING 均已链接）；`build.py`
+  整文件生成 `llms.txt`（无标记，计数/日期/研究笔记链接随数据自动更新，
+  `--check` 覆盖）；`.github/ISSUE_TEMPLATE/` 新增 new-integration 与
+  status-change 两个 issue 表单（分类/状态下拉与 schema 枚举一致）。
 
 ## 2026-10-11
 

@@ -1,0 +1,101 @@
+name: New integration
+description: Propose a new entry for the OSC 7501 support matrix
+title: "[new-integration] "
+labels:
+  - new-integration
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks! Before submitting, please check docs/support-matrix.md in this
+        repository — the project may already be tracked. Every claim needs a
+        first-hand source: the spec, implementation source code, a PR/issue, a
+        release/tag, an official changelog, or the author's own post. Second-hand
+        articles do not decide a status. Field definitions: AGENTS.md#data-model.
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      description: Project name as it should appear in the matrix.
+      placeholder: e.g. kitty
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Repo / URL
+      description: Primary link for the entry (http(s) URL).
+      placeholder: https://github.com/OWNER/REPO
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: One of the schema categories (data/schema.json).
+      options:
+        - receiver
+        - agent
+        - cli
+        - library
+        - spec
+        - reference
+        - article
+        - discussion
+    validations:
+      required: true
+  - type: dropdown
+    id: status
+    attributes:
+      label: Claimed status
+      description: The schema status you can actually evidence (definitions in AGENTS.md).
+      options:
+        - released
+        - implemented-self-reported
+        - merged-unreleased
+        - in-progress
+        - announced
+        - closed
+        - unsupported
+        - unconfirmed
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: First-hand source links
+      description: One per line. Spec, source code, PR/issue, release/tag, official changelog, or the author's own post.
+      placeholder: |
+        https://github.com/OWNER/REPO/pull/123
+        https://github.com/OWNER/REPO/releases/tag/v1.2.3
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version / tag
+      description: Release or tag containing the change, copied exactly from the source; "—" if none.
+      placeholder: v1.2.3
+    validations:
+      required: false
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence notes
+      description: What the sources show — merge date, compare result, verbatim quote. Mark anything inferred.
+    validations:
+      required: false
+  - type: checkboxes
+    id: self-verified
+    attributes:
+      label: I verified this myself from the first-hand source
+      options:
+        - label: I opened each link above and checked the claim against it myself (date checked, Asia/Shanghai CST).
+          required: true
+  - type: checkboxes
+    id: ai-assisted
+    attributes:
+      label: AI-assisted (disclose)
+      options:
+        - label: This report was drafted with AI assistance and I disclose that here; I have checked every fact against the first-hand sources myself.
+          required: false

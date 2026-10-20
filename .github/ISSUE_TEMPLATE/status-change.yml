@@ -1,0 +1,100 @@
+name: Status change
+description: Report a status change for an entry already tracked in the OSC 7501 support matrix
+title: "[status-change] "
+labels:
+  - status-change
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks! This form updates an **existing** row of docs/support-matrix.md in
+        this repository — use the "New integration" form for projects not yet
+        tracked. Status definitions and the compare rule (a release must contain
+        the merge commit) are in AGENTS.md#data-model.
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      description: Name (or matrix id) of the tracked entry.
+      placeholder: e.g. kitty
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Repo / URL
+      description: Primary link of the entry, so we can match the row.
+      placeholder: https://github.com/OWNER/REPO
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Current schema category of the entry (data/schema.json).
+      options:
+        - receiver
+        - agent
+        - cli
+        - library
+        - spec
+        - reference
+        - article
+        - discussion
+    validations:
+      required: true
+  - type: dropdown
+    id: status
+    attributes:
+      label: Claimed status
+      description: The new schema status you can actually evidence (definitions in AGENTS.md).
+      options:
+        - released
+        - implemented-self-reported
+        - merged-unreleased
+        - in-progress
+        - announced
+        - closed
+        - unsupported
+        - unconfirmed
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: First-hand source links
+      description: One per line. The PR/issue/release that proves the change — spec, source code, release/tag, official changelog, or the author's own post.
+      placeholder: |
+        https://github.com/OWNER/REPO/releases/tag/v1.3.0
+        https://github.com/OWNER/REPO/compare/MERGE_SHA...v1.3.0
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version / tag
+      description: Release or tag that contains the change, copied exactly from the source; "—" if none.
+      placeholder: v1.3.0
+    validations:
+      required: false
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence notes
+      description: What the sources show — merge date, compare result (ahead/identical = contained), verbatim quote. Mark anything inferred.
+    validations:
+      required: false
+  - type: checkboxes
+    id: self-verified
+    attributes:
+      label: I verified this myself from the first-hand source
+      options:
+        - label: I opened each link above and checked the claim against it myself (date checked, Asia/Shanghai CST).
+          required: true
+  - type: checkboxes
+    id: ai-assisted
+    attributes:
+      label: AI-assisted (disclose)
+      options:
+        - label: This report was drafted with AI assistance and I disclose that here; I have checked every fact against the first-hand sources myself.
+          required: false
