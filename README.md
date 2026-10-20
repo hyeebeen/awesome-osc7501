@@ -6,7 +6,20 @@
 
 [English](README.en.md) · 简体中文（本文件）
 
-**核实日期：2026-10-11（Asia/Shanghai，CST）。** 本清单只收录可回溯到一手源
+## 只看 3 条
+
+<!-- BEGIN GENERATED: top3 (scripts/build.py; edit data/featured.yml instead) -->
+
+- [OSC 7501 规范正文](https://www.superlogical.com/rex/docs/build/program-status) - 唯一权威规范（现行 rev 0.4）；先读「状态模型」「检测」两节，就够写出一个发送端。（已发布）
+- [Why OSC 7501（博文）](https://mitchellh.com/writing/program-status-osc7501) - 作者自己讲为什么走 PTY 字节流而不是带外 socket、为什么故意不做心跳；理解设计取舍最快的入口。（已发布）
+- [docs/practice.md](docs/practice.md) - 本仓库可运行的发送端/接收端示例与实测记录（含 tmux 透传），读完能直接动手。
+
+<!-- END GENERATED: top3 -->
+
+> 本仓库由 AI 辅助起草、人工核实：每条状态都附一手来源与核实日期，可用
+> [scripts/recheck.py](scripts/recheck.py) 复核；如发现错误请用 issue 模板报告。
+
+**核实日期：<!-- BEGIN GENERATED: verified-at -->2026-10-21<!-- END GENERATED: verified-at -->（Asia/Shanghai，CST）。** 本清单只收录可回溯到一手源
 （规范/源码/PR/release/作者帖子）的事实；版本号与发布日期集中在
 [docs/support-matrix.md](docs/support-matrix.md) 与 [docs/timeline.md](docs/timeline.md)，
 正文一律只写状态类别。未核实的内容标「未确认」。
@@ -23,9 +36,10 @@
   - [安全边界](#安全边界)
   - [规范未说清之处](#规范未说清之处)
 - [第二部分 · 重点：生态与实践](#第二部分--重点生态与实践)
-  - [精选清单](#精选清单)
+  - [精选](#精选)
   - [为什么大家要集成（摘要）](#为什么大家要集成摘要)
   - [支持概览](#支持概览)
+  - [常见误解](#常见误解)
   - [示例](#示例)
   - [空白清单（可贡献）](#空白清单可贡献)
 - [贡献](#贡献) · [许可](#许可)
@@ -219,91 +233,47 @@ stateDiagram-v2
 
 ## 第二部分 · 重点：生态与实践
 
-### 精选清单
+### 精选
 
-#### 规范与原始出处
+「只看 3 条」之外，再按场景挑 16 条，每条一句话说明为什么值得看。完整清单
+（含全部版本号与发布日期）只住在 [docs/support-matrix.md](docs/support-matrix.md)；
+机器可读导出见 [data/integrations.json](data/integrations.json) 与
+[data/resources.json](data/resources.json)（文章与讨论类条目）。
 
-- [OSC 7501 规范正文](https://www.superlogical.com/rex/docs/build/program-status) - 唯一权威规范（Rex 文档，作者 Mitchell Hashimoto），现行 rev 0.4（2026-10-10）。
-- [kitty #10638](https://github.com/kovidgoyal/kitty/issues/10638) - kitty 作者的评审触发了 rev 0.4（删除 terminfo `Pst`、检测回复可带 states/kinds 等），issue 仍 open。
-- [初稿 gist](https://gist.github.com/mitchellh/7acae3abd8355c1c00287d67e96c913a) - 最早的规范草稿（rev 0.1）。
-- [Why OSC 7501（博文）](https://mitchellh.com/writing/program-status-osc7501) - 作者亲述动机、设计取舍与 PoC。
-- [发布推文](https://x.com/mitchellh/status/2107577887159386152) - 问题陈述：250+ 编排器、Herdr 的 10 次兼容改动、O(N) 集成。
-- [control-codes.page 摘要](https://control-codes.page/proposals/osc-7501/) - 第三方中立摘要页。
+<!-- BEGIN GENERATED: featured (scripts/build.py; edit data/featured.yml instead) -->
 
-#### 参考实现与嵌入库
+#### 规范与参考实现
 
-- [Ghostty PR #14560](https://github.com/ghostty-org/ghostty/pull/14560) - 作者本人提交的 libghostty-vt 参考实现（已合并未发版）。
-- [program_status.zig](https://github.com/ghostty-org/ghostty/blob/main/src/terminal/osc/parsers/program_status.zig) - 规范级解析器，含大量边界测试。
-- [stream_terminal.zig](https://github.com/ghostty-org/ghostty/blob/main/src/terminal/stream_terminal.zig) - 查询应答逻辑（用与请求相同的终止符回复）。
-- [ghostty/vt C API](https://github.com/ghostty-org/ghostty/blob/main/include/ghostty/vt/terminal.h) - `GHOSTTY_TERMINAL_OPT_PROGRAM_STATUS` 与状态枚举。
-- [libghostty-rs](https://github.com/termio-sh/libghostty-rs/pull/6) - Rust 绑定，包装 program status 回调（已合并未发版）。
+- [program_status.zig](https://github.com/ghostty-org/ghostty/blob/main/src/terminal/osc/parsers/program_status.zig) - 规范作者本人写的解析器，边界测试比规范更清楚地说明「什么必须拒收」。（已发布）
+- [libghostty-vt](https://github.com/ghostty-org/ghostty/pull/14560) - 参考实现所在的库；注意只是库已合并，Ghostty 应用本身还不显示状态。（已合并未发版，见 [矩阵](docs/support-matrix.md#libghostty-vt)）
+- [control-codes.page 摘要](https://control-codes.page/proposals/osc-7501/) - 第三方中立摘要，适合快速对照字段。（已发布）
 
-#### 终端 / 多路复用器 / agent 工作台（接收端）
+#### 接收端
 
-- [Rex](https://www.superlogical.com/rex/docs/build/program-status) - 规范的发源地，会话选择器/标签头展示，Lua 事件（官方文档称已实现；版本未确认）。
-- [cmux](https://github.com/manaflow-ai/cmux/pull/18742) - 基于 Ghostty 的 agent 多路复用器，按 pane 存记录、侧栏按紧急度展示（已合并未发版）。
-- [termio](https://github.com/termio-sh/termio/pull/713) - agentic 开发环境，daemon 产生状态供 Mac/手机/CLI 共享（已发布）。
-- [SwiftTerm](https://github.com/migueldeicaza/SwiftTerm/pull/746) - Swift 写的 xterm/VT100 终端模拟器库（已发布）。
-- [TUIOS](https://github.com/Gaurav-Gosain/tuios/pull/546) - 终端窗口管理器（平铺窗格、统一 agent Inbox）（已发布）。
-- [Termy](https://github.com/lassejlv/termy/pull/408) - 终端（已发布）。
-- [con-terminal](https://github.com/nowledge-co/con-terminal/pull/451) - 记录了 SSH 与 tmux 转发细节的终端（已发布）。
-- [phux](https://github.com/no-phux/phux/pull/1050) - 多路复用器（已发布）。
-- [thurm](https://github.com/nklmilojevic/thurm/pull/68) - macOS 终端（已发布）。
-- [wietty](https://github.com/kloostermanw/wietty/pull/68) - 终端（已发布）。
-- [diri](https://github.com/cristicretu/diri/pull/732) - 并行 agent 工作台（已合并未发版）。
-- [programa](https://github.com/darkroomengineering/programa/pull/405) - 基于 Ghostty 的 agent 终端（已合并未发版）。
-- [ServerBox](https://github.com/lollipopkit/flutter_server_box/pull/1662) - Flutter 终端/SSH 客户端（已合并未发版）。
-- [Tern](https://x.com/_can1357/status/2108468517217665065) - Stencil 的终端（Rust 原生 neoterminal，闭源；仅宣布，开发者自述），见[矩阵](docs/support-matrix.md)。
-- tmux / Kitty / WezTerm / Alacritty / Windows Terminal / zellij / iTerm2 / foot 等 - 见[支持矩阵](docs/support-matrix.md)（多数未支持；foot 未确认）。
+- [Kitty](https://github.com/kovidgoyal/kitty/issues/10638) - kitty 作者先评审规范（促成 rev 0.4），随后在 master 实现（未发版）；id 上限用 263 而非规范的 128，实现与规范在这一点上已不一致。（已合并未发版，见 [矩阵](docs/support-matrix.md#kitty)）
+- [cmux](https://github.com/manaflow-ai/cmux/pull/18742) - 规范没定义多路复用器该怎么按 pane 存记录，cmux 给出了一种可参考的做法（按紧急度排序侧栏）。（已发布，见 [矩阵](docs/support-matrix.md#cmux)）
+- [termio](https://github.com/termio-sh/termio/pull/713) - 由 daemon 产生状态并在 Mac、手机、CLI 间共享，展示了状态离开终端窗口后的用法。（已发布，见 [矩阵](docs/support-matrix.md#termio)）
+- [tmux](https://github.com/tmux/tmux/issues/5713) - 最重要的反对意见：维护者认为窗格标题 + OSC 9 + OSC 133 已够用，并关闭了 issue；在 tmux 里要靠 DCS 透传。（未支持，见 [矩阵](docs/support-matrix.md#tmux)）
 
-#### AI agent 与 coding CLI（发送端）
+#### 发送端
 
-- [Claude Code](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md) - CHANGELOG 明确写入 Program Status Protocol 支持（已发布）。
-- [pi](https://github.com/earendil-works/pi) - 只在终端应答查询后才发送；文档写明 tmux 与 screen 不转发（已发布）。
-- [Docker Agent](https://github.com/docker/docker-agent/pull/4544) - 动机说明「agent 需要你关注时终端无从感知」（已发布）。
-- [Crush](https://github.com/charmbracelet/crush/pull/4041) - Charm 的 coding agent（已发布）。
-- [Factory Droid](https://docs.factory.com/changelog/release-notes) - changelog 描述终端活动状态（已发布（推断）：未写 7501 字样）。
-- [KnightCode](https://github.com/KnightCodeAI/knightcode/pull/296) - coding agent（已发布）。
-- [fx](https://github.com/vercel-labs/fx/pull/1181) - Vercel Labs coding agent（已合并未发版）。
-- [pi-subagents](https://github.com/nicobailon/pi-subagents/pull/2725) - pi 扩展，用层级 id `subagents/<run>` 上报子任务（已合并未发版）。
-- [omp](https://github.com/can1357/oh-my-pi) - 见[支持矩阵](docs/support-matrix.md)（已发布）。
-- Amp / Codex CLI / opencode / Tern - 仅宣布（Amp、Codex、opencode 为 Mitchell Hashimoto 转述；Tern 为其开发者 @_can1357 自述），详见[矩阵](docs/support-matrix.md)。
+- [Claude Code](https://github.com/anthropics/claude-code/releases/tag/v2.1.295) - CHANGELOG 明确写入 Program Status Protocol 支持；规范作者转述 Anthropic 用 Rex 验证过。（已发布，见 [矩阵](docs/support-matrix.md#claude-code)）
+- [Codex CLI（openai/codex）](https://github.com/openai/codex/pull/52725) - 从 rust-v0.163.0 起正式发布，可以拿来实测接收端。（已发布，见 [矩阵](docs/support-matrix.md#codex-cli)）
+- [pi（earendil-works/pi）](https://github.com/earendil-works/pi/releases/tag/v1.1.0) - 只在终端应答查询后才发送，并写明 tmux/screen 不转发——「先检测再发」的样板。（已发布，见 [矩阵](docs/support-matrix.md#pi)）
+- [tuist](https://github.com/tuist/tuist/pull/13956) - 非 AI 的 CLI 也用得上：浏览器登录等待时报 blocked（kind=auth）。（已合并未发版，见 [矩阵](docs/support-matrix.md#tuist)）
+- [Hugo](https://github.com/gohugoio/hugo/pull/15428) - 与 OSC 9;4 进度条并存的实现，适合看两种协议怎么同时发。（已发布，见 [矩阵](docs/support-matrix.md#hugo)）
+- [firebase-tools](https://github.com/firebase/firebase-tools/pull/11245) - 反面经验：维护者认为在每个调用点手工包裹难以维护，两次实现被关闭。（已关闭，见 [矩阵](docs/support-matrix.md#firebase-tools)）
 
-#### 非 AI CLI（发送端）
+#### 库
 
-- [tuist](https://github.com/tuist/tuist/pull/13956) - 长命令与浏览器登录时上报 blocked（kind=auth）（已合并未发版）。
-- [git-stack](https://github.com/DomBlack/git-stack/pull/16) - git 栈管理 CLI（已发布）。
-- [Hugo](https://github.com/gohugoio/hugo/pull/15428) - 与 OSC 9;4 并发支持（开发中）。
-- [Composer](https://github.com/composer/composer/pull/13117) - 同时支持 OSC 9;4（开发中）。
-- [Expo CLI](https://github.com/expo/expo/pull/51289) - experiment（开发中）。
-- [bunny.net CLI](https://github.com/BunnyWay/cli/pull/244) - 开发中。
-- [firebase-tools](https://github.com/firebase/firebase-tools/pull/11245) - 两次实现被关闭，维护者计划以「fresh implementation」重做（已关闭）。
-- Terraform / Homebrew - 仅作者博文中的 PoC（插件或 fork，仅宣布）。
+- [Bubble Tea](https://github.com/charmbracelet/bubbletea/releases/tag/v2.1.0) - Go TUI 框架层实现，下游程序升级即获得能力。（已发布，见 [矩阵](docs/support-matrix.md#bubble-tea)）
+- [OpenTUI](https://github.com/anomalyco/opentui/pull/1657) - TypeScript TUI 库提供 setProgramStatus()，opencode 借它接入。（已发布，见 [矩阵](docs/support-matrix.md#opentui)）
 
-#### TUI 库与 SDK
+#### 讨论
 
-- [Bubble Tea](https://github.com/charmbracelet/bubbletea) - Go TUI 框架，一次实现惠及全部下游程序（已发布）。
-- [charmbracelet/x](https://github.com/charmbracelet/x) - ansi 包的序列构造/解析（已合并未发版）。
-- [charmbracelet/ultraviolet](https://github.com/charmbracelet/ultraviolet/pull/207) - 已合并未发版。
-- [libvaxis](https://github.com/rockorager/libvaxis) - Zig TUI 库，含查询序列常量（已合并未发版）。
-- [tuika](https://github.com/everruns/tuika/pull/140) - Rust TUI 框架（已发布）。
-- [xterm.dart](https://github.com/lollipopkit/xterm.dart/pull/26) - 同时实现 7501、9;4 与 133（已合并未发版）。
+- [OOM 残留讨论](https://x.com/shahidcodes/status/2107995544065081475) - 远端 agent 被 OOM kill 后 blocked 记录悬挂的真实问题，以及作者为何仍不做心跳。（已发布）
 
-#### 文章与讨论
-
-- [Why OSC 7501（作者博文）](https://mitchellh.com/writing/program-status-osc7501) - 设计动机与取舍的第一手阐述。
-- [24 小时状态推文](https://x.com/mitchellh/status/2107894687587795079) - 作者汇总首日集成进展。
-- [Claude Code 支持推文](https://x.com/mitchellh/status/2108296550405619967) - 称 Anthropic 用 Rex 验证过。
-- [OOM 残留讨论](https://x.com/shahidcodes/status/2107995544065081475) - ssh 内 agent 被 OOM kill 后 blocked 记录悬挂；[作者回复](https://x.com/mitchellh/status/2107997330238795818)：故意不做心跳。
-- [隐藏标题 spinner 的建议](https://x.com/mitchellh/status/2107681182649667671) - 检测到 7501 支持时应用应隐藏自己的 spinner。
-
-#### 反对与观望
-
-- [tmux #5713](https://github.com/tmux/tmux/issues/5713) - 维护者 nicm：「This seems premature. Let's see if any other terminals and programs pick it up.」（未支持）
-- [Herdr #5069](https://github.com/herdrdev/herdr/issues/5069) - issue 被以 bugs-only 策略关闭（程序性，非技术否决）。
-- [firebase-tools #11245](https://github.com/firebase/firebase-tools/pull/11245) - 维护者认为「每个调用点手工包裹」难维护，计划重做（已关闭）。
-- [Bubble Tea #1845](https://github.com/charmbracelet/bubbletea/pull/1845) - 退出/挂起后记录陈旧的生命周期修复（open）。
-- 主流终端（Kitty、WezTerm、iTerm2、Alacritty、Windows Terminal）尚无公开动作；先行方案 iTerm2 OSC 21337 / Orca OSC 9999 与 7501 存在竞争。
+<!-- END GENERATED: featured -->
 
 ### 为什么大家要集成（摘要）
 
@@ -337,6 +307,29 @@ stateDiagram-v2
 
 <!-- END GENERATED: status-counts -->
 
+### 常见误解
+
+- 误解：「Ghostty 已经支持 7501」→ 事实：只有 libghostty-vt 库合并了（未进
+  tag v1.3.1），Ghostty 应用侧忽略报告（[PR #14560](https://github.com/ghostty-org/ghostty/pull/14560)、
+  [stream_handler.zig](https://github.com/ghostty-org/ghostty/blob/main/src/termio/stream_handler.zig)）。
+- 误解：「在 tmux 里直接发就行」→ 事实：tmux 丢弃未知 OSC（本仓库 3.5a 实测），
+  需 DCS passthrough + `allow-passthrough on`；上游 [#5713](https://github.com/tmux/tmux/issues/5713)
+  已关闭、不做原生支持（[examples/RUNLOG.md](examples/RUNLOG.md)）。
+- 误解：「需要定时重发保活」→ 事实：规范规定无心跳，终端不得要求重发；作者在
+  讨论中明确故意不做（[规范](https://www.superlogical.com/rex/docs/build/program-status)、
+  [作者回复](https://x.com/mitchellh/status/2107997330238795818)）。
+- 误解：「每次只发变化的键」→ 事实：每条报告整条替换该 id 的记录，缺的键会
+  消失，所以每次都要带 `app`（[规范](https://www.superlogical.com/rex/docs/build/program-status)）。
+- 误解：「done 会随进程退出消失」→ 事实：done/error 会挺过进程退出和新提示符，
+  直到被替换或 clear；working/blocked 才必须丢弃
+  （[规范](https://www.superlogical.com/rex/docs/build/program-status)）。
+- 误解：「不检测就发会在不支持的终端上乱码」→ 事实：未知 OSC 按规范必须被忽略，
+  不检测直接发也无害；检测自 rev 0.3 起是可选的
+  （[规范](https://www.superlogical.com/rex/docs/build/program-status)）。
+- 误解：「kitty 不支持」→ 事实：kitty master 已实现（尚未发版），id 上限用
+  263（[#10638](https://github.com/kovidgoyal/kitty/issues/10638)、
+  [commit 0e1b7f4](https://github.com/kovidgoyal/kitty/commit/0e1b7f4812bf297639999a362672c4271e42ed0c)）。
+
 ### 示例
 
 本仓库 [examples/](examples/) 提供可运行的发送端与接收端最小实现，全部在
@@ -353,7 +346,7 @@ POSIX sh 函数库、字节级演示、命令包装器、特性检测、带完�
 2. 多路复用器的 per-pane 记录模型与上报约定（tmux/zellij 侧）。
 3. OSC 9;4 → 7501 的映射/迁移工具与文档。
 4. 各语言的小型发送端库（Go/Rust/TS…）与「id 规划」最佳实践。
-5. 跟进 id 长度上限问题（kitty 作者指出 128 < 8×32+7，规范未解释，未修）。
+5. 跟进 id 长度上限问题（规范仍写 128；kitty 已按 8×32+7=263 实现，两者不一致，待规范表态）。
 
 ---
 

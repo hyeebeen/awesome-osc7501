@@ -68,8 +68,9 @@
         }
       ],
       "verified_at": "2026-10-21",
-      "why": null,
-      "featured": false
+      "why": "参考实现所在的库；注意只是库已合并，Ghostty 应用本身还不显示状态。",
+      "why_en": "The library holding the reference implementation; only the library has it — the Ghostty app does not show status yet.",
+      "featured": true
     },
     {
       "id": "ghostty-app",
@@ -168,8 +169,9 @@
         }
       ],
       "verified_at": "2026-10-21",
-      "why": null,
-      "featured": false
+      "why": "规范没定义多路复用器该怎么按 pane 存记录，cmux 给出了一种可参考的做法（按紧急度排序侧栏）。",
+      "why_en": "The spec leaves per-pane records undefined for multiplexers; cmux shows one workable answer.",
+      "featured": true
     },
     {
       "id": "termio",
@@ -194,8 +196,9 @@
         }
       ],
       "verified_at": "2026-10-11",
-      "why": null,
-      "featured": false
+      "why": "由 daemon 产生状态并在 Mac、手机、CLI 间共享，展示了状态离开终端窗口后的用法。",
+      "why_en": "A daemon produces status shared across Mac, phone and CLI.",
+      "featured": true
     },
     {
       "id": "swiftterm",
@@ -966,8 +969,9 @@
         }
       ],
       "verified_at": "2026-10-21",
-      "why": null,
-      "featured": false
+      "why": "最重要的反对意见：维护者认为窗格标题 + OSC 9 + OSC 133 已够用，并关闭了 issue；在 tmux 里要靠 DCS 透传。",
+      "why_en": "The key dissent: the maintainer considers pane titles + OSC 9 + OSC 133 enough and closed the issue; inside tmux you need DCS passthrough.",
+      "featured": true
     },
     {
       "id": "screen",
@@ -1014,8 +1018,9 @@
         }
       ],
       "verified_at": "2026-10-21",
-      "why": null,
-      "featured": false
+      "why": "kitty 作者先评审规范（促成 rev 0.4），随后在 master 实现（未发版）；id 上限用 263 而非规范的 128，实现与规范在这一点上已不一致。",
+      "why_en": "kitty's author reviewed the spec (prompting rev 0.4), then implemented it on master (unreleased) with an id limit of 263 instead of the spec's 128.",
+      "featured": true
     },
     {
       "id": "wezterm",
@@ -1444,8 +1449,9 @@
         }
       ],
       "verified_at": "2026-10-11",
-      "why": null,
-      "featured": false
+      "why": "CHANGELOG 明确写入 Program Status Protocol 支持；规范作者转述 Anthropic 用 Rex 验证过。",
+      "why_en": "Support is stated in its CHANGELOG; the spec author relays that Anthropic tested it with Rex.",
+      "featured": true
     },
     {
       "id": "pi",
@@ -1466,8 +1472,9 @@
         }
       ],
       "verified_at": "2026-10-11",
-      "why": null,
-      "featured": false
+      "why": "只在终端应答查询后才发送，并写明 tmux/screen 不转发——「先检测再发」的样板。",
+      "why_en": "Only sends after the terminal answers the query and documents that tmux/screen do not forward it.",
+      "featured": true
     },
     {
       "id": "omp",
@@ -2112,8 +2119,9 @@
         }
       ],
       "verified_at": "2026-10-21",
-      "why": null,
-      "featured": false
+      "why": "从 rust-v0.163.0 起正式发布，可以拿来实测接收端。",
+      "why_en": "Shipped since rust-v0.163.0; usable to test a receiver.",
+      "featured": true
     },
     {
       "id": "opencode",
@@ -2396,8 +2404,9 @@
         }
       ],
       "verified_at": "2026-10-21",
-      "why": null,
-      "featured": false
+      "why": "非 AI 的 CLI 也用得上：浏览器登录等待时报 blocked（kind=auth）。",
+      "why_en": "Not just for AI: reports blocked (kind=auth) while waiting for browser login.",
+      "featured": true
     },
     {
       "id": "hugo",
@@ -2422,8 +2431,9 @@
         }
       ],
       "verified_at": "2026-10-21",
-      "why": null,
-      "featured": false
+      "why": "与 OSC 9;4 进度条并存的实现，适合看两种协议怎么同时发。",
+      "why_en": "Emits it alongside OSC 9;4 progress; shows how both coexist.",
+      "featured": true
     },
     {
       "id": "composer",
@@ -2510,8 +2520,9 @@
         }
       ],
       "verified_at": "2026-10-11",
-      "why": null,
-      "featured": false
+      "why": "反面经验：维护者认为在每个调用点手工包裹难以维护，两次实现被关闭。",
+      "why_en": "Counter-example: maintainers found wrapping every call site by hand unmaintainable; two attempts were closed.",
+      "featured": true
     },
     {
       "id": "terraform-homebrew-poc",
@@ -2664,8 +2675,9 @@
         }
       ],
       "verified_at": "2026-10-11",
-      "why": null,
-      "featured": false
+      "why": "Go TUI 框架层实现，下游程序升级即获得能力。",
+      "why_en": "Implemented at the Go TUI framework layer; downstream apps get it by upgrading.",
+      "featured": true
     },
     {
       "id": "charmbracelet-x",
@@ -2844,8 +2856,9 @@
         }
       ],
       "verified_at": "2026-10-21",
-      "why": null,
-      "featured": false
+      "why": "TypeScript TUI 库提供 setProgramStatus()，opencode 借它接入。",
+      "why_en": "TypeScript TUI library exposing setProgramStatus(); opencode adopted it through this.",
+      "featured": true
     },
     {
       "id": "crossterm",

@@ -1,0 +1,46 @@
+# curated reading paths for the README「只看 3 条」/ "if you only read 3" and
+# 精选 / featured-picks blocks, rendered by scripts/build.py into both READMEs.
+# every id must exist in data/integrations.yml or data/resources.yml (checked by
+# scripts/validate.py, together with featured:true consistency). The fixed third
+# top3 item (docs/practice.md) is a repo path, not a data entry, and is rendered
+# by the build script itself.
+top3:
+- osc7501-spec
+- why-osc-7501-blog
+groups:
+- key: spec
+  title_zh: 规范与参考实现
+  title_en: Spec and reference implementation
+  ids:
+  - program-status-zig
+  - libghostty-vt
+  - control-codes-page-summary
+- key: receivers
+  title_zh: 接收端
+  title_en: Receivers
+  ids:
+  - kitty
+  - cmux
+  - termio
+  - tmux
+- key: senders
+  title_zh: 发送端
+  title_en: Senders
+  ids:
+  - claude-code
+  - codex-cli
+  - pi
+  - tuist
+  - hugo
+  - firebase-tools
+- key: libraries
+  title_zh: 库
+  title_en: Libraries
+  ids:
+  - bubble-tea
+  - opentui
+- key: discussion
+  title_zh: 讨论
+  title_en: Discussion
+  ids:
+  - oom-stale-records-discussion

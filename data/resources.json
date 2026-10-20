@@ -9,17 +9,17 @@
   },
   "counts": {
     "by_status": {
-      "released": 13,
+      "released": 12,
       "in-progress": 1,
       "closed": 1
     },
     "by_category": {
       "spec": 2,
       "reference": 3,
-      "article": 7,
+      "article": 6,
       "discussion": 3
     },
-    "total": 15
+    "total": 14
   },
   "latest_verified_at": "2026-10-11",
   "status_labels_zh": {
@@ -59,8 +59,9 @@
         }
       ],
       "verified_at": "2026-10-11",
-      "why": "唯一权威规范（Rex 文档，作者 Mitchell Hashimoto），现行 rev 0.4（2026-10-10）",
-      "featured": false
+      "why": "唯一权威规范（现行 rev 0.4）；先读「状态模型」「检测」两节，就够写出一个发送端。",
+      "why_en": "The only normative text (rev 0.4); the state model and detection sections are enough to write a sender.",
+      "featured": true
     },
     {
       "id": "kitty-10638",
@@ -125,8 +126,12 @@
         }
       ],
       "verified_at": "2026-10-11",
-      "why": "作者亲述动机、设计取舍与 PoC",
-      "featured": false
+      "why": "作者自己讲为什么走 PTY 字节流而不是带外 socket、为什么故意不做心跳；理解设计取舍最快的入口。",
+      "why_en": "The author on why it rides the PTY byte stream instead of an out-of-band socket, and why there is deliberately no heartbeat.",
+      "featured": true,
+      "aliases": [
+        "why-osc-7501-author-blog"
+      ]
     },
     {
       "id": "launch-tweet",
@@ -169,8 +174,9 @@
         }
       ],
       "verified_at": "2026-10-11",
-      "why": "第三方中立摘要页",
-      "featured": false
+      "why": "第三方中立摘要，适合快速对照字段。",
+      "why_en": "Neutral third-party summary for quick field lookup.",
+      "featured": true
     },
     {
       "id": "program-status-zig",
@@ -191,8 +197,9 @@
         }
       ],
       "verified_at": "2026-10-11",
-      "why": "规范级解析器，含大量边界测试",
-      "featured": false
+      "why": "规范作者本人写的解析器，边界测试比规范更清楚地说明「什么必须拒收」。",
+      "why_en": "Parser written by the spec author; its edge-case tests show what must be rejected more clearly than the prose.",
+      "featured": true
     },
     {
       "id": "stream-terminal-zig",
@@ -236,28 +243,6 @@
       ],
       "verified_at": "2026-10-11",
       "why": "`GHOSTTY_TERMINAL_OPT_PROGRAM_STATUS` 与状态枚举",
-      "featured": false
-    },
-    {
-      "id": "why-osc-7501-author-blog",
-      "anchor": null,
-      "name": "Why OSC 7501（作者博文）",
-      "url": "https://mitchellh.com/writing/program-status-osc7501",
-      "category": "article",
-      "role": "作者博文",
-      "status": "released",
-      "status_note": null,
-      "version": "—",
-      "evidence_type": "verified",
-      "evidence_note": null,
-      "source": [
-        {
-          "url": "https://mitchellh.com/writing/program-status-osc7501",
-          "label": "Why OSC 7501（作者博文）"
-        }
-      ],
-      "verified_at": "2026-10-11",
-      "why": "设计动机与取舍的第一手阐述",
       "featured": false
     },
     {
@@ -327,8 +312,9 @@
         }
       ],
       "verified_at": "2026-10-11",
-      "why": "ssh 内 agent 被 OOM kill 后 blocked 记录悬挂；作者回复：故意不做心跳",
-      "featured": false
+      "why": "远端 agent 被 OOM kill 后 blocked 记录悬挂的真实问题，以及作者为何仍不做心跳。",
+      "why_en": "A real stale-record case after an OOM kill over SSH, and why the author still refuses heartbeats.",
+      "featured": true
     },
     {
       "id": "hide-title-spinner-suggestion",

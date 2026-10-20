@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "OSC 7501 featured picks (README「只看 3 条」/ 精选 blocks)",
+  "description": "Curated reading paths rendered by scripts/build.py into README.md and README.en.md. Every id must exist in data/integrations.yml or data/resources.yml and be featured:true there (both checked by scripts/validate.py). The fixed local third top3 item (docs/practice.md) is not a data entry and is rendered by the build script.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["top3", "groups"],
+  "properties": {
+    "top3": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/id" }
+    },
+    "groups": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["key", "title_zh", "title_en", "ids"],
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$",
+            "minLength": 1,
+            "description": "Stable slug for the group (de-duplication only; not rendered)."
+          },
+          "title_zh": { "type": "string", "minLength": 1 },
+          "title_en": { "type": "string", "minLength": 1 },
+          "ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "$ref": "#/$defs/id" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "minLength": 1,
+      "description": "Entry id in data/integrations.yml or data/resources.yml."
+    }
+  }
+}

@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Deterministic generator: data/*.yml is the single source of truth.
 
+Inputs: data/integrations.yml, data/resources.yml, data/featured.yml
+(README「只看 3 条」/ 精选 picks) and examples/test_osc7501_parser.py (test count).
+
 Outputs (regenerated in place; no wall-clock timestamps, so runs are idempotent):
 
   docs/support-matrix.md   the 4 category tables inside ONE generated marker
@@ -9,19 +12,25 @@ Outputs (regenerated in place; no wall-clock timestamps, so runs are idempotent)
                            is a permanent link
   data/integrations.json   machine-readable export for agents
   data/resources.json      same export shape for the curated resource list
-  README.md                支持概览 count table + inline unit-test count
-  README.en.md             Overview count table + inline unit-test count
+  README.md                只看 3 条 (top3) + 精选 (featured) blocks,
+                           支持概览 count table, verification date and inline
+                           unit-test count
+  README.en.md             same blocks, English variants
 
 Markers (everything between BEGIN/END is replaced wholesale on every run; all
 bytes outside the markers are left untouched). A missing marker is an error:
 nothing is inserted and the build aborts non-zero.
 
   <!-- BEGIN GENERATED: matrix (scripts/build.py; edit data/integrations.yml instead) --> ... <!-- END GENERATED: matrix -->
+  <!-- BEGIN GENERATED: top3 (scripts/build.py; edit data/featured.yml instead) --> ... <!-- END GENERATED: top3 -->
+  <!-- BEGIN GENERATED: featured (scripts/build.py; edit data/featured.yml instead) --> ... <!-- END GENERATED: featured -->
   <!-- BEGIN GENERATED: status-counts --> ... <!-- END GENERATED: status-counts -->
+  <!-- BEGIN GENERATED: verified-at -->DATE<!-- END GENERATED: verified-at -->
   <!-- BEGIN GENERATED: test-count -->N<!-- END GENERATED: test-count -->
 
 Data files are validated first (delegates to scripts/validate.py, which checks
-data/schema.json + id/url hygiene); the build aborts non-zero on any error.
+the schemas + id/url hygiene + featured consistency); the build aborts non-zero
+on any error.
 
 Usage:
   python3 scripts/build.py           regenerate outputs in place
@@ -46,8 +55,20 @@ MATRIX_BEGIN = "<!-- BEGIN GENERATED: matrix (scripts/build.py; edit data/integr
 MATRIX_END = "<!-- END GENERATED: matrix -->"
 COUNTS_BEGIN = "<!-- BEGIN GENERATED: status-counts -->"
 COUNTS_END = "<!-- END GENERATED: status-counts -->"
+TOP3_BEGIN = "<!-- BEGIN GENERATED: top3 (scripts/build.py; edit data/featured.yml instead) -->"
+TOP3_END = "<!-- END GENERATED: top3 -->"
+FEATURED_BEGIN = "<!-- BEGIN GENERATED: featured (scripts/build.py; edit data/featured.yml instead) -->"
+FEATURED_END = "<!-- END GENERATED: featured -->"
+VERIFIED_BEGIN = "<!-- BEGIN GENERATED: verified-at -->"
+VERIFIED_END = "<!-- END GENERATED: verified-at -->"
 TESTCOUNT_BEGIN = "<!-- BEGIN GENERATED: test-count -->"
 TESTCOUNT_END = "<!-- END GENERATED: test-count -->"
+
+# the fixed third「只看 3 条」item is a repo path, not a data entry
+TOP3_LOCAL = {
+    "zh": "- [docs/practice.md](docs/practice.md) - 本仓库可运行的发送端/接收端示例与实测记录（含 tmux 透传），读完能直接动手。",
+    "en": "- [docs/practice.md](docs/practice.md) - Runnable sender/receiver examples from this repo, with real run logs (including tmux passthrough).",
+}
 
 # spec block for the JSON exports (facts from README.md: rev 0.4, 2026-10-10)
 SPEC = {
@@ -142,6 +163,14 @@ def load_entries(name: str) -> list[dict]:
     return entries
 
 
+def load_featured() -> dict:
+    path = REPO / "data" / "featured.yml"
+    doc = yaml.safe_load(path.read_text(encoding="utf-8"))
+    if not (doc and doc.get("top3") and doc.get("groups")):
+        raise BuildError(f"{path.relative_to(REPO)} needs top3 and groups")
+    return doc
+
+
 def count_unit_tests() -> int:
     """Number of `def test_...` functions in the example test file (ast, no execution)."""
     tree = ast.parse(TESTS_FILE.read_text(encoding="utf-8"))
@@ -233,6 +262,36 @@ def counts_block(lang: str, entries: list[dict]) -> str:
     return "\n".join(lines)
 
 
+# ------------------------------------------------------ featured / top3 ---
+def featured_item(entry: dict, lang: str, integration_ids: set[str]) -> str:
+    """- [name](url) - why（状态，见 [矩阵](docs/support-matrix.md#id)）
+    status label comes from data; resources have no matrix row/anchor, so no
+    matrix link is rendered for them."""
+    eid = entry["id"]
+    if lang == "zh":
+        label = STATUS_ZH_LABEL[entry["status"]]
+        tail = f"（{label}，见 [矩阵](docs/support-matrix.md#{eid})）" if eid in integration_ids else f"（{label}）"
+        return f"- [{entry['name']}]({entry['url']}) - {entry['why']}{tail}"
+    label = STATUS_EN[entry["status"]]
+    tail = f" ({label}, see [matrix](docs/support-matrix.md#{eid}))" if eid in integration_ids else f" ({label})"
+    return f"- [{entry['name']}]({entry['url']}) - {entry['why_en']}{tail}"
+
+
+def top3_block(lang: str, featured: dict, by_id: dict[str, dict], integration_ids: set[str]) -> str:
+    items = [featured_item(by_id[i], lang, integration_ids) for i in featured["top3"]]
+    items.append(TOP3_LOCAL[lang])
+    return "\n".join(items)
+
+
+def featured_block(lang: str, featured: dict, by_id: dict[str, dict], integration_ids: set[str]) -> str:
+    sections = []
+    for group in featured["groups"]:
+        title = group["title_zh"] if lang == "zh" else group["title_en"]
+        items = [featured_item(by_id[i], lang, integration_ids) for i in group["ids"]]
+        sections.append(f"#### {title}\n\n" + "\n".join(items))
+    return "\n\n".join(sections)
+
+
 # ------------------------------------------------------------------- json ---
 def entry_json(entry: dict, anchored: bool) -> dict:
     out = {"id": entry["id"]}
@@ -281,7 +340,20 @@ def replace_region(text: str, path: Path, begin: str, end: str, mid: str) -> str
 def generate() -> dict[Path, str]:
     integrations = load_entries("integrations")
     resources = load_entries("resources")
+    featured = load_featured()
     n_tests = count_unit_tests()
+
+    by_id: dict[str, dict] = {}
+    for e in (*integrations, *resources):
+        if e["id"] in by_id:
+            raise BuildError(f"duplicate id across data files: {e['id']}")
+        by_id[e["id"]] = e
+    picked = [*featured["top3"], *(i for g in featured["groups"] for i in g["ids"])]
+    missing = [i for i in picked if i not in by_id]
+    if missing:
+        raise BuildError(f"data/featured.yml references unknown ids: {missing}")
+    integration_ids = {e["id"] for e in integrations}
+    latest_verified = max(e["verified_at"] for e in by_id.values())
 
     outputs: dict[Path, str] = {}
 
@@ -295,11 +367,15 @@ def generate() -> dict[Path, str]:
     outputs[REPO / "data" / "integrations.json"] = dumps_json(export_doc(integrations, "data/integrations.yml", anchored=True))
     outputs[REPO / "data" / "resources.json"] = dumps_json(export_doc(resources, "data/resources.yml", anchored=False))
 
-    # README.md (zh) / README.en.md (en): count table + inline test count
+    # README.md (zh) / README.en.md (en): top3 + featured + count table +
+    # verification date + inline test count
     for name, lang in (("README.md", "zh"), ("README.en.md", "en")):
         readme = REPO / name
         text = readme.read_text(encoding="utf-8")
+        text = replace_region(text, readme, TOP3_BEGIN, TOP3_END, "\n\n" + top3_block(lang, featured, by_id, integration_ids) + "\n\n")
+        text = replace_region(text, readme, FEATURED_BEGIN, FEATURED_END, "\n\n" + featured_block(lang, featured, by_id, integration_ids) + "\n\n")
         text = replace_region(text, readme, COUNTS_BEGIN, COUNTS_END, "\n\n" + counts_block(lang, integrations) + "\n\n")
+        text = replace_region(text, readme, VERIFIED_BEGIN, VERIFIED_END, latest_verified)
         text = replace_region(text, readme, TESTCOUNT_BEGIN, TESTCOUNT_END, str(n_tests))
         outputs[readme] = text
 

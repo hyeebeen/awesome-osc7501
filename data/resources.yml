@@ -1,4 +1,5 @@
-# curated NON-integration resources from README.md「精选清单」(规范与原始出处 / 参考实现与嵌入库 / 文章与讨论 / 反对与观望); maintained by hand
+# curated NON-integration resources (spec & origin / reference code / articles & discussions,
+# formerly the README「精选清单」); maintained by hand; README picks live in data/featured.yml
 # entries that are themselves integrations (e.g. Ghostty PR #14560, libghostty-rs, tmux #5713, firebase-tools #11245, Bubble Tea #1845) live in data/integrations.yml instead
 entries:
 - id: osc7501-spec
@@ -15,8 +16,9 @@ entries:
   - url: https://www.superlogical.com/rex/docs/build/program-status
     label: OSC 7501 规范正文
   verified_at: '2026-10-11'
-  why: 唯一权威规范（Rex 文档，作者 Mitchell Hashimoto），现行 rev 0.4（2026-10-10）
-  featured: false
+  why: "唯一权威规范（现行 rev 0.4）；先读「状态模型」「检测」两节，就够写出一个发送端。"
+  why_en: "The only normative text (rev 0.4); the state model and detection sections are enough to write a sender."
+  featured: true
 - id: kitty-10638
   name: "kitty #10638"
   url: https://github.com/kovidgoyal/kitty/issues/10638
@@ -63,8 +65,11 @@ entries:
   - url: https://mitchellh.com/writing/program-status-osc7501
     label: Why OSC 7501（博文）
   verified_at: '2026-10-11'
-  why: 作者亲述动机、设计取舍与 PoC
-  featured: false
+  why: "作者自己讲为什么走 PTY 字节流而不是带外 socket、为什么故意不做心跳；理解设计取舍最快的入口。"
+  why_en: "The author on why it rides the PTY byte stream instead of an out-of-band socket, and why there is deliberately no heartbeat."
+  featured: true
+  aliases:
+  - why-osc-7501-author-blog
 - id: launch-tweet
   name: 发布推文
   url: https://x.com/mitchellh/status/2107577887159386152
@@ -95,8 +100,9 @@ entries:
   - url: https://control-codes.page/proposals/osc-7501/
     label: control-codes.page 摘要
   verified_at: '2026-10-11'
-  why: 第三方中立摘要页
-  featured: false
+  why: "第三方中立摘要，适合快速对照字段。"
+  why_en: "Neutral third-party summary for quick field lookup."
+  featured: true
 - id: program-status-zig
   name: program_status.zig
   url: https://github.com/ghostty-org/ghostty/blob/main/src/terminal/osc/parsers/program_status.zig
@@ -111,8 +117,9 @@ entries:
   - url: https://github.com/ghostty-org/ghostty/blob/main/src/terminal/osc/parsers/program_status.zig
     label: program_status.zig
   verified_at: '2026-10-11'
-  why: 规范级解析器，含大量边界测试
-  featured: false
+  why: "规范作者本人写的解析器，边界测试比规范更清楚地说明「什么必须拒收」。"
+  why_en: "Parser written by the spec author; its edge-case tests show what must be rejected more clearly than the prose."
+  featured: true
 - id: stream-terminal-zig
   name: stream_terminal.zig
   url: https://github.com/ghostty-org/ghostty/blob/main/src/terminal/stream_terminal.zig
@@ -144,22 +151,6 @@ entries:
     label: ghostty/vt C API
   verified_at: '2026-10-11'
   why: "`GHOSTTY_TERMINAL_OPT_PROGRAM_STATUS` 与状态枚举"
-  featured: false
-- id: why-osc-7501-author-blog
-  name: Why OSC 7501（作者博文）
-  url: https://mitchellh.com/writing/program-status-osc7501
-  category: article
-  role: 作者博文
-  status: released
-  status_note: null
-  version: "—"
-  evidence_type: verified
-  evidence_note: null
-  source:
-  - url: https://mitchellh.com/writing/program-status-osc7501
-    label: Why OSC 7501（作者博文）
-  verified_at: '2026-10-11'
-  why: 设计动机与取舍的第一手阐述
   featured: false
 - id: 24h-status-tweet
   name: 24 小时状态推文
@@ -209,8 +200,9 @@ entries:
   - url: https://x.com/mitchellh/status/2107997330238795818
     label: 作者回复
   verified_at: '2026-10-11'
-  why: ssh 内 agent 被 OOM kill 后 blocked 记录悬挂；作者回复：故意不做心跳
-  featured: false
+  why: "远端 agent 被 OOM kill 后 blocked 记录悬挂的真实问题，以及作者为何仍不做心跳。"
+  why_en: "A real stale-record case after an OOM kill over SSH, and why the author still refuses heartbeats."
+  featured: true
 - id: hide-title-spinner-suggestion
   name: 隐藏标题 spinner 的建议
   url: https://x.com/mitchellh/status/2107681182649667671

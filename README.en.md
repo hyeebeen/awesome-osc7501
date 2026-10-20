@@ -6,7 +6,22 @@
 
 [简体中文](README.md) · English (this file)
 
-**Verification date: 2026-10-11 (Asia/Shanghai, CST).** Every entry traces back to a
+## If you only read 3 things
+
+<!-- BEGIN GENERATED: top3 (scripts/build.py; edit data/featured.yml instead) -->
+
+- [OSC 7501 规范正文](https://www.superlogical.com/rex/docs/build/program-status) - The only normative text (rev 0.4); the state model and detection sections are enough to write a sender. (Released)
+- [Why OSC 7501（博文）](https://mitchellh.com/writing/program-status-osc7501) - The author on why it rides the PTY byte stream instead of an out-of-band socket, and why there is deliberately no heartbeat. (Released)
+- [docs/practice.md](docs/practice.md) - Runnable sender/receiver examples from this repo, with real run logs (including tmux passthrough).
+
+<!-- END GENERATED: top3 -->
+
+> This repository was drafted with AI assistance and verified by hand: every
+> status carries a primary source and a verification date, and you can re-check
+> any row with [scripts/recheck.py](scripts/recheck.py); if you find an error,
+> please report it via the issue templates.
+
+**Verification date: <!-- BEGIN GENERATED: verified-at -->2026-10-21<!-- END GENERATED: verified-at --> (Asia/Shanghai, CST).** Every entry traces back to a
 primary source (spec, source code, PR, release, or a first-party post). Version
 numbers and release dates live only in [docs/support-matrix.md](docs/support-matrix.md)
 and [docs/timeline.md](docs/timeline.md); everywhere else we state a status category only. Anything
@@ -166,50 +181,76 @@ stateDiagram-v2
 
 ## Part 2 · Focus: ecosystem and practice
 
-Curated highlights (full lists with statuses in the
-[support matrix](docs/support-matrix.md)):
+### Featured picks
 
-- **Spec & origin** — [the spec](https://www.superlogical.com/rex/docs/build/program-status)
-  (rev 0.4, 2026-10-10), the [original gist](https://gist.github.com/mitchellh/7acae3abd8355c1c00287d67e96c913a),
-  the author's [blog post](https://mitchellh.com/writing/program-status-osc7501)
-  and [announcement](https://x.com/mitchellh/status/2107577887159386152). Rev 0.4
-  came out of the kitty author's review in
-  [kitty #10638](https://github.com/kovidgoyal/kitty/issues/10638).
-- **Reference implementation** — [libghostty-vt PR #14560](https://github.com/ghostty-org/ghostty/pull/14560)
-  by the author (merged, unreleased); parser, query-reply logic and a C API.
-- **Receivers (terminals / multiplexers / agent workbenches)** —
-  [Rex](https://www.superlogical.com/rex/docs/build/program-status) (implemented
-  per its official docs; version unconfirmed),
-  [cmux](https://github.com/manaflow-ai/cmux/pull/18742) (merged, unreleased),
-  [termio](https://github.com/termio-sh/termio/pull/713) (released),
-  [SwiftTerm](https://github.com/migueldeicaza/SwiftTerm/pull/746) (released),
-  TUIOS, Termy, con-terminal, phux, thurm, wietty (released); Tern — Stencil's
-  closed-source Rust-native neoterminal, announced only by its developer; tmux and
-  the major terminals (Kitty, WezTerm, Alacritty, Windows Terminal, zellij, iTerm2)
-  do not support it yet; foot unconfirmed.
-- **Senders (AI agents / coding CLIs)** —
-  [Claude Code](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
-  (released), [pi](https://github.com/earendil-works/pi) (released),
-  [Docker Agent](https://github.com/docker/docker-agent/pull/4544) (released),
-  [Crush](https://github.com/charmbracelet/crush/pull/4041) (released),
-  [Factory Droid](https://docs.factory.com/changelog/release-notes) (released
-  (inferred)), plus many more merged or in progress; Amp, Codex CLI and opencode
-  announced only (per the author); Tern — a terminal, see receivers — announced
-  only by its developer.
-- **Non-AI CLIs** — tuist (merged, unreleased), git-stack (released), Hugo,
-  Composer, Expo, bunny.net (in development), firebase-tools (closed, redo planned).
-- **TUI libraries / SDKs** — [Bubble Tea](https://github.com/charmbracelet/bubbletea)
-  (released), charmbracelet/x, ultraviolet, libvaxis, tuika (released),
-  libghostty-rs, xterm.dart.
-- **Why integrate** — stop screen-scraping for state; surface "this agent needs
-  you" when the user has switched away; manage many sessions from a sidebar or a
-  unified inbox, even from a phone; cross-SSH/containers with zero out-of-band
-  plumbing; library-level network effects. Full analysis with sources in
-  [docs/why-integrate.md](docs/why-integrate.md) (Chinese).
-- **Opposition & wait-and-see** — tmux's maintainer calls it
-  ["premature"](https://github.com/tmux/tmux/issues/5713); firebase-tools closed
-  two implementations pending a redo; pre-existing sequences (iTerm2 OSC 21337,
-  Orca OSC 9999) compete in the same space.
+Sixteen more picks grouped by use case, each with a one-line reason. The full
+lists — with every version number and release date — live only in
+[docs/support-matrix.md](docs/support-matrix.md); machine-readable exports:
+[data/integrations.json](data/integrations.json) and
+[data/resources.json](data/resources.json) (articles & discussions).
+
+<!-- BEGIN GENERATED: featured (scripts/build.py; edit data/featured.yml instead) -->
+
+#### Spec and reference implementation
+
+- [program_status.zig](https://github.com/ghostty-org/ghostty/blob/main/src/terminal/osc/parsers/program_status.zig) - Parser written by the spec author; its edge-case tests show what must be rejected more clearly than the prose. (Released)
+- [libghostty-vt](https://github.com/ghostty-org/ghostty/pull/14560) - The library holding the reference implementation; only the library has it — the Ghostty app does not show status yet. (Merged, unreleased, see [matrix](docs/support-matrix.md#libghostty-vt))
+- [control-codes.page 摘要](https://control-codes.page/proposals/osc-7501/) - Neutral third-party summary for quick field lookup. (Released)
+
+#### Receivers
+
+- [Kitty](https://github.com/kovidgoyal/kitty/issues/10638) - kitty's author reviewed the spec (prompting rev 0.4), then implemented it on master (unreleased) with an id limit of 263 instead of the spec's 128. (Merged, unreleased, see [matrix](docs/support-matrix.md#kitty))
+- [cmux](https://github.com/manaflow-ai/cmux/pull/18742) - The spec leaves per-pane records undefined for multiplexers; cmux shows one workable answer. (Released, see [matrix](docs/support-matrix.md#cmux))
+- [termio](https://github.com/termio-sh/termio/pull/713) - A daemon produces status shared across Mac, phone and CLI. (Released, see [matrix](docs/support-matrix.md#termio))
+- [tmux](https://github.com/tmux/tmux/issues/5713) - The key dissent: the maintainer considers pane titles + OSC 9 + OSC 133 enough and closed the issue; inside tmux you need DCS passthrough. (Unsupported, see [matrix](docs/support-matrix.md#tmux))
+
+#### Senders
+
+- [Claude Code](https://github.com/anthropics/claude-code/releases/tag/v2.1.295) - Support is stated in its CHANGELOG; the spec author relays that Anthropic tested it with Rex. (Released, see [matrix](docs/support-matrix.md#claude-code))
+- [Codex CLI（openai/codex）](https://github.com/openai/codex/pull/52725) - Shipped since rust-v0.163.0; usable to test a receiver. (Released, see [matrix](docs/support-matrix.md#codex-cli))
+- [pi（earendil-works/pi）](https://github.com/earendil-works/pi/releases/tag/v1.1.0) - Only sends after the terminal answers the query and documents that tmux/screen do not forward it. (Released, see [matrix](docs/support-matrix.md#pi))
+- [tuist](https://github.com/tuist/tuist/pull/13956) - Not just for AI: reports blocked (kind=auth) while waiting for browser login. (Merged, unreleased, see [matrix](docs/support-matrix.md#tuist))
+- [Hugo](https://github.com/gohugoio/hugo/pull/15428) - Emits it alongside OSC 9;4 progress; shows how both coexist. (Released, see [matrix](docs/support-matrix.md#hugo))
+- [firebase-tools](https://github.com/firebase/firebase-tools/pull/11245) - Counter-example: maintainers found wrapping every call site by hand unmaintainable; two attempts were closed. (Closed, see [matrix](docs/support-matrix.md#firebase-tools))
+
+#### Libraries
+
+- [Bubble Tea](https://github.com/charmbracelet/bubbletea/releases/tag/v2.1.0) - Implemented at the Go TUI framework layer; downstream apps get it by upgrading. (Released, see [matrix](docs/support-matrix.md#bubble-tea))
+- [OpenTUI](https://github.com/anomalyco/opentui/pull/1657) - TypeScript TUI library exposing setProgramStatus(); opencode adopted it through this. (Released, see [matrix](docs/support-matrix.md#opentui))
+
+#### Discussion
+
+- [OOM 残留讨论](https://x.com/shahidcodes/status/2107995544065081475) - A real stale-record case after an OOM kill over SSH, and why the author still refuses heartbeats. (Released)
+
+<!-- END GENERATED: featured -->
+
+### Why integrate (summary)
+
+Full analysis with sources in [docs/why-integrate.md](docs/why-integrate.md)
+(Chinese).
+
+1. **Stop screen-scraping for state** — 250+ orchestrators each ran their own
+   heuristics; Herdr made ~10 compatibility changes in 3 months
+   ([launch tweet](https://x.com/mitchellh/status/2107577887159386152)).
+2. **"Needs you" becomes visible** — once the user has switched away, the
+   terminal or workbench can surface "this agent is waiting for you"
+   ([docker-agent #4544](https://github.com/docker/docker-agent/pull/4544),
+   [tuist #13956](https://github.com/tuist/tuist/pull/13956)).
+3. **Multi-session / multi-agent management** — sidebars sorted by urgency, a
+   unified inbox, visible even from a phone
+   ([cmux docs](https://github.com/manaflow-ai/cmux/blob/main/docs/program-status.md),
+   [termio #713](https://github.com/termio-sh/termio/pull/713)).
+4. **Cross-SSH/containers at zero integration cost** — the PTY byte stream
+   passes through natively; out-of-band sockets need extra bridging
+   ([blog post](https://mitchellh.com/writing/program-status-osc7501)).
+5. **Libraries implement once, every downstream app gains** — Bubble Tea,
+   SwiftTerm, libghostty-vt went first
+   ([Bubble Tea](https://github.com/charmbracelet/bubbletea) release notes, see
+   the matrix; network effects are inferred).
+6. **Interop with harnesses** — 7501 first, heuristics as a fallback layer
+   ([claude-fleet #2597](https://github.com/verkyyi/claude-fleet/pull/2597)).
+7. **Low implementation cost** — every PoC is under a dozen lines; one POSIX sh
+   function is enough ([blog post](https://mitchellh.com/writing/program-status-osc7501)).
 
 ### Overview
 
@@ -231,6 +272,37 @@ Status counts (121 tracked entries; methodology in the [support matrix](docs/sup
 
 <!-- END GENERATED: status-counts -->
 
+### Common misconceptions
+
+- Misconception: "Ghostty already supports 7501" → Fact: only the libghostty-vt
+  library has it (merged, not in tag v1.3.1); the Ghostty app itself ignores
+  reports ([PR #14560](https://github.com/ghostty-org/ghostty/pull/14560),
+  [stream_handler.zig](https://github.com/ghostty-org/ghostty/blob/main/src/termio/stream_handler.zig)).
+- Misconception: "You can just send inside tmux" → Fact: tmux drops unknown OSC
+  (verified on 3.5a in this repo); you need DCS passthrough +
+  `allow-passthrough on`; upstream [#5713](https://github.com/tmux/tmux/issues/5713)
+  is closed, with no native support ([examples/RUNLOG.md](examples/RUNLOG.md)).
+- Misconception: "You must re-send periodically to keep records alive" → Fact:
+  the spec mandates no heartbeat and terminals must not require re-sends; the
+  author has said the omission is deliberate
+  ([spec](https://www.superlogical.com/rex/docs/build/program-status),
+  [author reply](https://x.com/mitchellh/status/2107997330238795818)).
+- Misconception: "Only send the keys that changed" → Fact: each report fully
+  replaces the record for its id; missing keys disappear, so always include
+  `app` ([spec](https://www.superlogical.com/rex/docs/build/program-status)).
+- Misconception: "done disappears when the process exits" → Fact: done/error
+  survive process exit and new prompts until replaced or cleared; only
+  working/blocked must be dropped
+  ([spec](https://www.superlogical.com/rex/docs/build/program-status)).
+- Misconception: "Sending without detection garbles unsupported terminals" →
+  Fact: terminals must ignore unknown OSC per the spec, so blind sending
+  degrades safely; detection has been optional since rev 0.3
+  ([spec](https://www.superlogical.com/rex/docs/build/program-status)).
+- Misconception: "kitty doesn't support it" → Fact: kitty master has it
+  (unreleased), with an id limit of 263
+  ([#10638](https://github.com/kovidgoyal/kitty/issues/10638),
+  [commit](https://github.com/kovidgoyal/kitty/commit/0e1b7f4812bf297639999a362672c4271e42ed0c)).
+
 ### Examples
 
 Runnable sender and receiver examples (POSIX sh helpers, byte-level demo, command
@@ -238,6 +310,20 @@ wrapper, feature detection, a fully validating Python incremental parser with <!
 tests, and a tmux passthrough experiment) live in [examples/](examples/); real
 recorded output in [examples/RUNLOG.md](examples/RUNLOG.md). The how-to guide is
 [docs/practice.md](docs/practice.md) (Chinese).
+
+### Gaps to fill (contribute)
+
+See [deep-dive §5](docs/deep-dive.md#5-时间--空间--变量--反--空) (Chinese) for
+the full list. The highest-value items right now:
+
+1. A compliance test suite — the spec defines no reference tests.
+2. A per-pane record model and reporting convention for multiplexers
+   (tmux/zellij side).
+3. Mapping/migration tooling and docs from OSC 9;4 to 7501.
+4. Small sender libraries per language (Go/Rust/TS…) and "id planning" best
+   practices.
+5. Follow up on the id length limit (the spec still says 128; kitty implemented
+   263 = 8×32+7 — implementations and spec text now disagree).
 
 ## Contributing
 
