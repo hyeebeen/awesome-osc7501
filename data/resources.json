@@ -1,0 +1,378 @@
+{
+  "schema": "data/schema.json",
+  "generated_by": "scripts/build.py",
+  "source": "data/resources.yml",
+  "spec": {
+    "name": "OSC 7501 Program Status Protocol",
+    "revision": "0.4",
+    "url": "https://www.superlogical.com/rex/docs/build/program-status"
+  },
+  "counts": {
+    "by_status": {
+      "released": 13,
+      "in-progress": 1,
+      "closed": 1
+    },
+    "by_category": {
+      "spec": 2,
+      "reference": 3,
+      "article": 7,
+      "discussion": 3
+    },
+    "total": 15
+  },
+  "latest_verified_at": "2026-10-11",
+  "status_labels_zh": {
+    "released": "已发布",
+    "implemented-self-reported": "已实现（自述）",
+    "merged-unreleased": "已合并未发版",
+    "in-progress": "开发中",
+    "announced": "仅宣布",
+    "closed": "已关闭",
+    "unsupported": "未支持",
+    "unconfirmed": "未确认"
+  },
+  "evidence_labels_zh": {
+    "verified": "已验证",
+    "self-reported": "自述",
+    "self-reported-third-party": "自述（第三方）",
+    "inferred": "推断",
+    "not-found": null
+  },
+  "entries": [
+    {
+      "id": "osc7501-spec",
+      "anchor": null,
+      "name": "OSC 7501 规范正文",
+      "url": "https://www.superlogical.com/rex/docs/build/program-status",
+      "category": "spec",
+      "role": "唯一权威规范",
+      "status": "released",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://www.superlogical.com/rex/docs/build/program-status",
+          "label": "OSC 7501 规范正文"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": "唯一权威规范（Rex 文档，作者 Mitchell Hashimoto），现行 rev 0.4（2026-10-10）",
+      "featured": false
+    },
+    {
+      "id": "kitty-10638",
+      "anchor": null,
+      "name": "kitty #10638",
+      "url": "https://github.com/kovidgoyal/kitty/issues/10638",
+      "category": "discussion",
+      "role": "kitty 作者的规范评审",
+      "status": "in-progress",
+      "status_note": "issue 仍 open",
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/kovidgoyal/kitty/issues/10638",
+          "label": "kitty #10638"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": "kitty 作者的评审触发了 rev 0.4（删除 terminfo `Pst`、检测回复可带 states/kinds 等），issue 仍 open",
+      "featured": false
+    },
+    {
+      "id": "initial-draft-gist",
+      "anchor": null,
+      "name": "初稿 gist",
+      "url": "https://gist.github.com/mitchellh/7acae3abd8355c1c00287d67e96c913a",
+      "category": "spec",
+      "role": "最早的规范草稿",
+      "status": "released",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://gist.github.com/mitchellh/7acae3abd8355c1c00287d67e96c913a",
+          "label": "初稿 gist"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": "最早的规范草稿（rev 0.1）",
+      "featured": false
+    },
+    {
+      "id": "why-osc-7501-blog",
+      "anchor": null,
+      "name": "Why OSC 7501（博文）",
+      "url": "https://mitchellh.com/writing/program-status-osc7501",
+      "category": "article",
+      "role": "作者博文",
+      "status": "released",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://mitchellh.com/writing/program-status-osc7501",
+          "label": "Why OSC 7501（博文）"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": "作者亲述动机、设计取舍与 PoC",
+      "featured": false
+    },
+    {
+      "id": "launch-tweet",
+      "anchor": null,
+      "name": "发布推文",
+      "url": "https://x.com/mitchellh/status/2107577887159386152",
+      "category": "article",
+      "role": "发布推文（问题陈述）",
+      "status": "released",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://x.com/mitchellh/status/2107577887159386152",
+          "label": "发布推文"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": "问题陈述：250+ 编排器、Herdr 的 10 次兼容改动、O(N) 集成",
+      "featured": false
+    },
+    {
+      "id": "control-codes-page-summary",
+      "anchor": null,
+      "name": "control-codes.page 摘要",
+      "url": "https://control-codes.page/proposals/osc-7501/",
+      "category": "article",
+      "role": "第三方中立摘要页",
+      "status": "released",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://control-codes.page/proposals/osc-7501/",
+          "label": "control-codes.page 摘要"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": "第三方中立摘要页",
+      "featured": false
+    },
+    {
+      "id": "program-status-zig",
+      "anchor": null,
+      "name": "program_status.zig",
+      "url": "https://github.com/ghostty-org/ghostty/blob/main/src/terminal/osc/parsers/program_status.zig",
+      "category": "reference",
+      "role": "规范级解析器",
+      "status": "released",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/ghostty-org/ghostty/blob/main/src/terminal/osc/parsers/program_status.zig",
+          "label": "program_status.zig"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": "规范级解析器，含大量边界测试",
+      "featured": false
+    },
+    {
+      "id": "stream-terminal-zig",
+      "anchor": null,
+      "name": "stream_terminal.zig",
+      "url": "https://github.com/ghostty-org/ghostty/blob/main/src/terminal/stream_terminal.zig",
+      "category": "reference",
+      "role": "查询应答逻辑",
+      "status": "released",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/ghostty-org/ghostty/blob/main/src/terminal/stream_terminal.zig",
+          "label": "stream_terminal.zig"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": "查询应答逻辑（用与请求相同的终止符回复）",
+      "featured": false
+    },
+    {
+      "id": "ghostty-vt-c-api",
+      "anchor": null,
+      "name": "ghostty/vt C API",
+      "url": "https://github.com/ghostty-org/ghostty/blob/main/include/ghostty/vt/terminal.h",
+      "category": "reference",
+      "role": "C API 头文件",
+      "status": "released",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/ghostty-org/ghostty/blob/main/include/ghostty/vt/terminal.h",
+          "label": "ghostty/vt C API"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": "`GHOSTTY_TERMINAL_OPT_PROGRAM_STATUS` 与状态枚举",
+      "featured": false
+    },
+    {
+      "id": "why-osc-7501-author-blog",
+      "anchor": null,
+      "name": "Why OSC 7501（作者博文）",
+      "url": "https://mitchellh.com/writing/program-status-osc7501",
+      "category": "article",
+      "role": "作者博文",
+      "status": "released",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://mitchellh.com/writing/program-status-osc7501",
+          "label": "Why OSC 7501（作者博文）"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": "设计动机与取舍的第一手阐述",
+      "featured": false
+    },
+    {
+      "id": "24h-status-tweet",
+      "anchor": null,
+      "name": "24 小时状态推文",
+      "url": "https://x.com/mitchellh/status/2107894687587795079",
+      "category": "article",
+      "role": "首日集成进展汇总",
+      "status": "released",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://x.com/mitchellh/status/2107894687587795079",
+          "label": "24 小时状态推文"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": "作者汇总首日集成进展",
+      "featured": false
+    },
+    {
+      "id": "claude-code-support-tweet",
+      "anchor": null,
+      "name": "Claude Code 支持推文",
+      "url": "https://x.com/mitchellh/status/2108296550405619967",
+      "category": "article",
+      "role": "Claude Code 支持确认",
+      "status": "released",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://x.com/mitchellh/status/2108296550405619967",
+          "label": "Claude Code 支持推文"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": "称 Anthropic 用 Rex 验证过",
+      "featured": false
+    },
+    {
+      "id": "oom-stale-records-discussion",
+      "anchor": null,
+      "name": "OOM 残留讨论",
+      "url": "https://x.com/shahidcodes/status/2107995544065081475",
+      "category": "discussion",
+      "role": "推文讨论串",
+      "status": "released",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://x.com/shahidcodes/status/2107995544065081475",
+          "label": "OOM 残留讨论"
+        },
+        {
+          "url": "https://x.com/mitchellh/status/2107997330238795818",
+          "label": "作者回复"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": "ssh 内 agent 被 OOM kill 后 blocked 记录悬挂；作者回复：故意不做心跳",
+      "featured": false
+    },
+    {
+      "id": "hide-title-spinner-suggestion",
+      "anchor": null,
+      "name": "隐藏标题 spinner 的建议",
+      "url": "https://x.com/mitchellh/status/2107681182649667671",
+      "category": "article",
+      "role": "建议",
+      "status": "released",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://x.com/mitchellh/status/2107681182649667671",
+          "label": "隐藏标题 spinner 的建议"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": "检测到 7501 支持时应用应隐藏自己的 spinner",
+      "featured": false
+    },
+    {
+      "id": "herdr-5069",
+      "anchor": null,
+      "name": "Herdr #5069",
+      "url": "https://github.com/herdrdev/herdr/issues/5069",
+      "category": "discussion",
+      "role": "反对与观望（程序性关闭）",
+      "status": "closed",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/herdrdev/herdr/issues/5069",
+          "label": "Herdr #5069"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": "issue 被以 bugs-only 策略关闭（程序性，非技术否决）",
+      "featured": false
+    }
+  ]
+}

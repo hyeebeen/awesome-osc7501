@@ -1,0 +1,2349 @@
+{
+  "schema": "data/schema.json",
+  "generated_by": "scripts/build.py",
+  "source": "data/integrations.yml",
+  "spec": {
+    "name": "OSC 7501 Program Status Protocol",
+    "revision": "0.4",
+    "url": "https://www.superlogical.com/rex/docs/build/program-status"
+  },
+  "counts": {
+    "by_status": {
+      "released": 34,
+      "implemented-self-reported": 1,
+      "merged-unreleased": 30,
+      "in-progress": 12,
+      "announced": 3,
+      "closed": 2,
+      "unsupported": 16,
+      "unconfirmed": 2
+    },
+    "by_category": {
+      "receiver": 52,
+      "agent": 32,
+      "cli": 8,
+      "library": 8
+    },
+    "total": 100
+  },
+  "latest_verified_at": "2026-10-11",
+  "status_labels_zh": {
+    "released": "已发布",
+    "implemented-self-reported": "已实现（自述）",
+    "merged-unreleased": "已合并未发版",
+    "in-progress": "开发中",
+    "announced": "仅宣布",
+    "closed": "已关闭",
+    "unsupported": "未支持",
+    "unconfirmed": "未确认"
+  },
+  "evidence_labels_zh": {
+    "verified": "已验证",
+    "self-reported": "自述",
+    "self-reported-third-party": "自述（第三方）",
+    "inferred": "推断",
+    "not-found": null
+  },
+  "entries": [
+    {
+      "id": "libghostty-vt",
+      "anchor": "docs/support-matrix.md#libghostty-vt",
+      "name": "libghostty-vt",
+      "url": "https://github.com/ghostty-org/ghostty/pull/14560",
+      "category": "receiver",
+      "role": "嵌入式 VT 库（作者本人的参考实现）",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "main，已跟到 rev 0.4（PR #14630 合并 2026-10-11 03:44；不在最新 tag v1.3.1 中）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/ghostty-org/ghostty/pull/14560",
+          "label": null
+        },
+        {
+          "url": "https://github.com/ghostty-org/ghostty/pull/14630",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "ghostty-app",
+      "anchor": "docs/support-matrix.md#ghostty-app",
+      "name": "Ghostty 应用",
+      "url": "https://github.com/ghostty-org/ghostty/blob/main/src/termio/stream_handler.zig",
+      "category": "receiver",
+      "role": "终端",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（应用侧忽略报告，库已支持）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/ghostty-org/ghostty/blob/main/src/termio/stream_handler.zig",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "rex",
+      "anchor": "docs/support-matrix.md#rex",
+      "name": "Rex（Superlogical）",
+      "url": "https://www.superlogical.com/rex/docs/build/program-status",
+      "category": "receiver",
+      "role": "agent 工作台（规范发源地）",
+      "status": "implemented-self-reported",
+      "status_note": "官方文档自述",
+      "version": "版本未确认（beta 邀请制为推断）",
+      "evidence_type": "self-reported",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://www.superlogical.com/rex/docs/build/program-status",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "tern",
+      "anchor": "docs/support-matrix.md#tern",
+      "name": "Tern（Stencil）",
+      "url": "https://x.com/_can1357/status/2108468517217665065",
+      "category": "receiver",
+      "role": "终端（Stencil 的 Rust 原生 neoterminal，闭源）",
+      "status": "announced",
+      "status_note": null,
+      "version": "0.6.4（自述，未确认；无公开 release）",
+      "evidence_type": "self-reported",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://x.com/_can1357/status/2108468517217665065",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "cmux",
+      "anchor": "docs/support-matrix.md#cmux",
+      "name": "cmux",
+      "url": "https://github.com/manaflow-ai/cmux/pull/18742",
+      "category": "receiver",
+      "role": "agent 多路复用器（基于 Ghostty）",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "正式版本未确认（最新 v0.65.0，2026-10-06，不含；新 PR #19091 open）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/manaflow-ai/cmux/pull/18742",
+          "label": null
+        },
+        {
+          "url": "https://github.com/manaflow-ai/cmux/blob/main/docs/program-status.md",
+          "label": "文档"
+        },
+        {
+          "url": "https://github.com/manaflow-ai/cmux/pull/19091",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "termio",
+      "anchor": "docs/support-matrix.md#termio",
+      "name": "termio",
+      "url": "https://github.com/termio-sh/termio/pull/713",
+      "category": "receiver",
+      "role": "agentic 开发环境",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.56.0（2026-10-09 21:31）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/termio-sh/termio/pull/713",
+          "label": null
+        },
+        {
+          "url": "https://github.com/termio-sh/termio/releases/tag/v0.56.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "swiftterm",
+      "anchor": "docs/support-matrix.md#swiftterm",
+      "name": "SwiftTerm",
+      "url": "https://github.com/migueldeicaza/SwiftTerm/releases/tag/v1.99.0",
+      "category": "receiver",
+      "role": "终端组件库（macOS/Linux）",
+      "status": "released",
+      "status_note": null,
+      "version": "v1.99.0（2026-10-09 04:21；后续 PR #748 已合并）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/migueldeicaza/SwiftTerm/releases/tag/v1.99.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "tuios",
+      "anchor": "docs/support-matrix.md#tuios",
+      "name": "TUIOS",
+      "url": "https://github.com/Gaurav-Gosain/tuios/releases/tag/v0.9.0",
+      "category": "receiver",
+      "role": "终端",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.9.0（2026-10-08 14:39）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/Gaurav-Gosain/tuios/releases/tag/v0.9.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "termy",
+      "anchor": "docs/support-matrix.md#termy",
+      "name": "Termy",
+      "url": "https://github.com/lassejlv/termy/pull/408",
+      "category": "receiver",
+      "role": "终端",
+      "status": "released",
+      "status_note": null,
+      "version": "v1.0.0-rc.2（2026-10-08 17:01）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/lassejlv/termy/pull/408",
+          "label": null
+        },
+        {
+          "url": "https://github.com/lassejlv/termy/releases/tag/v1.0.0-rc.2",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "con-terminal",
+      "anchor": "docs/support-matrix.md#con-terminal",
+      "name": "con-terminal",
+      "url": "https://github.com/nowledge-co/con-terminal/pull/451",
+      "category": "receiver",
+      "role": "终端",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.1.0-beta.122（2026-10-09 20:49）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/nowledge-co/con-terminal/pull/451",
+          "label": null
+        },
+        {
+          "url": "https://github.com/nowledge-co/con-terminal/releases/tag/v0.1.0-beta.122",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "phux",
+      "anchor": "docs/support-matrix.md#phux",
+      "name": "phux",
+      "url": "https://github.com/no-phux/phux/pull/1050",
+      "category": "receiver",
+      "role": "多路复用器",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.52.0（2026-10-07 14:34）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/no-phux/phux/pull/1050",
+          "label": null
+        },
+        {
+          "url": "https://github.com/no-phux/phux/releases/tag/v0.52.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "thurm",
+      "anchor": "docs/support-matrix.md#thurm",
+      "name": "thurm",
+      "url": "https://github.com/nklmilojevic/thurm/pull/68",
+      "category": "receiver",
+      "role": "macOS 终端",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.3.0（2026-10-08 04:28）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/nklmilojevic/thurm/pull/68",
+          "label": null
+        },
+        {
+          "url": "https://github.com/nklmilojevic/thurm/releases/tag/v0.3.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "wietty",
+      "anchor": "docs/support-matrix.md#wietty",
+      "name": "wietty",
+      "url": "https://github.com/kloostermanw/wietty/pull/68",
+      "category": "receiver",
+      "role": "终端",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.0.17（2026-10-09 23:04）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/kloostermanw/wietty/pull/68",
+          "label": null
+        },
+        {
+          "url": "https://github.com/kloostermanw/wietty/releases/tag/v0.0.17",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "prowl",
+      "anchor": "docs/support-matrix.md#prowl",
+      "name": "Prowl",
+      "url": "https://github.com/onevcat/Prowl/pull/887",
+      "category": "receiver",
+      "role": "macOS 原生 agent 编排器（经 GhosttyKit 接收）",
+      "status": "released",
+      "status_note": null,
+      "version": "v2026.10.11（2026-10-11 15:25）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/onevcat/Prowl/pull/887",
+          "label": null
+        },
+        {
+          "url": "https://x.com/onevcat/status/2109188629885243596",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "rove",
+      "anchor": "docs/support-matrix.md#rove",
+      "name": "rove",
+      "url": "https://github.com/Sma1lboy/rove/pull/1232",
+      "category": "receiver",
+      "role": "agent 多路复用器",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.9.245（2026-10-10 22:06）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/Sma1lboy/rove/pull/1232",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "botmux",
+      "anchor": "docs/support-matrix.md#botmux",
+      "name": "botmux",
+      "url": "https://github.com/deepcoldy/botmux/pull/1781",
+      "category": "receiver",
+      "role": "飞书 / Lark 桥接 AI coding CLI",
+      "status": "released",
+      "status_note": null,
+      "version": "v3.40.0（2026-10-10 10:32）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/deepcoldy/botmux/pull/1781",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "armadra",
+      "anchor": "docs/support-matrix.md#armadra",
+      "name": "Armadra",
+      "url": "https://github.com/AMA-Link/Armadra/pull/217",
+      "category": "receiver",
+      "role": "agent 画布",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.2.5（2026-10-10 04:55）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/AMA-Link/Armadra/pull/217",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "dozer-sandbox",
+      "anchor": "docs/support-matrix.md#dozer-sandbox",
+      "name": "dozer-sandbox",
+      "url": "https://github.com/dozer-sandbox/dozer-sandbox/pull/5",
+      "category": "receiver",
+      "role": "Mac 上给 agent 用的 Linux 沙箱",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.32.0（2026-10-09 19:44）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/dozer-sandbox/dozer-sandbox/pull/5",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "serverbox",
+      "anchor": "docs/support-matrix.md#serverbox",
+      "name": "ServerBox（flutter_server_box）",
+      "url": "https://github.com/lollipopkit/flutter_server_box/pull/1662",
+      "category": "receiver",
+      "role": "Flutter 终端 / SSH 客户端",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/lollipopkit/flutter_server_box/pull/1662",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "diri",
+      "anchor": "docs/support-matrix.md#diri",
+      "name": "diri",
+      "url": "https://github.com/cristicretu/diri/pull/732",
+      "category": "receiver",
+      "role": "并行 agent 工作台",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.9.6（2026-10-09 20:53）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/cristicretu/diri/pull/732",
+          "label": null
+        },
+        {
+          "url": "https://github.com/cristicretu/diri/releases/tag/v0.9.6",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "programa",
+      "anchor": "docs/support-matrix.md#programa",
+      "name": "programa",
+      "url": "https://github.com/darkroomengineering/programa/pull/405",
+      "category": "receiver",
+      "role": "基于 Ghostty 的 agent 终端",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "—（仅持续移动的 `rolling` 预构建 tag，无版本号）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/darkroomengineering/programa/pull/405",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "agent-os",
+      "anchor": "docs/support-matrix.md#agent-os",
+      "name": "agent-os",
+      "url": "https://github.com/saadnvd1/agent-os/pull/100",
+      "category": "receiver",
+      "role": "agent 工作台（小项目）",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/saadnvd1/agent-os/pull/100",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "zz",
+      "anchor": "docs/support-matrix.md#zz",
+      "name": "zz",
+      "url": "https://github.com/demfabris/zz/pull/10",
+      "category": "receiver",
+      "role": "小项目",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/demfabris/zz/pull/10",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "toastty",
+      "anchor": "docs/support-matrix.md#toastty",
+      "name": "toastty",
+      "url": "https://github.com/figelwump/toastty/pull/105",
+      "category": "receiver",
+      "role": "小项目",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.9.1（2026-10-11 10:38）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/figelwump/toastty/pull/105",
+          "label": null
+        },
+        {
+          "url": "https://github.com/figelwump/toastty/releases/tag/v0.9.1",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "claude-fleet",
+      "anchor": "docs/support-matrix.md#claude-fleet",
+      "name": "claude-fleet",
+      "url": "https://github.com/verkyyi/claude-fleet/pull/2597",
+      "category": "receiver",
+      "role": "agent 工作台（小项目）",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "—",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/verkyyi/claude-fleet/pull/2597",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "para-code",
+      "anchor": "docs/support-matrix.md#para-code",
+      "name": "para-code",
+      "url": "https://github.com/MocA-Love/para-code/pull/318",
+      "category": "receiver",
+      "role": "agent 工作台（小项目）",
+      "status": "released",
+      "status_note": null,
+      "version": "v1.139.1-paracode-165（2026-10-10 19:46）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/MocA-Love/para-code/pull/318",
+          "label": null
+        },
+        {
+          "url": "https://github.com/MocA-Love/para-code/releases/tag/v1.139.1-paracode-165",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "attn",
+      "anchor": "docs/support-matrix.md#attn",
+      "name": "attn",
+      "url": "https://github.com/SolenesInc/attn/pull/613",
+      "category": "receiver",
+      "role": "agent 会话管理",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #613（合并 2026-10-10 04:30）与 #631（合并 2026-10-11 04:23）；最新 v0.12.0 早于合并",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/SolenesInc/attn/pull/613",
+          "label": null
+        },
+        {
+          "url": "https://github.com/SolenesInc/attn/pull/631",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "cherry",
+      "anchor": "docs/support-matrix.md#cherry",
+      "name": "cherry",
+      "url": "https://github.com/patrick91/cherry/pull/10",
+      "category": "receiver",
+      "role": "agent 状态工具（PR 标题：从 7501 取 agent 状态）",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #10（合并 2026-10-10 22:29）；无 release",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/patrick91/cherry/pull/10",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "noctty",
+      "anchor": "docs/support-matrix.md#noctty",
+      "name": "noctty",
+      "url": "https://github.com/amanthanvi/noctty/pull/301",
+      "category": "receiver",
+      "role": "Windows 原生终端（原 winghostty，fork）",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #301（合并 2026-10-11 05:24；最新 v1.3.131 早于合并）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/amanthanvi/noctty/pull/301",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "monkeyssh",
+      "anchor": "docs/support-matrix.md#monkeyssh",
+      "name": "MonkeySSH",
+      "url": "https://github.com/depollsoft/MonkeySSH/pull/977",
+      "category": "receiver",
+      "role": "Flutter SSH 客户端",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #977（合并 2026-10-10 13:21；最新 v0.9.2 早于合并）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/depollsoft/MonkeySSH/pull/977",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "go-term",
+      "anchor": "docs/support-matrix.md#go-term",
+      "name": "go-term",
+      "url": "https://github.com/go-gui-org/go-term/pull/265",
+      "category": "receiver",
+      "role": "go-gui 的终端组件",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #265（合并 2026-10-10 06:09；最新 v0.15.1 早于合并）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/go-gui-org/go-term/pull/265",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "agentd",
+      "anchor": "docs/support-matrix.md#agentd",
+      "name": "agentd",
+      "url": "https://github.com/robmorgan/agentd/pull/29",
+      "category": "receiver",
+      "role": "agent 工作区守护进程",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #29（合并 2026-10-11 11:07；无 release）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/robmorgan/agentd/pull/29",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "tmux-agent-panel",
+      "anchor": "docs/support-matrix.md#tmux-agent-panel",
+      "name": "tmux-agent-panel",
+      "url": "https://github.com/ahmedelgabri/tmux-agent-panel/pull/4",
+      "category": "receiver",
+      "role": "tmux 面板",
+      "status": "closed",
+      "status_note": null,
+      "version": "—（PR #4 closed 未合并）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/ahmedelgabri/tmux-agent-panel/pull/4",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "wintty",
+      "anchor": "docs/support-matrix.md#wintty",
+      "name": "wintty",
+      "url": "https://github.com/deblasis/wintty/pull/1316",
+      "category": "receiver",
+      "role": "Windows 上的 Ghostty 移植",
+      "status": "in-progress",
+      "status_note": null,
+      "version": "PR open",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/deblasis/wintty/pull/1316",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "royalterminal",
+      "anchor": "docs/support-matrix.md#royalterminal",
+      "name": "RoyalTerminal",
+      "url": "https://github.com/royalapplications/RoyalTerminal/pull/121",
+      "category": "receiver",
+      "role": ".NET 终端栈（集成 Ghostty VT）",
+      "status": "in-progress",
+      "status_note": null,
+      "version": "PR open",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/royalapplications/RoyalTerminal/pull/121",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "luvus",
+      "anchor": "docs/support-matrix.md#luvus",
+      "name": "luvus",
+      "url": "https://github.com/RizRiyz/luvus/pull/498",
+      "category": "receiver",
+      "role": "agent 任务台（mission control）",
+      "status": "in-progress",
+      "status_note": null,
+      "version": "PR open",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/RizRiyz/luvus/pull/498",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "cleat",
+      "anchor": "docs/support-matrix.md#cleat",
+      "name": "cleat",
+      "url": "https://github.com/flotilla-org/cleat/pull/329",
+      "category": "receiver",
+      "role": "会话守护进程",
+      "status": "in-progress",
+      "status_note": null,
+      "version": "PR open（ADR）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/flotilla-org/cleat/pull/329",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "tmux",
+      "anchor": "docs/support-matrix.md#tmux",
+      "name": "tmux",
+      "url": "https://github.com/tmux/tmux/issues/5713",
+      "category": "receiver",
+      "role": "多路复用器",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（实测 3.5a：裸序列丢弃；DCS passthrough + `allow-passthrough on` 可透传；issue open，最后更新 2026-10-10 01:51）",
+      "evidence_type": "verified",
+      "evidence_note": "issue + 本仓库实测",
+      "source": [
+        {
+          "url": "https://github.com/tmux/tmux/issues/5713",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "screen",
+      "anchor": "docs/support-matrix.md#screen",
+      "name": "screen",
+      "url": "https://github.com/earendil-works/pi/blob/v1.1.0/packages/coding-agent/docs/terminal-setup.md",
+      "category": "receiver",
+      "role": "多路复用器",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（pi 文档称不转发）",
+      "evidence_type": "self-reported",
+      "evidence_note": "pi 文档",
+      "source": [
+        {
+          "url": "https://github.com/earendil-works/pi/blob/v1.1.0/packages/coding-agent/docs/terminal-setup.md",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "kitty",
+      "anchor": "docs/support-matrix.md#kitty",
+      "name": "Kitty",
+      "url": "https://github.com/kovidgoyal/kitty/issues/10638",
+      "category": "receiver",
+      "role": "终端",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（作者在 issue 中审阅规范，主分支无实现）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/kovidgoyal/kitty/issues/10638",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "wezterm",
+      "anchor": "docs/support-matrix.md#wezterm",
+      "name": "WezTerm",
+      "url": "research/2026-10-09.md",
+      "category": "receiver",
+      "role": "终端",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（主分支 commit 与 issue 搜索均无）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "research/2026-10-09.md",
+          "label": "research 笔记"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "alacritty",
+      "anchor": "docs/support-matrix.md#alacritty",
+      "name": "Alacritty",
+      "url": "research/2026-10-09.md",
+      "category": "receiver",
+      "role": "终端",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（主分支代码搜索无）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "research/2026-10-09.md",
+          "label": "research 笔记"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "windows-terminal",
+      "anchor": "docs/support-matrix.md#windows-terminal",
+      "name": "Windows Terminal",
+      "url": "research/2026-10-09.md",
+      "category": "receiver",
+      "role": "终端",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（主分支代码搜索无）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "research/2026-10-09.md",
+          "label": "research 笔记"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "zellij",
+      "anchor": "docs/support-matrix.md#zellij",
+      "name": "zellij",
+      "url": "research/2026-10-09.md",
+      "category": "receiver",
+      "role": "多路复用器",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（主分支代码搜索无）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "research/2026-10-09.md",
+          "label": "research 笔记"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "iterm2",
+      "anchor": "docs/support-matrix.md#iterm2",
+      "name": "iTerm2",
+      "url": "research/2026-10-09.md",
+      "category": "receiver",
+      "role": "终端",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（代码与 issue 搜索均无；已有 OSC 21337）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "research/2026-10-09.md",
+          "label": "research 笔记"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "xterm-js",
+      "anchor": "docs/support-matrix.md#xterm-js",
+      "name": "xterm.js（VS Code 终端）",
+      "url": "research/2026-10-09.md",
+      "category": "receiver",
+      "role": "嵌入式终端组件",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（主分支代码搜索无）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "research/2026-10-09.md",
+          "label": "research 笔记"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "zed",
+      "anchor": "docs/support-matrix.md#zed",
+      "name": "Zed",
+      "url": "research/2026-10-09.md",
+      "category": "receiver",
+      "role": "编辑器（终端面板）",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（主分支代码搜索无）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "research/2026-10-09.md",
+          "label": "research 笔记"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "warp",
+      "anchor": "docs/support-matrix.md#warp",
+      "name": "Warp",
+      "url": "research/2026-10-09.md",
+      "category": "receiver",
+      "role": "终端",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（主分支代码搜索无）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "research/2026-10-09.md",
+          "label": "research 笔记"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "wave",
+      "anchor": "docs/support-matrix.md#wave",
+      "name": "Wave",
+      "url": "research/2026-10-09.md",
+      "category": "receiver",
+      "role": "终端",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（主分支代码搜索无）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "research/2026-10-09.md",
+          "label": "research 笔记"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "rio",
+      "anchor": "docs/support-matrix.md#rio",
+      "name": "Rio",
+      "url": "research/2026-10-09.md",
+      "category": "receiver",
+      "role": "终端",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（主分支代码搜索无）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "research/2026-10-09.md",
+          "label": "research 笔记"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "contour",
+      "anchor": "docs/support-matrix.md#contour",
+      "name": "Contour",
+      "url": "research/2026-10-09.md",
+      "category": "receiver",
+      "role": "终端",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（主分支代码搜索无）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "research/2026-10-09.md",
+          "label": "research 笔记"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "foot",
+      "anchor": "docs/support-matrix.md#foot",
+      "name": "foot",
+      "url": "research/2026-10-09.md",
+      "category": "receiver",
+      "role": "终端",
+      "status": "unconfirmed",
+      "status_note": null,
+      "version": "—（issue 搜索无结果，代码未查）",
+      "evidence_type": "not-found",
+      "evidence_note": "Codeberg issue 搜索无结果，代码未查",
+      "source": [
+        {
+          "url": "research/2026-10-09.md",
+          "label": "research 笔记"
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "claude-code",
+      "anchor": "docs/support-matrix.md#claude-code",
+      "name": "Claude Code",
+      "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.295",
+      "category": "agent",
+      "role": "AI coding agent",
+      "status": "released",
+      "status_note": null,
+      "version": "v2.1.295（2026-10-09 03:48）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/anthropics/claude-code/releases/tag/v2.1.295",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "pi",
+      "anchor": "docs/support-matrix.md#pi",
+      "name": "pi（earendil-works/pi）",
+      "url": "https://github.com/earendil-works/pi/releases/tag/v1.1.0",
+      "category": "agent",
+      "role": "AI coding agent",
+      "status": "released",
+      "status_note": null,
+      "version": "v1.1.0（2026-10-08 06:26）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/earendil-works/pi/releases/tag/v1.1.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "omp",
+      "anchor": "docs/support-matrix.md#omp",
+      "name": "omp（can1357/oh-my-pi）",
+      "url": "https://github.com/can1357/oh-my-pi/releases/tag/v18.8.7",
+      "category": "agent",
+      "role": "AI coding agent",
+      "status": "released",
+      "status_note": null,
+      "version": "v18.8.7（2026-10-09 21:45，实现 commit fd84fae，7501 首发）；v18.9.0（2026-10-11 16:08）release notes 未提 7501；PR #15113 open",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/can1357/oh-my-pi/releases/tag/v18.8.7",
+          "label": null
+        },
+        {
+          "url": "https://github.com/can1357/oh-my-pi/releases/tag/v18.9.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "factory-droid",
+      "anchor": "docs/support-matrix.md#factory-droid",
+      "name": "Factory Droid",
+      "url": "https://docs.factory.com/changelog/release-notes",
+      "category": "agent",
+      "role": "AI coding agent",
+      "status": "released",
+      "status_note": "推断：changelog 未写 OSC 7501 字样",
+      "version": "CLI v0.236.0 · Desktop v0.193.0（2026-10-08）",
+      "evidence_type": "inferred",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://docs.factory.com/changelog/release-notes",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "docker-agent",
+      "anchor": "docs/support-matrix.md#docker-agent",
+      "name": "Docker Agent（docker/docker-agent）",
+      "url": "https://github.com/docker/docker-agent/releases/tag/v1.150.0",
+      "category": "agent",
+      "role": "AI agent",
+      "status": "released",
+      "status_note": null,
+      "version": "v1.150.0（2026-10-09 19:39；PR #4544 合并 2026-10-07 22:51）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/docker/docker-agent/releases/tag/v1.150.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "crush",
+      "anchor": "docs/support-matrix.md#crush",
+      "name": "Crush（charmbracelet/crush）",
+      "url": "https://github.com/charmbracelet/crush/pull/4041",
+      "category": "agent",
+      "role": "AI coding agent",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.98.0（2026-10-09 02:26）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/charmbracelet/crush/pull/4041",
+          "label": null
+        },
+        {
+          "url": "https://github.com/charmbracelet/crush/releases/tag/v0.98.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "knightcode",
+      "anchor": "docs/support-matrix.md#knightcode",
+      "name": "KnightCode",
+      "url": "https://github.com/KnightCodeAI/knightcode/pull/296",
+      "category": "agent",
+      "role": "AI coding agent",
+      "status": "released",
+      "status_note": null,
+      "version": "@knightcodeai/cli@0.15.0（2026-10-08 08:27）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/KnightCodeAI/knightcode/pull/296",
+          "label": null
+        },
+        {
+          "url": "https://github.com/KnightCodeAI/knightcode/releases/tag/%40knightcodeai%2Fcli%400.15.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "atomic",
+      "anchor": "docs/support-matrix.md#atomic",
+      "name": "atomic（bastani-inc/atomic）",
+      "url": "https://github.com/bastani-inc/atomic/pull/3558",
+      "category": "agent",
+      "role": "coding agent runtime",
+      "status": "released",
+      "status_note": null,
+      "version": "0.9.33（2026-10-11 06:51；#3558 为修复 PR，首个实现 PR 未核实）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/bastani-inc/atomic/pull/3558",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "lydakis-agent",
+      "anchor": "docs/support-matrix.md#lydakis-agent",
+      "name": "agent（lydakis/agent）",
+      "url": "https://github.com/lydakis/agent/pull/85",
+      "category": "agent",
+      "role": "多 agent 守护进程 CLI",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.2.0（2026-10-11 14:11）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/lydakis/agent/pull/85",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "fx",
+      "anchor": "docs/support-matrix.md#fx",
+      "name": "fx（vercel-labs/fx）",
+      "url": "https://github.com/vercel-labs/fx/pull/1181",
+      "category": "agent",
+      "role": "coding agent",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #1181（合并 2026-10-08 00:14）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/vercel-labs/fx/pull/1181",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "pi-subagents",
+      "anchor": "docs/support-matrix.md#pi-subagents",
+      "name": "pi-subagents",
+      "url": "https://github.com/nicobailon/pi-subagents/pull/2725",
+      "category": "agent",
+      "role": "pi 扩展（层级 id `subagents/<run>`）",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.77.0（2026-10-10 13:26）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/nicobailon/pi-subagents/pull/2725",
+          "label": null
+        },
+        {
+          "url": "https://github.com/nicobailon/pi-subagents/releases/tag/v0.77.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "yolop",
+      "anchor": "docs/support-matrix.md#yolop",
+      "name": "yolop",
+      "url": "https://github.com/everruns/yolop/pull/818",
+      "category": "agent",
+      "role": "coding agent（小项目）",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.20.0（2026-10-10 07:18）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/everruns/yolop/pull/818",
+          "label": null
+        },
+        {
+          "url": "https://github.com/everruns/yolop/releases/tag/v0.20.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "rho",
+      "anchor": "docs/support-matrix.md#rho",
+      "name": "rho",
+      "url": "https://github.com/matthewyjiang/rho/pull/1454",
+      "category": "agent",
+      "role": "coding agent（小项目）",
+      "status": "released",
+      "status_note": null,
+      "version": "rho-sdk-v5.9.0（2026-10-11 05:01；tag 名为 sdk，CLI 是否同包未确认）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/matthewyjiang/rho/pull/1454",
+          "label": null
+        },
+        {
+          "url": "https://github.com/matthewyjiang/rho/releases/tag/rho-sdk-v5.9.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "jazz",
+      "anchor": "docs/support-matrix.md#jazz",
+      "name": "jazz",
+      "url": "https://github.com/lvndry/jazz/pull/824",
+      "category": "agent",
+      "role": "coding agent（小项目）",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.16.13（2026-10-09 17:37）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/lvndry/jazz/pull/824",
+          "label": null
+        },
+        {
+          "url": "https://github.com/lvndry/jazz/releases/tag/v0.16.13",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "wing-agent",
+      "anchor": "docs/support-matrix.md#wing-agent",
+      "name": "wing-agent",
+      "url": "https://github.com/lpdink/wing-agent/pull/177",
+      "category": "agent",
+      "role": "coding agent（小项目）",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #177",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/lpdink/wing-agent/pull/177",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "shikigami",
+      "anchor": "docs/support-matrix.md#shikigami",
+      "name": "shikigami",
+      "url": "https://github.com/Sannrox/shikigami/pull/438",
+      "category": "agent",
+      "role": "coding agent（小项目）",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #438",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/Sannrox/shikigami/pull/438",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "the-last-harness",
+      "anchor": "docs/support-matrix.md#the-last-harness",
+      "name": "the-last-harness",
+      "url": "https://github.com/diegopetrucci/the-last-harness/pull/749",
+      "category": "agent",
+      "role": "coding agent（小项目）",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #749",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/diegopetrucci/the-last-harness/pull/749",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "haskell-agent",
+      "anchor": "docs/support-matrix.md#haskell-agent",
+      "name": "haskell-agent",
+      "url": "https://github.com/digitallyinduced/haskell-agent/pull/1389",
+      "category": "agent",
+      "role": "agent harness（Haskell）",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #1389（合并 2026-10-11 06:07；无 release）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/digitallyinduced/haskell-agent/pull/1389",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "cyrup",
+      "anchor": "docs/support-matrix.md#cyrup",
+      "name": "cyrup",
+      "url": "https://github.com/cyrup-ai/cyrup/pull/221",
+      "category": "agent",
+      "role": "agent / CLI",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #221（无 release）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/cyrup-ai/cyrup/pull/221",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "tincan",
+      "anchor": "docs/support-matrix.md#tincan",
+      "name": "tincan",
+      "url": "https://github.com/AarushSah/tincan/pull/1",
+      "category": "agent",
+      "role": "Mac 消息 / 通讯录应用（小项目）",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #1（无 release）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/AarushSah/tincan/pull/1",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "armadra-agent",
+      "anchor": "docs/support-matrix.md#armadra-agent",
+      "name": "Armadra Agent",
+      "url": "https://github.com/AMA-Link/armadra-agent/pull/126",
+      "category": "agent",
+      "role": "Armadra 画布的 agent 端（发送端）",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #126",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/AMA-Link/armadra-agent/pull/126",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "prime-agent",
+      "anchor": "docs/support-matrix.md#prime-agent",
+      "name": "prime-agent",
+      "url": "https://github.com/PrimeIntellect-ai/prime-agent/pull/3424",
+      "category": "agent",
+      "role": "AI agent",
+      "status": "in-progress",
+      "status_note": null,
+      "version": "PR open",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/PrimeIntellect-ai/prime-agent/pull/3424",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "8gent-code",
+      "anchor": "docs/support-matrix.md#8gent-code",
+      "name": "8gent-code",
+      "url": "https://github.com/8gi-foundation/8gent-code/pull/3738",
+      "category": "agent",
+      "role": "AI agent",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #3738（合并 2026-10-10 07:09；最新 v0.19.0 早于合并）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/8gi-foundation/8gent-code/pull/3738",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "bub",
+      "anchor": "docs/support-matrix.md#bub",
+      "name": "bub",
+      "url": "https://github.com/bubbuild/bub/pull/345",
+      "category": "agent",
+      "role": "AI agent",
+      "status": "in-progress",
+      "status_note": null,
+      "version": "PR open",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/bubbuild/bub/pull/345",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "wovenmatter",
+      "anchor": "docs/support-matrix.md#wovenmatter",
+      "name": "wovenmatter",
+      "url": "https://github.com/wovenmatter/wovenmatter/pull/111",
+      "category": "agent",
+      "role": "AI agent",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.2.7（2026-10-10 23:57）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/wovenmatter/wovenmatter/pull/111",
+          "label": null
+        },
+        {
+          "url": "https://github.com/wovenmatter/wovenmatter/releases/tag/v0.2.7",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "minimax-code",
+      "anchor": "docs/support-matrix.md#minimax-code",
+      "name": "MiniMax Code",
+      "url": "https://github.com/MiniMax-AI/minimax-code/pull/471",
+      "category": "agent",
+      "role": "AI coding agent",
+      "status": "in-progress",
+      "status_note": null,
+      "version": "PR #471 open（2026-10-10 00:45 开）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/MiniMax-AI/minimax-code/pull/471",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "icode",
+      "anchor": "docs/support-matrix.md#icode",
+      "name": "iCode",
+      "url": "https://github.com/openJiuwen-ai/iCode/pull/80",
+      "category": "agent",
+      "role": "离线开发平台 / agent 工具包",
+      "status": "in-progress",
+      "status_note": null,
+      "version": "PR #80 open",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/openJiuwen-ai/iCode/pull/80",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "amp",
+      "anchor": "docs/support-matrix.md#amp",
+      "name": "Amp",
+      "url": "https://x.com/mitchellh/status/2107894687587795079",
+      "category": "agent",
+      "role": "AI coding agent",
+      "status": "announced",
+      "status_note": "作者自述，无官方 changelog",
+      "version": "未确认",
+      "evidence_type": "self-reported-third-party",
+      "evidence_note": "第三方",
+      "source": [
+        {
+          "url": "https://x.com/mitchellh/status/2107894687587795079",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "codex-cli",
+      "anchor": "docs/support-matrix.md#codex-cli",
+      "name": "Codex CLI（openai/codex）",
+      "url": "https://github.com/openai/codex/pull/52725",
+      "category": "agent",
+      "role": "AI coding agent",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #52725（合并 2026-10-10 07:43；尚未进任何 release：最新预发布 rust-v0.163.0-alpha.5 与最新正式版 rust-v0.162.1 均不含）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/openai/codex/pull/52725",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "opencode",
+      "anchor": "docs/support-matrix.md#opencode",
+      "name": "opencode",
+      "url": "https://github.com/anomalyco/opencode/pull/54402",
+      "category": "agent",
+      "role": "AI coding agent",
+      "status": "in-progress",
+      "status_note": null,
+      "version": "PR #54402 open（2026-10-11 06:21 开）；另有 issue #54179（2026-10-10 01:39）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/anomalyco/opencode/pull/54402",
+          "label": null
+        },
+        {
+          "url": "https://github.com/anomalyco/opencode/issues/54179",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "gemini-cli",
+      "anchor": "docs/support-matrix.md#gemini-cli",
+      "name": "Gemini CLI",
+      "url": "https://github.com/google-gemini/gemini-cli/issues/29710",
+      "category": "agent",
+      "role": "AI coding agent",
+      "status": "unsupported",
+      "status_note": null,
+      "version": "—（代码 / PR 搜索无；issue #29710 open，2026-10-10 开）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/google-gemini/gemini-cli/issues/29710",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "cursor-cli",
+      "anchor": "docs/support-matrix.md#cursor-cli",
+      "name": "Cursor CLI",
+      "url": "https://cursor.com/changelog",
+      "category": "agent",
+      "role": "AI coding agent",
+      "status": "unconfirmed",
+      "status_note": "闭源",
+      "version": "—（changelog 未见）",
+      "evidence_type": "not-found",
+      "evidence_note": "官方 changelog 未见（闭源）",
+      "source": [
+        {
+          "url": "https://cursor.com/changelog",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "git-stack",
+      "anchor": "docs/support-matrix.md#git-stack",
+      "name": "git-stack",
+      "url": "https://github.com/DomBlack/git-stack/pull/16",
+      "category": "cli",
+      "role": "git 工作流 CLI",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.2.0（2026-10-07 19:25）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/DomBlack/git-stack/pull/16",
+          "label": null
+        },
+        {
+          "url": "https://github.com/DomBlack/git-stack/releases/tag/v0.2.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "tuist",
+      "anchor": "docs/support-matrix.md#tuist",
+      "name": "tuist",
+      "url": "https://github.com/tuist/tuist/pull/13956",
+      "category": "cli",
+      "role": "Xcode 项目工具",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #13956（合并 2026-10-08 17:02；含 blocked kind=auth；最新 4.212.0-rc.2 不含）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/tuist/tuist/pull/13956",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "hugo",
+      "anchor": "docs/support-matrix.md#hugo",
+      "name": "Hugo",
+      "url": "https://github.com/gohugoio/hugo/pull/15428",
+      "category": "cli",
+      "role": "静态站点生成器",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #15428（合并 2026-10-10 01:18；最新 v0.167.0，2026-09-28，早于合并；与 OSC 9;4 并发）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/gohugoio/hugo/pull/15428",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "composer",
+      "anchor": "docs/support-matrix.md#composer",
+      "name": "Composer",
+      "url": "https://github.com/composer/composer/pull/13117",
+      "category": "cli",
+      "role": "PHP 依赖管理",
+      "status": "in-progress",
+      "status_note": null,
+      "version": "PR open（同时支持 OSC 9;4）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/composer/composer/pull/13117",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "expo-cli",
+      "anchor": "docs/support-matrix.md#expo-cli",
+      "name": "Expo CLI",
+      "url": "https://github.com/expo/expo/pull/51289",
+      "category": "cli",
+      "role": "开发工具",
+      "status": "in-progress",
+      "status_note": "experiment",
+      "version": "PR open",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/expo/expo/pull/51289",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "bunny-net-cli",
+      "anchor": "docs/support-matrix.md#bunny-net-cli",
+      "name": "bunny.net CLI",
+      "url": "https://github.com/BunnyWay/cli/pull/244",
+      "category": "cli",
+      "role": "CDN CLI",
+      "status": "in-progress",
+      "status_note": null,
+      "version": "PR open",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/BunnyWay/cli/pull/244",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "firebase-tools",
+      "anchor": "docs/support-matrix.md#firebase-tools",
+      "name": "firebase-tools",
+      "url": "https://github.com/firebase/firebase-tools/pull/11245",
+      "category": "cli",
+      "role": "开发工具",
+      "status": "closed",
+      "status_note": null,
+      "version": "—（#11245 / #11246 关闭，计划 fresh implementation 重做）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/firebase/firebase-tools/pull/11245",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "terraform-homebrew-poc",
+      "anchor": "docs/support-matrix.md#terraform-homebrew-poc",
+      "name": "Terraform / Homebrew",
+      "url": "https://mitchellh.com/writing/program-status-osc7501",
+      "category": "cli",
+      "role": "—",
+      "status": "announced",
+      "status_note": "仅作者 PoC，插件或 fork",
+      "version": "—",
+      "evidence_type": "self-reported",
+      "evidence_note": "博文",
+      "source": [
+        {
+          "url": "https://mitchellh.com/writing/program-status-osc7501",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "bubble-tea",
+      "anchor": "docs/support-matrix.md#bubble-tea",
+      "name": "Bubble Tea",
+      "url": "https://github.com/charmbracelet/bubbletea/releases/tag/v2.1.0",
+      "category": "library",
+      "role": "Go TUI 框架",
+      "status": "released",
+      "status_note": null,
+      "version": "v2.1.0（2026-10-09 01:40；PR #1845 open：退出/挂起后陈旧记录修复）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/charmbracelet/bubbletea/releases/tag/v2.1.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "charmbracelet-x",
+      "anchor": "docs/support-matrix.md#charmbracelet-x",
+      "name": "charmbracelet/x（ansi）",
+      "url": "https://github.com/charmbracelet/x/pull/1004",
+      "category": "library",
+      "role": "Go ANSI 库",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #1004（合并 2026-10-09 01:27）；#1005 open（解析器）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/charmbracelet/x/pull/1004",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "charmbracelet-ultraviolet",
+      "anchor": "docs/support-matrix.md#charmbracelet-ultraviolet",
+      "name": "charmbracelet/ultraviolet",
+      "url": "https://github.com/charmbracelet/ultraviolet/pull/207",
+      "category": "library",
+      "role": "Go 终端库",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #207；#208 open",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/charmbracelet/ultraviolet/pull/207",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "libvaxis",
+      "anchor": "docs/support-matrix.md#libvaxis",
+      "name": "libvaxis",
+      "url": "https://github.com/rockorager/libvaxis/blob/main/src/ctlseqs.zig",
+      "category": "library",
+      "role": "Zig TUI 库",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "main（ctlseqs.zig 含查询序列）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/rockorager/libvaxis/blob/main/src/ctlseqs.zig",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "tuika",
+      "anchor": "docs/support-matrix.md#tuika",
+      "name": "tuika",
+      "url": "https://github.com/everruns/tuika/pull/140",
+      "category": "library",
+      "role": "Rust TUI 框架",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.13.0（2026-10-08 04:40）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/everruns/tuika/pull/140",
+          "label": null
+        },
+        {
+          "url": "https://github.com/everruns/tuika/releases/tag/v0.13.0",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "libghostty-rs",
+      "anchor": "docs/support-matrix.md#libghostty-rs",
+      "name": "libghostty-rs",
+      "url": "https://github.com/termio-sh/libghostty-rs/pull/6",
+      "category": "library",
+      "role": "libghostty-vt 的 Rust 绑定",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #6（包装回调）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/termio-sh/libghostty-rs/pull/6",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "xterm-dart",
+      "anchor": "docs/support-matrix.md#xterm-dart",
+      "name": "xterm.dart",
+      "url": "https://github.com/lollipopkit/xterm.dart/pull/26",
+      "category": "library",
+      "role": "Dart 终端组件",
+      "status": "merged-unreleased",
+      "status_note": null,
+      "version": "PR #26（7501 + 9;4 + 133）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/lollipopkit/xterm.dart/pull/26",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    },
+    {
+      "id": "uncurses",
+      "anchor": "docs/support-matrix.md#uncurses",
+      "name": "uncurses",
+      "url": "https://github.com/aymanbagabas/uncurses/pull/89",
+      "category": "library",
+      "role": "终端 UI 工具库",
+      "status": "released",
+      "status_note": null,
+      "version": "v0.0.6（2026-10-11 03:26）",
+      "evidence_type": "verified",
+      "evidence_note": null,
+      "source": [
+        {
+          "url": "https://github.com/aymanbagabas/uncurses/pull/89",
+          "label": null
+        }
+      ],
+      "verified_at": "2026-10-11",
+      "why": null,
+      "featured": false
+    }
+  ]
+}

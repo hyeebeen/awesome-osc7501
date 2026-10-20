@@ -213,15 +213,28 @@ Curated highlights (full lists with statuses in the
 
 ### Overview
 
-100 tracked entries: 34 released (incl. Factory Droid, inferred), 1 implemented per
-official docs (Rex), 30 merged-but-unreleased, 12 in development, 3 announced,
-2 closed, 16 unsupported, 2 unconfirmed — breakdown and sources in the
-[support matrix](docs/support-matrix.md).
+<!-- BEGIN GENERATED: status-counts -->
+
+Status counts (100 tracked entries; methodology in the [support matrix](docs/support-matrix.md); latest verified 2026-10-11):
+
+| Status | Count |
+| --- | --- |
+| Released | 34 |
+| Implemented (self-reported) | 1 |
+| Merged, unreleased | 30 |
+| In development | 12 |
+| Announced | 3 |
+| Closed | 2 |
+| Unsupported | 16 |
+| Unconfirmed | 2 |
+| Total | 100 |
+
+<!-- END GENERATED: status-counts -->
 
 ### Examples
 
 Runnable sender and receiver examples (POSIX sh helpers, byte-level demo, command
-wrapper, feature detection, a fully validating Python incremental parser with 39
+wrapper, feature detection, a fully validating Python incremental parser with <!-- BEGIN GENERATED: test-count -->49<!-- END GENERATED: test-count -->
 tests, and a tmux passthrough experiment) live in [examples/](examples/); real
 recorded output in [examples/RUNLOG.md](examples/RUNLOG.md). The how-to guide is
 [docs/practice.md](docs/practice.md) (Chinese).

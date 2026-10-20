@@ -319,25 +319,30 @@ stateDiagram-v2
 
 ### 支持概览
 
-状态类别统计（100 个条目，统计口径见 [docs/support-matrix.md](docs/support-matrix.md)）：
+<!-- BEGIN GENERATED: status-counts -->
+
+状态类别统计（100 个条目，统计口径见 [docs/support-matrix.md](docs/support-matrix.md)；最近核实 2026-10-11）：
 
 | 状态 | 数量 |
 | --- | --- |
-| 已发布 | 34（含 Factory Droid（推断）） |
-| 已实现（自述） | 1（Rex，版本未确认） |
+| 已发布 | 34 |
+| 已实现（自述） | 1 |
 | 已合并未发版 | 30 |
 | 开发中 | 12 |
 | 仅宣布 | 3 |
 | 已关闭 | 2 |
 | 未支持 | 16 |
 | 未确认 | 2 |
+| 合计 | 100 |
+
+<!-- END GENERATED: status-counts -->
 
 ### 示例
 
 本仓库 [examples/](examples/) 提供可运行的发送端与接收端最小实现，全部在
 Linux + tmux 3.5a 上实际运行过（真实输出见 [examples/RUNLOG.md](examples/RUNLOG.md)）：
 POSIX sh 函数库、字节级演示、命令包装器、特性检测、带完整校验的 Python
-增量解析器（39 个单测）、tmux DCS passthrough 实验。实践指南见
+增量解析器（<!-- BEGIN GENERATED: test-count -->49<!-- END GENERATED: test-count --> 个单测）、tmux DCS passthrough 实验。实践指南见
 [docs/practice.md](docs/practice.md)。
 
 ### 空白清单（可贡献）
