@@ -32,7 +32,7 @@
 | <a id="rove"></a>rove | agent 多路复用器 | 已发布 | v0.9.245（2026-10-10 22:06） | 已验证 | <https://github.com/Sma1lboy/rove/pull/1232> | 2026-10-11 |
 | <a id="botmux"></a>botmux | 飞书 / Lark 桥接 AI coding CLI | 已发布 | v3.40.0（2026-10-10 10:32） | 已验证 | <https://github.com/deepcoldy/botmux/pull/1781> | 2026-10-11 |
 | <a id="armadra"></a>Armadra | agent 画布 | 已发布 | v0.2.5（2026-10-10 04:55） | 已验证 | <https://github.com/AMA-Link/Armadra/pull/217> | 2026-10-11 |
-| <a id="dozer-sandbox"></a>dozer-sandbox | Mac 上给 agent 用的 Linux 沙箱 | 已发布 | v0.32.0（2026-10-09 19:44） | 已验证 | <https://github.com/dozer-sandbox/dozer-sandbox/pull/5> | 2026-10-11 |
+| <a id="dozer-sandbox"></a>dozer-sandbox | Mac 上给 agent 用的 Linux 沙箱 | 已发布 | v0.32.0（2026-10-09 19:44） | 已验证（2026-10-11 核实时已发布；2026-10-21 仓库返回 404，链接无法再复核） | <https://github.com/dozer-sandbox/dozer-sandbox/pull/5> | 2026-10-21 |
 | <a id="serverbox"></a>ServerBox（flutter_server_box） | Flutter 终端 / SSH 客户端 | 已发布 | v1.0.1765（2026-10-12 02:32） | 已验证 | <https://github.com/lollipopkit/flutter_server_box/pull/1662> · <https://github.com/lollipopkit/flutter_server_box/releases/tag/v1.0.1765> | 2026-10-21 |
 | <a id="diri"></a>diri | 并行 agent 工作台 | 已发布 | v0.9.6（2026-10-09 20:53） | 已验证 | <https://github.com/cristicretu/diri/pull/732> · <https://github.com/cristicretu/diri/releases/tag/v0.9.6> | 2026-10-11 |
 | <a id="programa"></a>programa | 基于 Ghostty 的 agent 终端 | 已合并未发版 | —（仅持续移动的 `rolling` 预构建 tag，无版本号） | 已验证 | <https://github.com/darkroomengineering/programa/pull/405> | 2026-10-21 |

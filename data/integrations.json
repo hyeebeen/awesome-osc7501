@@ -477,14 +477,14 @@
       "status_note": null,
       "version": "v0.32.0（2026-10-09 19:44）",
       "evidence_type": "verified",
-      "evidence_note": null,
+      "evidence_note": "2026-10-11 核实时已发布；2026-10-21 仓库返回 404，链接无法再复核",
       "source": [
         {
           "url": "https://github.com/dozer-sandbox/dozer-sandbox/pull/5",
           "label": null
         }
       ],
-      "verified_at": "2026-10-11",
+      "verified_at": "2026-10-21",
       "why": null,
       "featured": false
     },
