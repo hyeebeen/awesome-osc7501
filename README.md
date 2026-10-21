@@ -16,7 +16,7 @@
 
 <!-- END GENERATED: top3 -->
 
-> 本仓库由 AI 辅助起草、人工核实：每条状态都附一手来源与核实日期，可用
+> 每条状态都附一手来源与核实日期，可用
 > [scripts/recheck.py](scripts/recheck.py) 复核；如发现错误请用 issue 模板报告。
 
 **核实日期：<!-- BEGIN GENERATED: verified-at -->2026-10-21<!-- END GENERATED: verified-at -->（Asia/Shanghai，CST）。** 本清单只收录可回溯到一手源
@@ -360,3 +360,13 @@ POSIX sh 函数库、字节级演示、命令包装器、特性检测、带完�
 ## 许可
 
 清单与文档内容以 [CC0-1.0](LICENSE) 发布。
+
+---
+
+## 声明
+
+本仓库在资料检索、信息分析和图表绘制中使用了 AI 辅助，由人工编辑校正并深度梳理。它主要服务于我个人的技术研究与实践，内容仅供参考。
+
+文中的数据和状态可能存在延迟，请以原始出处为准，谨慎判断后再使用。
+
+如有内容涉及侵权，请在 [Issues](https://github.com/hyeebeen/awesome-osc7501/issues) 留言，我会尽快核实并删除。

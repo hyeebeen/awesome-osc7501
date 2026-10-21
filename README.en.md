@@ -16,8 +16,7 @@
 
 <!-- END GENERATED: top3 -->
 
-> This repository was drafted with AI assistance and verified by hand: every
-> status carries a primary source and a verification date, and you can re-check
+> Every status carries a primary source and a verification date, and you can re-check
 > any row with [scripts/recheck.py](scripts/recheck.py); if you find an error,
 > please report it via the issue templates.
 
@@ -335,3 +334,13 @@ status/evidence enums, verification and AI policy) is [AGENTS.md](AGENTS.md).
 ## License
 
 [CC0-1.0](LICENSE).
+
+---
+
+## Disclaimer
+
+This repository uses AI to help with research, analysis and diagrams. A human edits, corrects and organizes the content in depth. It is maintained mainly for my own technical research and practice, and is provided for reference only.
+
+Data and status may lag behind the original sources. Please check the linked sources and use your own judgment before relying on them.
+
+If any content infringes your rights, please open an [issue](https://github.com/hyeebeen/awesome-osc7501/issues) and I will review and remove it promptly.
